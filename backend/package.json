@@ -1,0 +1,17 @@
+{
+  "name": "tecnoforum_backend",
+  "version": "1.0.0",
+  "description": "backend for tecnoforum",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "axios",
+    "mongoose"
+  ],
+  "author": "Esa Maaninka",
+  "license": "MIT"
+}
