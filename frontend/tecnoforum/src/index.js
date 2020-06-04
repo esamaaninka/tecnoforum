@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>TecnoForum</h1>{' '}
+        <h1>_TecnoForum_</h1>{' '}
       </div>
     );
   }
