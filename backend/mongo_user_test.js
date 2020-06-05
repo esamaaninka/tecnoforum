@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
 
   const User = mongoose.model('User', userSchema, 'user')
 
-  
+  /*
   const user = new User({
     fullname: 'Kalle Mätitahna',
     password: 'haukionkala',
@@ -42,11 +42,20 @@ const userSchema = mongoose.Schema({
   user.save().then(response => {
       console.log('user saved')
   })
+*/
 
-//  User.find({
+  const name = 'Kalle Mätitahna'
 
+  User
+    .findOne({ fullname: '${name}' }, function (error, user) {
+    console.log("Error: " + error);
+    console.log("User: " + user);
+    mongoose.connection.close()
+    })
+    
+  
   //})
-
+/*
   User.find({})
     .then(result => {
       result.forEach(n => {
@@ -54,6 +63,6 @@ const userSchema = mongoose.Schema({
       })  
       mongoose.connection.close()
     })
-    
+  */  
     
     

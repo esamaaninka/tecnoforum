@@ -5,7 +5,7 @@ Define env variables in .env file in project root, examples below:
 
 
 Start with 
-%npm run 
+%npm start
 
 to run in dev mode utilising NODEMON 
 %npm run dev
