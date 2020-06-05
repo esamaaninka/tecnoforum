@@ -35,6 +35,6 @@ mongo_user_test.js
 - saves data to tecnoforum_db/users - not user as I wanted cannot find reason ???
 
 REST API 
-GET http://localhost:<PORT>/api/users
-- get_all_users.rest to be used from VSC
+GET http://localhost:{<PORT>}/api/users
+- get_all_users.rest to be used from VSC, note change port number manually
 - Note! reads from tecnoforum_db/users  - not user as intended ???
