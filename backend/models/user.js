@@ -17,6 +17,5 @@ const userSchema = mongoose.Schema({
       delete returnedObject.__v
     }
   })
-  //tarkista vielä mikä merkitys tuolla "User" parametrillä on,
-  // ei eroa onko isolla vai pienillä, ja onko user tai users
-  module.exports = mongoose.model('Users', userSchema)
+  
+  module.exports = mongoose.model('Users', userSchema, 'user')

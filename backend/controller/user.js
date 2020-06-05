@@ -9,6 +9,10 @@ userRouter.get('/api/users', (request, response,next) => {
         })
         .catch(error => next(error))
   })
-    
-  module.exports = userRouter
+
+//userRouter.get('/api/users/:name', (request, respnse, next) => {
+//    User
+//        .find({}) 
+//})
+module.exports = userRouter
 

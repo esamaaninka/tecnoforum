@@ -29,18 +29,23 @@ const userSchema = mongoose.Schema({
     }
   })
 
-  const User = mongoose.model('User', userSchema)
+  const User = mongoose.model('User', userSchema, 'user')
+
   
   const user = new User({
-    fullname: 'Jaska Jokunen',
-    password: 'sanasala',
-    email: 'jaska.jokunen@mail.com',
-    nickname: 'Jaska'
+    fullname: 'Kalle Mätitahna',
+    password: 'haukionkala',
+    email: 'kallemat@mail.com',
+    nickname: 'Abba'
   })
 
   user.save().then(response => {
       console.log('user saved')
   })
+
+//  User.find({
+
+  //})
 
   User.find({})
     .then(result => {
