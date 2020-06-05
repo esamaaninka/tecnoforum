@@ -29,10 +29,6 @@ Browser localhost:<PORT>/api/users
         }
     ]
 
-Issues: 
-mongo_user_test.js 
-- needs to run twice to be able to read from DB 
-- saves data to tecnoforum_db/users - not user as I wanted cannot find reason ???
 
 REST API 
 GET http://localhost:{<PORT>}/api/users
