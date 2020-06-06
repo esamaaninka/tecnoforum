@@ -33,30 +33,34 @@ const userSchema = mongoose.Schema({
 
   /*
   const user = new User({
-    fullname: 'Janne Vaan',
-    password: 'halitulijallaa',
-    email: 'janne.v@mail.com',
-    nickname: 'Jepjep'
+    fullname: 'kalle kustaa',
+    password: 'korkki',
+    email: 'kallekustaa@mail.com',
+    nickname: 'Gustav'
   })
 
   user.save().then(response => {
       console.log('user saved')
   })
+
 */
-/*
-  const name = 'Kalle Mätitahna'
+  const name = 'kalle kustaa'
 
   User
-    .findOne({ fullname: '${name}' }, function (error, user) {
+    .findOne({ fullname: `${name}` }, function (error, user) {
     console.log("Error: " + error);
     console.log("User: " + user);
     //mongoose.connection.close()
     })
-    //mongoose.connection.close()
+   .then( () => {
+      //console.log('Is this the right way? ')
+      mongoose.connection.close()
+  })
+  
     
-  */
-  //})
 
+  //})
+/*
   User.find({})
     .then(result => {
       result.forEach(n => {
@@ -64,6 +68,6 @@ const userSchema = mongoose.Schema({
       })  
       mongoose.connection.close()
     })
-  
+  */
     
     

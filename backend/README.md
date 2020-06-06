@@ -33,4 +33,7 @@ Browser localhost:<PORT>/api/users
 REST API 
 GET http://localhost:{<PORT>}/api/users
 - get_all_users.rest to be used from VSC, note change port number manually
-- Note! reads from tecnoforum_db/users  - not user as intended ???
+
+GET http://localhost:<PORT>/api/users/<NAME>
+- ISSUE! does not work with names with capital letter or spaces, lowercase single name ok
+- get_user_by_name.rest (change the port number manually)
