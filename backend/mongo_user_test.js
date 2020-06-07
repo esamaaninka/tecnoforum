@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
     }
   })
 
-  const User = mongoose.model('User', userSchema, 'user')
+  const User = mongoose.model('user', userSchema, 'user')
 
   /*
   const user = new User({
@@ -44,7 +44,9 @@ const userSchema = mongoose.Schema({
   })
 
 */
-  const name = 'kalle kustaa'
+
+/*
+const name = 'kalle kustaa'
 
   User
     .findOne({ fullname: `${name}` }, function (error, user) {
@@ -56,7 +58,22 @@ const userSchema = mongoose.Schema({
       //console.log('Is this the right way? ')
       mongoose.connection.close()
   })
-  
+  */
+
+  const id = '5edaaa175521736e1898f736'
+
+  User
+    .findById(id, function (err, docs) { 
+      if (err){ 
+          console.log(err)
+      } 
+      else{ 
+          console.log("Result : ", docs)
+      }
+    }) 
+   .then( () => {
+      mongoose.connection.close()
+    })
     
 
   //})
