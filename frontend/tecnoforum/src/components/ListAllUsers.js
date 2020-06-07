@@ -1,5 +1,6 @@
 import React from 'react';
 import Row from './Row'
+import {Table} from 'semantic-ui-react';
 
 export default class ListAllUsers extends React.Component {
 	
@@ -43,20 +44,20 @@ export default class ListAllUsers extends React.Component {
 			return <Row key={user.id} item={user}/>
 		})
 		return(
-			<table>
-				<thead>
-				<tr>
-					<th>Fullname</th>
-					<th>Password</th>
-					<th>Email</th>
-					<th>Nickname</th>
-					<th>Id</th>
-				</tr>
-				</thead>
-				<tbody>
+			<Table celled>
+				<Table.Header>
+				<Table.Row>
+					<Table.HeaderCell>Fullname</Table.HeaderCell>
+					<Table.HeaderCell>Password</Table.HeaderCell>
+					<Table.HeaderCell>Email</Table.HeaderCell>
+					<Table.HeaderCell>Nickname</Table.HeaderCell>
+					<Table.HeaderCell>Id</Table.HeaderCell>
+				</Table.Row>
+				</Table.Header>
+				<Table.Body>
 				{users}
-				</tbody>
-			</table>
+				</Table.Body>
+			</Table>
 		)
 	}
 
