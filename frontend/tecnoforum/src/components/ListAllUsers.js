@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from './Row'
 import {Table} from 'semantic-ui-react';
+import DataFetchController from '../controller/DataFetchController'
 
 export default class ListAllUsers extends React.Component {
 	
@@ -11,32 +12,8 @@ export default class ListAllUsers extends React.Component {
 		}
 	}
 
-	getUserslist = () =>
-	{
-		let request = {
-			method:"GET",
-			mode:"cors",
-			headers:{"Content-type":"application/json"}
-		}
-		fetch("/api/users",request).then(response => {
-			if(response.ok) {
-				response.json().then(data => {
-					this.setState({
-						list:data
-					})
-				}).catch(error => {
-					console.log("Failed to parse JSON data:",error)
-				})
-			} else {
-				console.log("Server responded with status:",response.status) 
-			}
-		}).catch(error => {
-			console.log("Server responded with an error:",error);
-		})
-	}
-
 	componentDidMount() {
-		this.getUserslist();
+		DataFetchController.getUserslist(this);
 	}
 
 	render() {
