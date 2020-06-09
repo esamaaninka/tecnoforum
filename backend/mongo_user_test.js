@@ -32,18 +32,32 @@ const userSchema = mongoose.Schema({
   const User = mongoose.model('user', userSchema, 'user')
 
   /*
+
+{"_id":
+  { "$oid":"5edb910a0cfa3550a48703a9"},
+    "fullname":"kalle kustaa",
+    "password":"korkki",
+    "email":"kallekustaa@mail.com",
+    "nickname":"Gustav",
+    "__v":{"$numberInt":"0"}
+}
+*/
   const user = new User({
-    fullname: 'kalle kustaa',
-    password: 'korkki',
-    email: 'kallekustaa@mail.com',
-    nickname: 'Gustav'
+    fullname: 'Pekka Pätkä',
+    password: 'wilhelmiina',
+    email: 'pekka@email.com',
+    nickname: 'Pätkä'
   })
 
   user.save().then(response => {
       console.log('user saved')
   })
+  .then( () => {
+    //console.log('Is this the right way? ')
+    mongoose.connection.close()
+})
 
-*/
+
 
 /*
 const name = 'kalle kustaa'
@@ -61,7 +75,7 @@ const name = 'kalle kustaa'
   */
 
   const id = '5edaaa175521736e1898f736'
-
+/*
   User
     .findById(id, function (err, docs) { 
       if (err){ 
@@ -74,9 +88,21 @@ const name = 'kalle kustaa'
    .then( () => {
       mongoose.connection.close()
     })
-    
+  */  
 
-  //})
+ // HOX ei toimi vielä !!!! 
+ /*
+  User.deleteOne({id: id})
+      .then(function(){ 
+        console.log("Data deleted"); // Success 
+      })
+      .then( () => {
+        mongoose.connection.close()
+      })
+      .catch(function(error){ 
+        console.log(error); // Failure 
+      }) 
+  */
 /*
   User.find({})
     .then(result => {

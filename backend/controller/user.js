@@ -42,5 +42,26 @@ userRouter.get('/api/users/id/:id', (request, response, next) => {
         })
         .catch(error => next(error))
 })
+
+userRouter.post('/api/users/', (request, response, next) => {
+    console.log("post: ", request.body)
+    const user = new User(request.body)
+
+    user.save()
+        .then(result => {
+            console.log('post result: ', result)
+            response.status(201).json(result)
+        })
+        .catch(error => next(error))
+})
+
+/* KESKEN 
+userRouter.delete('/api/users/:name_or_id'), (request, response,next) => {
+    console.log("Deleting with name or id: ", request.params.name_or_id)
+    console.log(typeof request.params.name_or_id)
+    User
+        .findOneAndDelete
+}
+*/
 module.exports = userRouter
 

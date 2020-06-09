@@ -1,6 +1,6 @@
 Define env variables in .env file in project root, examples below:
 
-    port=<PORT_NUMBER> by default 3000 used if undefined
+    port=<PORT_NUMBER> by default 3001 used if undefined
     MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?retryWrites=true&w=majority
 
 
@@ -34,6 +34,11 @@ REST API
 GET http://localhost:{<PORT>}/api/users
 - get_all_users.rest to be used from VSC, note change port number manually
 
-GET http://localhost:<PORT>/api/users/<NAME>
-- ISSUE! does not work with names with capital letter or spaces, lowercase single name ok
+GET http://localhost:<PORT>/api/users/name/<NAME>
 - get_user_by_name.rest (change the port number manually)
+
+GET http://localhost:<PORT>/api/users/id/<id>
+- get_user_by_id.rest
+
+POST http://localhost:<PORT>/api/users 
+- POST_user.rest

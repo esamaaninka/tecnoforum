@@ -1,0 +1,10 @@
+@PORT=3001
+POST http://localhost:{{PORT}}/api/users/
+Content-Type: application/json
+
+{
+  		"fullname": "Pekka Poutapäivä",
+  		"password": "ukkospilvi",
+        "email": "pekkapouta@mtv.fi",
+        "nickname": "wheathergubbe"
+}
