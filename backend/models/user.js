@@ -1,10 +1,19 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
-// siirrä ensin requestit controller moduuliin, sen jälkeen ota tämä models/blog.js
-// käyttöön
-
+// HOX validators might work only in creation, when using schema
+// e.g when updating model validations see discussion about solutions
+// https://stackoverflow.com/questions/15627967/why-mongoose-doesnt-validate-on-update
+// try whether this setting "mongoose.set('runValidators', true); "
+// just before app.js connectMongo
 const userSchema = mongoose.Schema({
-    fullname: String,
+    fullname: {
+      type: String,
+      required:true,
+      unique: true,
+      minlength: 4,
+      maxlength: 10
+    },
     password: String,
     email: String,
     nickname: String
@@ -15,7 +24,9 @@ const userSchema = mongoose.Schema({
       returnedObject.id = returnedObject._id.toString()
       delete returnedObject._id
       delete returnedObject.__v
+      // delete the hashed password from final, not to be revealed outside
+      //delete returnedObject.password
     }
   })
-  
+
   module.exports = mongoose.model('Users', userSchema, 'user')

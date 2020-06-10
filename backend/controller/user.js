@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const userRouter = require('express').Router()
 const User = require('../models/user')
 
@@ -42,10 +43,21 @@ userRouter.get('/api/users/id/:id', (request, response, next) => {
         })
         .catch(error => next(error))
 })
-
-userRouter.post('/api/users/', (request, response, next) => {
+// HOX jos kutsutaan await oltava tehty async sisältä
+userRouter.post('/api/users/', async (request, response, next) => {
     console.log("post: ", request.body)
-    const user = new User(request.body)
+    const body = request.body
+
+    const saltrounds = 10
+    const passwordHash = await bcrypt.hash(body.password, saltrounds)
+    console.log('Hashed pwd: ', passwordHash)
+    
+    const user = new User({
+        fullname: body.fullname,
+        password: passwordHash,
+        email: body.email,
+        nickname: body.nickname
+    })
 
     user.save()
         .then(result => {
