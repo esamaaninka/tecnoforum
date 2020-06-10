@@ -4,23 +4,23 @@ import { Table } from 'semantic-ui-react';
 import FetchDataController from '../controller/FetchDataController';
 import Spinner from './Spinner';
 
-export default class ListAllUsers extends React.Component {
+export default class GetUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
+      user:null,
     };
   }
 
   componentDidMount() {
-    FetchDataController.getUserslist(this);
+    FetchDataController.getUserByName(this, this.props.name);
   }
 
   render() {
-    if (this.state.list <= this.state.list.length) return <Spinner />;
-    let users = this.state.list.map((user, index) => {
-      return <Row key={user.id} item={user} />;
-    });
+    if (this.state.user === null) return <Spinner />;
+    // let users = this.state.list.map((user, index) => {
+    //   return <Row item={user} />;
+    // });
     return (
       <Table celled>
         <Table.Header>
@@ -32,7 +32,7 @@ export default class ListAllUsers extends React.Component {
             <Table.HeaderCell>Id</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{users}</Table.Body>
+        <Table.Body><Row key={this.state.user.id} item={this.state.user} /></Table.Body>
       </Table>
     );
   }
