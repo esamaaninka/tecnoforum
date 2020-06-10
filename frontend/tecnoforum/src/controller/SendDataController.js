@@ -2,17 +2,20 @@ import Axios from 'axios';
 
 export default class SendDataController
 {
-	static getUserslist (object)
+	static register (state, newUser)
 	{
 		Axios({
-			method: 'GET',
+			method: 'POST',
 			mode: "cors",
 			url: '/api/users',
-			responseType: 'json'
+			data: {
+			fullname: newUser.fullname,
+			password: newUser.password,
+			email: newUser.email,
+			nickname: newUser.nickname
+			}
 		}).then((response) => {
-			object.setState({
-				list:response.data
-			});
+			console.log(response);
 		}).catch(error => {
 			console.log("Server responded with an error:",error);
 		});

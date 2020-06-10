@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 export default class FetchDataController
 {
-	static getUserslist (object)
+	static getUserslist (state)
 	{
 		Axios({
 			method: 'GET',
@@ -10,7 +10,7 @@ export default class FetchDataController
 			url: '/api/users',
 			responseType: 'json'
 		}).then((response) => {
-			object.setState({
+			state.setState({
 				list:response.data
 			});
 		}).catch(error => {
@@ -18,7 +18,7 @@ export default class FetchDataController
 		});
 	}
 
-	static getUserByName (object, name)
+	static getUserByName (state, name)
 	{
 		Axios({
 			method: 'GET',
@@ -26,7 +26,7 @@ export default class FetchDataController
 			url: `/api/users/name/${name}`,
 			responseType: 'json'
 		}).then((response) => {
-			object.setState({
+			state.setState({
 				user:response.data
 			});
 		}).catch(error => {
