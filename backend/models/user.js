@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
       required:true,
       unique: true,
       minlength: 4,
-      maxlength: 10
+      maxlength: 20
     },
     password: String,
     email: String,
@@ -28,5 +28,7 @@ const userSchema = mongoose.Schema({
       //delete returnedObject.password
     }
   })
+
+  userSchema.plugin(uniqueValidator)
 
   module.exports = mongoose.model('Users', userSchema, 'user')
