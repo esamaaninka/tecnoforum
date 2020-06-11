@@ -1,24 +1,30 @@
 import React from 'react';
-import Row from './Row';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
-import FetchDataController from '../controller/FetchDataController';
-import Spinner from './Spinner';
 
-export default class ListAllUsers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: [],
-    };
-  }
+import { getContacts } from '../actions/contactActions';
+import Row from './Row';
+import Spinner from './Spinner';
+// import FetchDataController from '../controller/FetchDataController';
+
+class ListAllUsers extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     list: [],
+  //   };
+  // }
 
   componentDidMount() {
-    FetchDataController.getUserslist(this);
+    // FetchDataController.getContacts(this)
+    console.log(this.props);
+    getContacts(this);
   }
 
   render() {
-    if (this.state.list <= this.state.list.length) return <Spinner />;
-    let users = this.state.list.map((user, index) => {
+    // if (this.props.list <= this.props.list.length) return <Spinner />;
+    let users = this.props.list.map((user) => {
       return <Row key={user.id} item={user} />;
     });
     return (
@@ -37,3 +43,16 @@ export default class ListAllUsers extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    token: state.login.token,
+    list: state.contact.list,
+  };
+};
+
+// const mapDispatchToProps = (dispatch) => ({
+//   getContacts: () => dispatch(getContacts()),
+// });
+
+export default withRouter(connect(mapStateToProps, { getContacts })(ListAllUsers));
