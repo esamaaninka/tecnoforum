@@ -2,10 +2,13 @@ Define env variables in .env file in project root, examples below:
 
     port=<PORT_NUMBER> by default 3001 used if undefined
     MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?retryWrites=true&w=majority
+    SECRET=SALAINENSANATOKENINTEKOON
 
 
 Start with 
-%npm start
+%npm start 
+or
+%node index.js
 
 to run in dev mode utilising NODEMON 
 %npm run dev
@@ -42,3 +45,6 @@ GET http://localhost:<PORT>/api/users/id/<id>
 
 POST http://localhost:<PORT>/api/users 
 - POST_user.rest
+
+POST http://localhost:<PORT>/api/users/login
+- POST_login.rest
