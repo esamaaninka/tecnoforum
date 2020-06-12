@@ -6,6 +6,7 @@ const config = require('./utils/config')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const userRouter = require('./controller/user')
+const commentRouter = require('./controller/comment')
 
 const mongoose = require('mongoose')
 

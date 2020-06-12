@@ -1,0 +1,2 @@
+@PORT=3001
+GET http://localhost:{{PORT}}/api/comments
