@@ -25,22 +25,26 @@ class ListAllUsers extends React.Component {
 
   render() {
     // if (this.props.list <= this.props.list.length) return <Spinner />;
+    const isLoading = this.props.loading && <Spinner />;
     let users = this.props.list.map((user) => {
       return <Row key={user.id} item={user} />;
     });
     return (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Fullname</Table.HeaderCell>
-            <Table.HeaderCell>Password</Table.HeaderCell>
-            <Table.HeaderCell>Email</Table.HeaderCell>
-            <Table.HeaderCell>Nickname</Table.HeaderCell>
-            <Table.HeaderCell>Id</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{users}</Table.Body>
-      </Table>
+      <>
+        {isLoading}
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Fullname</Table.HeaderCell>
+              <Table.HeaderCell>Password</Table.HeaderCell>
+              <Table.HeaderCell>Email</Table.HeaderCell>
+              <Table.HeaderCell>Nickname</Table.HeaderCell>
+              <Table.HeaderCell>Id</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>{users}</Table.Body>
+        </Table>
+      </>
     );
   }
 }
@@ -49,6 +53,7 @@ const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     list: state.contact.list,
+    loading: state.login.loading,
   };
 };
 
