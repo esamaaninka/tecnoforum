@@ -1,23 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListAllUsers from './components/ListAllUsers'
+import thunk from 'redux-thunk';
+import { BrowserRouter } from 'react-router-dom';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
 
-class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
+import App from './App';
+import rootReducer from './reducers/';
 
-		};
-	}
+// composeEnhancers is here for Redux devTools. Install extension in your browser
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
-	render() {
-		return (
-			<div>
-			<h1>_TecnoForum_</h1>{' '}
-			<ListAllUsers/>
-			</div>
-		);
-	}
-}
-
-ReactDOM.render(<React.StrictMode><App /></React.StrictMode>, document.getElementById('root'));
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
