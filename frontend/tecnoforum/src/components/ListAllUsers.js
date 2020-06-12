@@ -18,8 +18,9 @@ class ListAllUsers extends React.Component {
 
   componentDidMount() {
     // FetchDataController.getContacts(this)
+
+    this.props.getContacts(this.props.token);
     console.log(this.props);
-    getContacts(this);
   }
 
   render() {
