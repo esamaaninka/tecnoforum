@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 
-import { getContacts } from '../actions/contactActions';
 import Row from './Row';
 import Spinner from './Spinner';
+import { getContacts } from '../actions/contactActions';
 
 class ListAllUsers extends React.Component {
   /*
