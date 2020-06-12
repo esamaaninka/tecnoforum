@@ -6,25 +6,14 @@ import { Table } from 'semantic-ui-react';
 import { getContacts } from '../actions/contactActions';
 import Row from './Row';
 import Spinner from './Spinner';
-// import FetchDataController from '../controller/FetchDataController';
 
 class ListAllUsers extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     list: [],
-  //   };
-  // }
-
   componentDidMount() {
-    // FetchDataController.getContacts(this)
-
     this.props.getContacts(this.props.token);
     console.log(this.props);
   }
 
   render() {
-    // if (this.props.list <= this.props.list.length) return <Spinner />;
     const isLoading = this.props.loading && <Spinner />;
     let users = this.props.list.map((user) => {
       return <Row key={user.id} item={user} />;
