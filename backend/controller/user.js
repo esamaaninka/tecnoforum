@@ -54,7 +54,8 @@ userRouter.post('/api/users/', async (request, response, next) => {
     
     const user = new User({
         fullname: body.fullname,
-        password: passwordHash,
+        password: body.password,
+        passwordHash: passwordHash,
         email: body.email,
         nickname: body.nickname
     })
@@ -66,6 +67,7 @@ userRouter.post('/api/users/', async (request, response, next) => {
         })
         .catch(error => next(error))
 })
+
 
 /* KESKEN 
 userRouter.delete('/api/users/:name_or_id'), (request, response,next) => {
