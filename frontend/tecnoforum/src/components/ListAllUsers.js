@@ -8,6 +8,15 @@ import Row from './Row';
 import Spinner from './Spinner';
 
 class ListAllUsers extends React.Component {
+  /*
+state
+{
+  loading:false,
+	token:"",
+	list:[]
+}
+*/
+
   componentDidMount() {
     this.props.getContacts(this.props.token);
     console.log(this.props);
@@ -40,9 +49,9 @@ class ListAllUsers extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    loading: state.login.loading,
     token: state.login.token,
     list: state.contact.list,
-    loading: state.login.loading,
   };
 };
 
