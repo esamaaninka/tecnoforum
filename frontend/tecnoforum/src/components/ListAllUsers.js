@@ -3,28 +3,26 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 
-import { getContacts } from '../actions/contactActions';
 import Row from './Row';
 import Spinner from './Spinner';
-// import FetchDataController from '../controller/FetchDataController';
+import { getContacts } from '../actions/contactActions';
 
 class ListAllUsers extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     list: [],
-  //   };
-  // }
+  /*
+state
+{
+  loading:false,
+	token:"",
+	list:[]
+}
+*/
 
   componentDidMount() {
-    // FetchDataController.getContacts(this)
-
     this.props.getContacts(this.props.token);
     console.log(this.props);
   }
 
   render() {
-    // if (this.props.list <= this.props.list.length) return <Spinner />;
     const isLoading = this.props.loading && <Spinner />;
     let users = this.props.list.map((user) => {
       return <Row key={user.id} item={user} />;
@@ -51,9 +49,9 @@ class ListAllUsers extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    loading: state.login.loading,
     token: state.login.token,
     list: state.contact.list,
-    loading: state.login.loading,
   };
 };
 
