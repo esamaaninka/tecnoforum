@@ -8,27 +8,14 @@ import Spinner from './Spinner';
 import { getContacts } from '../actions/contactActions';
 
 class ListAllUsers extends React.Component {
-  /*
-state
-{
-  loading:false,
-	token:"",
-	list:[]
-}
-*/
-
-  componentDidMount() {
-    this.props.getContacts(this.props.token);
-    console.log(this.props);
-  }
-
+  
   render() {
     const isLoading = this.props.loading && <Spinner />;
     let users = this.props.list.map((user) => {
       return <Row key={user.id} item={user} />;
     });
     return (
-      <>
+      <div>
         {isLoading}
         <Table celled>
           <Table.Header>
@@ -42,9 +29,10 @@ state
           </Table.Header>
           <Table.Body>{users}</Table.Body>
         </Table>
-      </>
+      </div>
     );
   }
+
 }
 
 const mapStateToProps = (state) => {

@@ -1,7 +1,11 @@
 import React from 'react';
-import { Form, Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { Form, Button, Segment } from 'semantic-ui-react';
+
 import Spinner from './Spinner';
 import SendDataController from '../controller/SendDataController';
+import { onRegister } from '../actions/registerActions';
 
 class Registration extends React.Component {
   constructor(props) {
@@ -46,35 +50,50 @@ class Registration extends React.Component {
   };
 
   render() {
+	const isLoading = this.props.loading && <Spinner />;
     return (
-      <div>
-        <Form>
-          <Form.Field>
-            <label htmlFor='fullname'>Fullname</label>
-            <input type='text' name='fullname' value={this.state.fullname} onChange={this.onChange} />
-          </Form.Field>
-        </Form>
-        <Form>
-          <Form.Field>
-            <label htmlFor='password'>Password</label>
-            <input type='password' name='password' value={this.state.password} onChange={this.onChange} />
-          </Form.Field>
-        </Form>
-        <Form>
-          <Form.Field>
-            <label htmlFor='email'>Email</label>
-            <input type='text' name='email' value={this.state.email} onChange={this.onChange} />
-          </Form.Field>
-        </Form>
-        <Form>
-          <Form.Field>
-            <label htmlFor='nickname'>Nickname</label>
-            <input type='text' name='nickname' value={this.state.nickname} onChange={this.onChange} />
-          </Form.Field>
-        </Form>
-        <Button onClick={this.onSubmit}>Submit</Button>
-      </div>
+	  <div>
+		{isLoading}
+		<Segment>
+			<Form>
+			<Form.Field>
+				<label htmlFor='fullname'>Fullname</label>
+				<input type='text' name='fullname' placeholder='Fullname' value={this.state.fullname} onChange={this.onChange} />
+			</Form.Field>
+			</Form>
+			<br/>
+			<Form>
+			<Form.Field>
+				<label htmlFor='password'>Password</label>
+				<input type='password' name='password' placeholder='Password' value={this.state.password} onChange={this.onChange} />
+			</Form.Field>
+			</Form>
+			<br/>
+			<Form>
+			<Form.Field>
+				<label htmlFor='email'>Email</label>
+				<input type='text' name='email' placeholder='Email' value={this.state.email} onChange={this.onChange} />
+			</Form.Field>
+			</Form>
+			<br/>
+			<Form>
+			<Form.Field>
+				<label htmlFor='nickname'>Nickname</label>
+				<input type='text' name='nickname' placeholder='Nickname' value={this.state.nickname} onChange={this.onChange} />
+			</Form.Field>
+			</Form>
+			<br/>
+			<Button position='right' onClick={this.onSubmit}>Register</Button>
+		</Segment>
+	  </div>
     );
   }
 }
-export default Registration;
+
+const mapStateToProps = (state) => {
+	return {
+	  loading: state.login.loading
+	};
+};
+  
+export default withRouter(connect(mapStateToProps, { onRegister })(Registration));
