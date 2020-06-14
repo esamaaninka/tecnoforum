@@ -34,6 +34,7 @@ Browser localhost:<PORT>/api/users
 
 
 REST API 
+Users
 GET http://localhost:{<PORT>}/api/users
 - get_all_users.rest to be used from VSC, note change port number manually
 
@@ -48,3 +49,10 @@ POST http://localhost:<PORT>/api/users
 
 POST http://localhost:<PORT>/api/users/login
 - POST_login.rest
+
+Comments: 
+GET http://localhost:<PORT>/api/comments
+- get_all_comments.rest
+
+POST http://localhost:<PORT>/api/comments
+- POST_a_comment.rest
