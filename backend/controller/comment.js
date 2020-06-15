@@ -1,6 +1,18 @@
 const commentRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Comments = require('../models/comment')
 const { response } = require('../app')
+
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if(authorization && authorization.toLowerCase().startsWith('basic ')) {
+        return authorization.substring(6)
+      }
+    else if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      return authorization.substring(7)
+    }
+    return null
+  }
 
 commentRouter.get('/api/comments', (request, response,next) => {
     
@@ -17,6 +29,13 @@ commentRouter.get('/api/comments', (request, response,next) => {
     const body = request.body  
     
     // token tarkistus tähän ensin
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    //const user = await User.findById(decodedToken.id)
 
     const comment = new Comments({
         comment: body.comment,
@@ -30,7 +49,6 @@ commentRouter.get('/api/comments', (request, response,next) => {
     //await user.save()
   
     response.json(savedComment.toJSON())
-    //comments.save
   })    
 
   module.exports = commentRouter
