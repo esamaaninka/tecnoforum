@@ -32,8 +32,10 @@ Browser localhost:<PORT>/api/users
         }
     ]
 
-
+----------------------------------------------------------------
 REST API 
+----------------------------------------------------------------
+
 Users
 GET http://localhost:{<PORT>}/api/users
 - get_all_users.rest to be used from VSC, note change port number manually
@@ -50,9 +52,20 @@ POST http://localhost:<PORT>/api/users
 POST http://localhost:<PORT>/api/users/login
 - POST_login.rest
 
+----------------------------------------------------------------
 Comments: 
 GET http://localhost:<PORT>/api/comments
 - get_all_comments.rest
 
 POST http://localhost:<PORT>/api/comments
 - POST_a_comment.rest
+
+
+POST http://localhost:{{PORT}}/api/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBla2thIFB1dXDDpMOkIiwiaWQiOiI1ZWUzMWIwMTk0MmJkZjQ2OTBhZWU0ZjkiLCJpYXQiOjE1OTIxNjY1MTl9.jO4apItViBccU9xYD3D7GVvXUFvV1F3_ZEV8vE-cR3Q
+
+{
+		"comment": "Aliquam in porta enim, ut pulvinar neque. Fusce pulvinar fermentum placerat. Nulla porta, quam elementum eleifend dictum, leo erat fringilla arcu, nec efficitur sem purus vitae magna. Nulla facilisi. Aliquam mi lectus, iaculis non mattis sed, laoreet vitae sem. Phasellus viverra sodales arcu at sollicitudin. Phasellus vestibulum neque at dolor porttitor mattis. Curabitur porttitor massa sed condimentum auctor. Mauris semper ex massa. Vestibulum aliquet hendrerit diam, semper dictum enim lobortis eget.",
+		"author": "cicero"
+}
