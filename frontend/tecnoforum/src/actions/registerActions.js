@@ -15,11 +15,10 @@ export const onRegister = (user) => {
       body: JSON.stringify(user),
     };
     dispatch(loading());
-    fetch('/register', request)
+    fetch('/api/users', request)
       .then((response) => {
 		dispatch(endLoading());
         if (response.ok) {
-          alert('Register success');
 		  dispatch(registerSuccess());
         } else {
           if (response.status === 409) {

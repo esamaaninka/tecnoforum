@@ -3,25 +3,18 @@ import {
 	REGISTER_FAILED,
   } from '../actions/registerActions';
   
-  /*
-  state
-  {
-	  token:"",
-	  isLogged:false,
-	  loading:false,
-	  error:""
-  }
-  */
-  
   const getInitialStateFromStorage = () => {
 	if (sessionStorage.getItem('registerstate')) {
 	  let registerstate = JSON.parse(sessionStorage.getItem('registerstate'));
+	  registerstate.error = '';
+	  registerstate.success = false;
 	  return registerstate;
 	} else {
 	  return {
 		token: '',
 		loading: false,
 		error: '',
+		success: false
 	  };
 	}
   };
@@ -41,6 +34,7 @@ import {
 		  ...state,
 		  error: '',
 		  loading: false,
+		  success: true
 		};
 		saveToStorage(tempState);
 		return tempState;
@@ -49,6 +43,7 @@ import {
 		  ...state,
 		  error: action.error,
 		  loading: false,
+		  success: false
 		};
 		saveToStorage(tempState);
 		return tempState;
