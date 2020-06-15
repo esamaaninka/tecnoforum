@@ -19,7 +19,8 @@ state
 
 const getInitialStateFromStorage = () => {
   if (sessionStorage.getItem('loginstate')) {
-    let loginstate = JSON.parse(sessionStorage.getItem('loginstate'));
+	let loginstate = JSON.parse(sessionStorage.getItem('loginstate'));
+	loginstate.error = '';
     return loginstate;
   } else {
     return {

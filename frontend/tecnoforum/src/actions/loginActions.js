@@ -1,24 +1,4 @@
-// import Axios from 'axios';
 import { clearContactReducerState, getContacts } from './contactActions';
-
-// Axios({
-//   method: 'POST',
-//   mode: 'cors',
-//   url: '/api/users',
-//   data: {
-//     fullname: newUser.fullname,
-//     password: newUser.password,
-//     email: newUser.email,
-//     nickname: newUser.nickname,
-//   },
-// })
-//   .then((response) => {
-//     console.log('onRegister(): ', response);
-//     dispatch(onRegisterSuccesss(response));
-//   })
-//   .catch((error) => {
-//     console.log('Server responded with an error:', error);
-//   });
 
 //Action constants
 
@@ -31,7 +11,7 @@ export const LOGOUT_FAILED = 'LOGOUT_FAILED';
 
 //Async Actions
 
-export const onLogin = (user) => {
+export const onLogin = (user, history) => {
   return (dispatch) => {
     let request = {
       method: 'POST',
@@ -40,14 +20,14 @@ export const onLogin = (user) => {
       body: JSON.stringify(user),
     };
     dispatch(loading());
-    fetch('/login', request)
+    fetch('/api/users/login', request)
       .then((response) => {
         if (response.ok) {
           response
             .json()
             .then((data) => {
               dispatch(loginSuccess(data.token));
-              dispatch(getContacts(data.token));
+			  history.push('/');
             })
             .catch((error) => {
               dispatch(loginFailed('Failed to parse response. Reason:', error));
