@@ -1,8 +1,6 @@
 import {
   LOADING,
   END_LOADING,
-  REGISTER_SUCCESS,
-  REGISTER_FAILED,
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT_SUCCESS,
@@ -21,7 +19,8 @@ state
 
 const getInitialStateFromStorage = () => {
   if (sessionStorage.getItem('loginstate')) {
-    let loginstate = JSON.parse(sessionStorage.getItem('loginstate'));
+	let loginstate = JSON.parse(sessionStorage.getItem('loginstate'));
+	loginstate.error = '';
     return loginstate;
   } else {
     return {
@@ -55,22 +54,6 @@ const loginReducer = (state = initialState, action) => {
         loading: false,
         error: '',
       };
-    case REGISTER_SUCCESS:
-      tempState = {
-        ...state,
-        error: '',
-        loading: false,
-      };
-      saveToStorage(tempState);
-      return tempState;
-    case REGISTER_FAILED:
-      tempState = {
-        ...state,
-        error: action.error,
-        loading: false,
-      };
-      saveToStorage(tempState);
-      return tempState;
     case LOGIN_SUCCESS:
       tempState = {
         isLogged: true,
