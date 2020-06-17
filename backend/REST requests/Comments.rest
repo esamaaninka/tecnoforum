@@ -3,10 +3,12 @@
 // "rest-client.environmentVariables": {
 //
 //        "local": {
- //           "HOST": "localhost",
- //           "PORT": "3001"
- //       }
- //   }
+//           "HOST": "localhost",
+//           "PORT": "3001"
+//       }
+//   }
+//
+// OR COMMENT THESE OUT
 //@PORT=3001
 //@HOST=localhost
 GET http://{{HOST}}:{{PORT}}/api/comments
@@ -27,5 +29,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBla
         //"comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rhoncus condimentum turpis. Sed auctor ante a neque auctor malesuada. Praesent tempor interdum neque a bibendum. Aliquam erat volutpat. Maecenas id dapibus felis. Nullam vel tempus purus. Cras hendrerit mi lacus, ac sodales ipsum euismod a. Nulla ornare at dui et vehicula. Praesent at malesuada sapien, sit amet lacinia est. Donec non ornare ligula. Curabitur sollicitudin et tellus ac tincidunt.",
 		//"comment": "Donec tristique ipsum libero, ut viverra ligula vehicula nec. Etiam luctus porta nisl nec gravida. Suspendisse id diam elementum, elementum sapien eu, vestibulum dolor. Sed a posuere quam, ac lacinia massa. Etiam consequat lorem aliquam mi sagittis efficitur ac in ligula. Nunc mattis tincidunt nulla quis finibus. Pellentesque quis nulla nec nisl varius aliquet eget vel dolor. Proin sed semper dolor, vel tempus sem. Curabitur laoreet ultricies dui vel sagittis. Curabitur consequat pellentesque tortor, ut commodo lorem varius vitae. Mauris ornare condimentum mi vitae ornare. In lacinia eget sapien non dictum. Interdum et malesuada fames ac ante ipsum primis in faucibus.",
 		"comment": "Aliquam in porta enim, ut pulvinar neque. Fusce pulvinar fermentum placerat. Nulla porta, quam elementum eleifend dictum, leo erat fringilla arcu, nec efficitur sem purus vitae magna. Nulla facilisi. Aliquam mi lectus, iaculis non mattis sed, laoreet vitae sem. Phasellus viverra sodales arcu at sollicitudin. Phasellus vestibulum neque at dolor porttitor mattis. Curabitur porttitor massa sed condimentum auctor. Mauris semper ex massa. Vestibulum aliquet hendrerit diam, semper dictum enim lobortis eget.",
-		"author": "cicero"
+        //"comment": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
+		//"comment": "Curabitur quis lectus non nunc porta interdum. Cras sagittis nisi vel velit bibendum molestie. Maecenas nunc lorem, bibendum ut gravida eget, lacinia quis neque. Etiam id dolor nisl. Maecenas tincidunt ligula ut pretium accumsan. Curabitur lorem orci, aliquet vitae eleifend id, bibendum ac sem. Integer pharetra hendrerit magna nec tristique. Mauris ex magna, eleifend vel ipsum nec, molestie auctor risus. Cras porta, risus et pulvinar molestie, nibh velit tempus augue, ultrices finibus lorem turpis eu augue. Phasellus rutrum justo eu metus porta, quis tempus lectus ultrices. In ac diam eget orci ornare luctus vitae ac dolor.",
+        "author": "cicero"
 }
