@@ -24,6 +24,20 @@ commentRouter.get('/api/comments', (request, response,next) => {
         .catch(error => next(error))
   })
 
+  //pitääk pathissa olla vielä ../id/:id ? vai riittääkö tuo
+  commentRouter.get('/api/comments/:id', (request, response, next) => {
+    console.log('/api/comments/:id', request.params.id)
+    console.log(typeof request.params.id)
+    Comments
+        .findById(request.params.id)
+        .then(comment =>{
+            console.log(`comment ${comment} with id ${request.params.id}`)
+            if(comment) response.json(comment.toJSON())
+            else response.json(`no comment found with id ${request.params.id}`)
+        })
+        .catch(error => next(error))
+})
+
   commentRouter.post('/api/comments', async (request, response,next) => {
     
     const body = request.body  

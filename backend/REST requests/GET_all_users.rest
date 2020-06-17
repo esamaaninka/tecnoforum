@@ -1,1 +1,12 @@
-GET http://localhost:3009/api/users
+// Define these variables in VSC settings.js and select "local" 
+// as "REST Client Environment"
+// "rest-client.environmentVariables": {
+//
+//        "local": {
+ //           "HOST": "localhost",
+ //           "PORT": "3001"
+ //       }
+ //   }
+//@PORT=3001
+//@HOST=localhost
+GET http://{{HOST}}:{{PORT}}/api/users

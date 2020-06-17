@@ -14,12 +14,13 @@ const userSchema = mongoose.Schema({
       minlength: 4,
       maxlength: 20
     },
-    password: {
+    /*password: {
       type: String,
       required:true,
       minlength: 8,
       maxlength: 16
     },
+    */
     passwordHash: String,
     email: String,
     nickname: String
