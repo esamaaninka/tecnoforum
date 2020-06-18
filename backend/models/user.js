@@ -10,19 +10,21 @@ const userSchema = mongoose.Schema({
     fullname: {
       type: String,
       required:true,
-      unique: true,
       minlength: 4,
       maxlength: 20
     },
-    password: {
-      type: String,
-      required:true,
-      minlength: 8,
-      maxlength: 16
-    },
     passwordHash: String,
-    email: String,
-    nickname: String
+    email: {
+        type: String,
+        required: true
+    },
+    nickname: String,
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+      }
+    ] 
   })
 
   userSchema.set('toJSON', {

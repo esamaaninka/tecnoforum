@@ -17,15 +17,11 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
             user = await User.findOne({email: body.email})
         }    
     
-        console.log('user after email find ', user)
-        
         const passwordCorrect = user === null
         ? false
             : await bcrypt.compare(body.password, user.passwordHash)
-       
-
-        //const passwordCorrect = await bcrypt.compare(body.password, user.passwordHash)
-        console.log('after pwd check', passwordCorrect)
+    
+        //console.log('after pwd check', passwordCorrect)
 
         if (!(user && passwordCorrect)) {
             return response.status(401).json({
@@ -38,12 +34,18 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
             id: user._id,
         }
 
+        /*
+            jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
+                if(err) { console.log(err) }    
+                res.send(token);
+            });        */
         const token = jwt.sign(userForToken, process.env.SECRET)
 
         response
             .status(200)
             .send({ fullname: user.fullname, token })
-        }catch{console.log("Pieleen meni")}
+        }catch{
+            console.log("Pieleen meni")} // korjaa tämä virhekäsittely esim. comments.js
     })
  
     module.exports = loginRouter

@@ -1,7 +1,10 @@
 const commentRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Comments = require('../models/comment')
+const User = require('../models/user')
 const { response } = require('../app')
+const logger = require('../utils/logger')
+//const { ConnectionStates } = require('mongoose') // mistä tämä tuli ?
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -24,31 +27,50 @@ commentRouter.get('/api/comments', (request, response,next) => {
         .catch(error => next(error))
   })
 
+  
+  commentRouter.get('/api/comments/:id', (request, response, next) => {
+      Comments
+        .findById(request.params.id)
+        .then(comment =>{
+            //console.log(`comment ${comment} with id ${request.params.id}`)
+            if(comment) response.json(comment.toJSON())
+            else response.json(`no comment found with id ${request.params.id}`)
+        })
+        .catch(error => next(error))
+})
+
   commentRouter.post('/api/comments', async (request, response,next) => {
     
     const body = request.body  
-    
-    // token tarkistus tähän ensin
     const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.id) {
-        return response.status(401).json({ error: 'token missing or invalid' })
+ 
+    try{
+      const decodedToken = jwt.verify(token, process.env.SECRET)
+      
+        if (!token || !decodedToken.id) {
+          return response.status(401).json({ error: 'token missing or invalid' })
+      }
+      const user = await User.findById(decodedToken.id)
+    
+      const comment = new Comments({
+        comment: body.comment,
+        author: user.fullname, // vai id
+        date: new Date(),
+        user: user._id
+      })
+    
+      const savedComment = await comment.save()
+      
+      user.comments = user.comments.concat(savedComment._id)
+      await user.save()
+      response.json(savedComment.toJSON())
+
+    }catch(error) {
+      logger.error(error.name)
+      return response.status(401).json({ error: 'token not matching any user'})
     }
 
-    //const user = await User.findById(decodedToken.id)
-
-    const comment = new Comments({
-        comment: body.comment,
-        author: body.author, // vai id
-        date: new Date()
-    })
-    
-    const savedComment = await comment.save()
-    console.log("saved comment id: ", savedComment._id)
-    //user.notes = user.notes.concat(savedNote._id)
-    //await user.save()
   
-    response.json(savedComment.toJSON())
-  })    
+})    
 
   module.exports = commentRouter
