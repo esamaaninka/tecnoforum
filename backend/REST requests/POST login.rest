@@ -4,6 +4,6 @@ Content-Type: application/json
 
 {
   	//"username": "Pekka Puupää",
-	"email": "pekka@suomi.fi",
+	"email": "pekkas@mtv3.fi",
   	"password": "salasana"
 }

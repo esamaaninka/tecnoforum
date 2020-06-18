@@ -3,8 +3,8 @@ POST http://localhost:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Pekka Puupää",
+  	"fullname": "Pekka Pouta",
   	"password": "salasana",
-        "email": "pekkasession@session.fi",
-        "nickname": "Pirkka"
+        "email": "pekkas@mtv3.fi",
+        "nickname": "pilvi"
 }
