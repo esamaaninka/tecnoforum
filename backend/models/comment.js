@@ -13,10 +13,12 @@ const commentSchema = mongoose.Schema({
     },
     author: String,
     date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'    
-    }
+    user: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'    
+      }
+    ],
     //category
     //thread
   })

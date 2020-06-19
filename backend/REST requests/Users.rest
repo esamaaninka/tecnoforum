@@ -1,0 +1,58 @@
+// Define these variables in VSC settings.js and select "local" 
+// as "REST Client Environment"
+// "rest-client.environmentVariables": {
+//
+//        "local": {
+//           "HOST": "localhost",
+//           "PORT": "3001"
+//       }
+//   }
+//-------------------------
+// OR COMMENT THESE OUT
+//@PORT=3001
+//@HOST=localhost
+//
+//-------------------------
+// GET ALL USERS
+GET http://{{HOST}}:{{PORT}}/api/users
+
+###
+//-------------------------
+// GET A USER by name or id (change fullname/id at the end of path)
+GET http://{{HOST}}:{{PORT}}/api/users/name/Jaska Jokunen
+###
+GET http://{{HOST}}:{{PORT}}/api/users/id/5eeb4e94e490098050f18ede
+
+###
+//
+// POST a user, userType enum : ['user','moderator','admin']
+// default "user"
+POST http://{{HOST}}:{{PORT}}/api/users/
+Content-Type: application/json
+
+{
+  	"fullname": "Alpo Admin",
+  	"password": "salasana",
+    "email": "alpo@tt.fi",
+    "nickname": "admini",
+    "userType": "admin" 
+}
+
+###
+// LOGIN 
+// returns fullname and token
+POST http://localhost:{{PORT}}/api/users/login
+Content-Type: application/json
+
+{
+  	//"username": "Alpo Admin",
+	"email": "alpo@tt.fi",
+  	"password": "salasana"
+}
+###
+//-------------------------
+//DELETE http://{{HOST}}:{{PORT}}/api/users/name_or_id
+DELETE http://{{HOST}}:{{PORT}}/api/users/5ee9e8fff11f0c4d58c3bc1d
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikphc2thIEpva3VuZW4iLCJpZCI6IjVlZWI2MjJmMTQ5ZWNiM2E4MGE4MTExNCIsImlhdCI6MTU5MjU1MDg4N30.KIeV5xe8Z9obPWP6CHEyQ9_SlcmeJJuAaWFY4Tlwnr0
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5MjU1MDE4N30.YrZ0ewHmxMUWmZzukkbbXZHtxzLhKMf2Nj2l2fQmr74
+###
