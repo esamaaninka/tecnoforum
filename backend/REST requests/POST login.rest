@@ -1,9 +1,0 @@
-@PORT=3001
-POST http://localhost:{{PORT}}/api/users/login
-Content-Type: application/json
-
-{
-  	//"username": "Pekka Puupää",
-	"email": "pekkas@mtv3.fi",
-  	"password": "salasana"
-}

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
+
 // HOX validators might work only in creation, when using schema
 // e.g when updating model validations see discussion about solutions
 // https://stackoverflow.com/questions/15627967/why-mongoose-doesnt-validate-on-update
@@ -19,12 +20,17 @@ const userSchema = mongoose.Schema({
         required: true
     },
     nickname: String,
+    userType: {
+      type: String,
+      enum : ['user','moderator','admin'],
+      default: 'user'
+    },
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
       }
-    ] 
+    ], 
   })
 
   userSchema.set('toJSON', {

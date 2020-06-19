@@ -39,22 +39,16 @@
 ## REST API 
 ----------------------------------------------------------------
 
-### Users
+### Users.rest
 ```
-	GET http://localhost:{<PORT>}/api/users
-	- get_all_users.rest to be used from VSC, note change port number manually
+	GET http://<HOST>:<PORT>/api/users
+	GET http://<HOST>:<PORT>/api/users/name/<NAME>
+	GET http://<HOST>:<PORT>/api/users/id/<id>
+	
 
-	GET http://localhost:<PORT>/api/users/name/<NAME>
-	- get_user_by_name.rest (change the port number manually)
-
-	GET http://localhost:<PORT>/api/users/id/<id>
-	- get_user_by_id.rest
-
-	POST http://localhost:<PORT>/api/users 
-	- POST_user.rest
-
-	POST http://localhost:<PORT>/api/users/login
-	- POST_login.rest
+	POST http://<HOST>:<PORT>/api/users 
+	POST http://<HOST>:<PORT>/api/users/login
+	
 
 ```
 ----------------------------------------------------------------
