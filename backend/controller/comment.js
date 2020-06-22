@@ -68,9 +68,36 @@ commentRouter.get('/api/comments', (request, response,next) => {
     }catch(error) {
       logger.error(error.name)
       return response.status(401).json({ error: 'token not matching any user'})
-    }
-
-  
+    } 
 })    
+
+commentRouter.delete('/api/comments/:id', async (request, response, next) => {
+    
+  const body = request.body  
+  const token = getTokenFrom(request)
+  
+  // tarkista olenko admin tai käyttäjä itse
+  try{
+      const decodedToken = jwt.verify(token, process.env.SECRET)
+      
+        if (!token || !decodedToken.id) {
+          return response.status(401).json({ error: 'token missing or invalid' })
+      }
+      const user = await User.findById(decodedToken.id)
+      console.log("admin user ", user.userType)
+      if(user.userType !== "admin") {
+          return response.status(401).json({ error: 'unauthorized admin delete operation'})
+      }
+
+      // poista comment, päivitä user ja thread, category modelit 
+      await Comments.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+    } catch (exception) {
+        // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+      next(exception)
+    }
+    
+})
+
 
   module.exports = commentRouter

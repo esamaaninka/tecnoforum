@@ -20,8 +20,12 @@ GET http://{{HOST}}:{{PORT}}/api/comments
 
 // GET A COMMENT BY ID
 // copy the comment id to the path from some of the listed comments
-GET http://{{HOST}}:{{PORT}}/api/comments/5eeb057fe868be4e70807427
+GET http://{{HOST}}:{{PORT}}/api/comments/5eeb3c898c5a886e105ab7ad
 
+###
+// DELETE A COMMENT BY ID
+DELETE http://{{HOST}}:{{PORT}}/api/comments/5eeb3c898c5a886e105ab7ad
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5MjgxMDM2OX0.1oT_FpwElqkSHXKRoaeOXEmJJAsMcTvXHerOzNyO95w
 ###
 
 // POST A COMMENT
