@@ -114,7 +114,7 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
             return response.status(401).json({ error: 'unauthorized admin delete operation'})
         }
 
-    
+        
         await User.findByIdAndRemove(request.params.id)
         response.status(204).end()
       } catch (exception) {

@@ -13,14 +13,19 @@ const commentSchema = mongoose.Schema({
     },
     author: String,
     date: Date,
-    user: [
+    user_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'    
       }
-    ],
+    ,
     //category
-    //thread
+    thread_id:  // kokeillaan toimisko näin ei taulukko vaan vain 1 ref
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Thread'
+      }
+    
   })
 
   commentSchema.set('toJSON', {
