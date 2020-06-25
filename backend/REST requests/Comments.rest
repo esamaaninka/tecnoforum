@@ -44,7 +44,7 @@ Content-Type: application/json
 @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkVzYSBBZG1pbiIsImlkIjoiNWVmNDU0OTcwYzQ4NGY3ZTQ4ODgzZjJmIiwiaWF0IjoxNTkzMDcxNzU4fQ.lBOesFw_8gRpkVbcZtw1CIOjY_DdlBQ29NofiB_lxxI
 ###
 // DELETE A COMMENT BY ID
-DELETE http://{{HOST}}:{{PORT}}/api/comments/5ef46395ba24bf1b307c3a5f
+DELETE http://{{HOST}}:{{PORT}}/api/comments/5ef4699e0e13696b5c01bb59
 //Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5Mjg5ODM0NH0.HKds10qxS35g56FkSGQdHUyFsTTKFvKKZElwYa1pu5E
 Authorization: bearer {{authToken}}
 ###
@@ -94,8 +94,8 @@ Authorization: bearer {{authToken}}
 {
 	"threadName": "Wankel -koneet",
 	//"comment": "old car, new car, go;... peel-out, burn-rubber, punch-it;... flat tire no treat!"
-	"comment": "Grinding metal sounds... I check; yes, the warranty... Was up yesterday."
+	//"comment": "Grinding metal sounds... I check; yes, the warranty... Was up yesterday."
 	//"comment": "Service Engine Soon... Horrid light that burns in Hell... Damn the Ford Taurus"
 	//"comment": "Objects in mirror... Are closer than they appear,... So back off, jack-ass."
-	//"comment": "Today crude oil reached... Sixty dollars a barrel ... Farewell, my Hummer."
+	"comment": "Today crude oil reached... Sixty dollars a barrel ... Farewell, my Hummer."
 }

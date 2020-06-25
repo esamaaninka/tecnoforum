@@ -116,7 +116,7 @@ commentRouter.delete('/api/comments/:id', async (request, response, next) => {
           await Thread.update({_id: comment.thread_id}, {$pull:{comments: comment._id} })
           // miksi nämä user updatet ei toimi? vaikka tuo yo ok ??
           // await User.update({_id: comment.user_id}, {$pull:{comments: comment._id} })
-          const result = await User.findByIdAndUpdate({_id: comment.user_id}, {$pull: {comments: { _id: comment._id }}}, { new: true });
+          const result = await User.findByIdAndUpdate({_id: comment.user_id}, {$pull:{comments: comment._id} }, { new: true });
             if (result)
               console.log('user pull result: ',result)
             
