@@ -19,7 +19,7 @@ GET http://{{HOST}}:{{PORT}}/api/users
 ###
 //-------------------------
 // GET A USER by name or id (change fullname/id at the end of path)
-GET http://{{HOST}}:{{PORT}}/api/users/name/Jaska Jokunen
+GET http://{{HOST}}:{{PORT}}/api/users/name/Esa Maaninka
 ###
 GET http://{{HOST}}:{{PORT}}/api/users/id/5eeb4e94e490098050f18ede
 
@@ -31,9 +31,9 @@ POST http://{{HOST}}:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Alpo Admin",
+  	"fullname": "Esa Admin",
   	"password": "salasana",
-    "email": "alpo@tt.fi",
+    "email": "esa@tt.fi",
     "nickname": "admini",
     "userType": "admin" 
 }
@@ -41,12 +41,12 @@ Content-Type: application/json
 ###
 // LOGIN 
 // returns fullname and token
-POST http://localhost:{{PORT}}/api/users/login
+POST http://{{HOST}}:{{PORT}}/api/users/login
 Content-Type: application/json
 
 {
   	//"username": "Alpo Admin",
-	"email": "alpo@tt.fi",
+	"email": "pekkas@mtv3.fi",
   	"password": "salasana"
 }
 ###

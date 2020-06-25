@@ -8,6 +8,8 @@ const middleware = require('./utils/middleware')
 const userRouter = require('./controller/user')
 const commentRouter = require('./controller/comment')
 const loginRouter = require('./controller/login')
+const threadRouter = require('./controller/thread')
+const categoryRouter = require('./controller/category')
 
 const mongoose = require('mongoose')
 
@@ -28,6 +30,8 @@ app.use(middleware.requestLogger)
 app.use('', userRouter)
 app.use('', loginRouter)
 app.use('', commentRouter)
+app.use('', threadRouter)
+app.use('', categoryRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

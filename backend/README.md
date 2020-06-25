@@ -57,6 +57,8 @@
 GET http://<HOST>:<PORT>/api/comments
 GET http://<HOST>:<PORT>/api/comments/<ID>
 
+DELETE http://<HOST>:<PORT>/api/comments/<ID>
+
 POST http://<HOST>:<PORT>/api/comments
 ```
 ```

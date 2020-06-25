@@ -15,7 +15,9 @@ const threadSchema = mongoose.Schema({
       maxlength: 20
     },
     date: Date, // thread luontipäivä
-    category: _id, // toimiikohan näin? 
+    author: String, 
+    user_id: String,
+    category_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}, 
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
@@ -32,4 +34,4 @@ const threadSchema = mongoose.Schema({
 
   threadSchema.plugin(uniqueValidator)
 
-  module.exports = mongoose.model('Threads', userSchema, 'threads')
+  module.exports = mongoose.model('Threads', threadSchema, 'threads')

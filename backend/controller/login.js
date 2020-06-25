@@ -40,7 +40,7 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
                 res.send(token);
             });        */
         const token = jwt.sign(userForToken, process.env.SECRET)
-
+        //console('login palauttama tokeni; ', token)
         response
             .status(200)
             .send({ fullname: user.fullname, token })

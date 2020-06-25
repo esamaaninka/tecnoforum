@@ -1,0 +1,44 @@
+// Define these variables in VSC settings.js and select "local" 
+// as "REST Client Environment"
+// "rest-client.environmentVariables": {
+//
+//        "local": {
+//           "HOST": "localhost",
+//           "PORT": "3001"
+//       }
+//   }
+//-------------------------
+// OR COMMENT THESE OUT
+//@PORT=3001
+//@HOST=localhost
+//-------------------------
+// 
+// GET ALL THREADS / CATEGORIES
+GET http://{{HOST}}:{{PORT}}/api/threads
+
+###
+
+GET http://{{HOST}}:{{PORT}}/api/categories
+
+###
+
+// Before posting a comment, log in and copy-paste the session string e.g
+//"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBla2thIFBvdXRhIiwiaWQiOiI1ZWViMmM4MjcyMWNkMjgxNDAzY2MzZWQiLCJpYXQiOjE1OTI0NzE2Mzh9.KUUzXGpiSxtEwk5_0OZe1yGUBQdsopqCBlQiOEefTnA"
+POST http://{{HOST}}:{{PORT}}/api/threads
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5MjkwNzUzMX0.bvvp4bGfWJN247tiqnsbKxXPPSOyAdwLtCXMzB4wjEM
+
+{
+		"categoryName": "Autot",
+		"threadName": "Wankel -koneet"
+}
+
+###
+POST http://{{HOST}}:{{PORT}}/api/categories
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5MjkwNzUzMX0.bvvp4bGfWJN247tiqnsbKxXPPSOyAdwLtCXMzB4wjEM
+
+{
+		"categoryName": "Autot"
+}
+
