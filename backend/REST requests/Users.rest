@@ -31,9 +31,9 @@ POST http://{{HOST}}:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Alpo Admin",
+  	"fullname": "Esa Admin",
   	"password": "salasana",
-    "email": "alpo@tt.fi",
+    "email": "esa@tt.fi",
     "nickname": "admini",
     "userType": "admin" 
 }

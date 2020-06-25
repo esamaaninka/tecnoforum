@@ -45,7 +45,7 @@ commentRouter.get('/api/comments', (request, response,next) => {
     
     const body = request.body  
     const token = getTokenFrom(request)
- 
+    
     try{
       const decodedToken = jwt.verify(token, process.env.SECRET)
       
@@ -71,7 +71,7 @@ commentRouter.get('/api/comments', (request, response,next) => {
       
       user.comments = user.comments.concat(savedComment._id)
       await user.save()
-      // tallenna myös Threadiin
+
       thread.comments = thread.comments.concat(savedComment._id)
       await thread.save()
       
@@ -88,7 +88,6 @@ commentRouter.delete('/api/comments/:id', async (request, response, next) => {
   const body = request.body  
   const token = getTokenFrom(request)
   
-  // tarkista olenko admin tai käyttäjä itse
   try{
       console.log('token: ', token)
       const decodedToken = jwt.verify(token, process.env.SECRET)
@@ -103,20 +102,27 @@ commentRouter.delete('/api/comments/:id', async (request, response, next) => {
           return response.status(401).json({ error: 'unauthorized admin delete operation'})
       }
 
-      // poista comment, päivitä user ja thread, category modelit vai löytyiskö
-      // automaattisesti kun modeliin linkitetty - tutki Populate ?!
+      
         /* Delete the reference: you can do an update with $pull (the value to pull would be the resume's _id):
 
         Assuming that `resume.user` is *not* populated
         await User.update({ _id: resume.user }, { $pull: { resumes: resume._id } })
         ..or get the user, remove the corresponding entry in resumes, save the user.*/
         //https://stackoverflow.com/questions/61297292/how-do-i-delete-an-item-from-a-schema-which-is-an-array-of-objects-in-mongoose
-
-      await Comments.findByIdAndRemove(request.params.id) 
+      
+      const comment = await Comments.findByIdAndRemove(request.params.id) 
         if(response) {
-          console.log('find and deleted, user data not updated yet')
+          
+          await Thread.update({_id: comment.thread_id}, {$pull:{comments: comment._id} })
+          // miksi nämä user updatet ei toimi? vaikka tuo yo ok ??
+          // await User.update({_id: comment.user_id}, {$pull:{comments: comment._id} })
+          const result = await User.findByIdAndUpdate({_id: comment.user_id}, {$pull: {comments: { _id: comment._id }}}, { new: true });
+            if (result)
+              console.log('user pull result: ',result)
+            
 
-          response.status(204).end()
+            
+            response.status(204).end()
         }
       
       } catch (exception) {
