@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const userRouter = require('express').Router()
 const User = require('../models/user')
 
@@ -9,11 +10,27 @@ userRouter.get('/api/users', (request, response,next) => {
             response.json(users.map(p => p.toJSON()))
         })
         .catch(error => next(error))
-  })
+})
+/* virhettä
+Schema hasn't been registered for model "Comment".
+Use mongoose.model(name, schema)
 
-  
-   // .findOne({ fullname: `${name}` }, function (error, user) {
+userRouter.get('/api/userscomments', async (request, response,next) => {  
     
+    try{
+        const users = await User
+            .find({})
+            .populate('comments', { comment: 1, date: 1 })
+            //.populate('comments')
+        response.json(users.map(u => u.toJSON()))
+    } catch (exception) {
+        // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+      next(exception)
+    }
+
+    
+})
+*/
 userRouter.get('/api/users/name/:name', (request, response, next) => {
     console.log('/api/users/name', request.params.name)
     User
@@ -57,7 +74,8 @@ userRouter.post('/api/users/', async (request, response, next) => {
         password: body.password,
         passwordHash: passwordHash,
         email: body.email,
-        nickname: body.nickname
+        nickname: body.nickname,
+        userType: body.userType
     })
 
     user.save()
@@ -68,14 +86,43 @@ userRouter.post('/api/users/', async (request, response, next) => {
         .catch(error => next(error))
 })
 
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if(authorization && authorization.toLowerCase().startsWith('basic ')) {
+        return authorization.substring(6)
+      }
+    else if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      return authorization.substring(7)
+    }
+    return null
+  }
+userRouter.delete('/api/users/:id', async (request, response, next) => {
+    
+    const body = request.body  
+    const token = getTokenFrom(request)
+    
+    // tarkista olenko admin tai käyttäjä itse
+    try{
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        
+          if (!token || !decodedToken.id) {
+            return response.status(401).json({ error: 'token missing or invalid' })
+        }
+        const user = await User.findById(decodedToken.id)
+        console.log("admin user ", user.userType)
+        if(user.userType !== "admin") {
+            return response.status(401).json({ error: 'unauthorized admin delete operation'})
+        }
 
-/* KESKEN 
-userRouter.delete('/api/users/:name_or_id'), (request, response,next) => {
-    console.log("Deleting with name or id: ", request.params.name_or_id)
-    console.log(typeof request.params.name_or_id)
-    User
-        .findOneAndDelete
-}
-*/
+        
+        await User.findByIdAndRemove(request.params.id)
+        response.status(204).end()
+      } catch (exception) {
+          // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+        next(exception)
+      }
+      
+})
+
 module.exports = userRouter
 

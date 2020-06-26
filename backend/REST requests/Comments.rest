@@ -1,0 +1,101 @@
+// Define these variables in VSC settings.js and select "local" 
+// as "REST Client Environment"
+// "rest-client.environmentVariables": {
+//
+//        "local": {
+//           "HOST": "localhost",
+//           "PORT": "3001"
+//       }
+//   }
+//-------------------------
+// OR COMMENT THESE OUT
+//@PORT=3001
+//@HOST=localhost
+//-------------------------
+// 
+// GET ALL COMMENTS
+GET http://{{HOST}}:{{PORT}}/api/comments
+
+###
+
+// GET A COMMENT BY ID
+// copy the comment id to the path from some of the listed comments
+GET http://{{HOST}}:{{PORT}}/api/comments/5eeb3b0ab3b2e67e98c0c650
+
+###
+
+////////////////////////////////////////////////////////////////////////
+// Helper LOGIN request to login and use token for the session
+// copy the token value to the variable @authToken below 
+////////////////////////////////////////////////////////////////////////
+POST http://{{HOST}}:{{PORT}}/api/users/login
+Content-Type: application/json
+
+{
+	//"email": "esa.maaninka@gmail.com",
+	"email": "esa@tt.fi",
+  	"password": "salasana"
+}
+
+//
+### tämä header juttu ei toimi
+//@authToken = {{login.response.headers.X-AuthToken}}
+
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkVzYSBBZG1pbiIsImlkIjoiNWVmNDU0OTcwYzQ4NGY3ZTQ4ODgzZjJmIiwiaWF0IjoxNTkzMDcxNzU4fQ.lBOesFw_8gRpkVbcZtw1CIOjY_DdlBQ29NofiB_lxxI
+###
+// DELETE A COMMENT BY ID
+DELETE http://{{HOST}}:{{PORT}}/api/comments/5ef4699e0e13696b5c01bb59
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5Mjg5ODM0NH0.HKds10qxS35g56FkSGQdHUyFsTTKFvKKZElwYa1pu5E
+Authorization: bearer {{authToken}}
+###
+
+// POST A COMMENT
+POST http://{{HOST}}:{{PORT}}/api/comments
+Content-Type: application/json
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkVzYSBNYWFuaW5rYSIsImlkIjoiNWVlZmM2MGY5ZmJlYzk0MGFlNzg1NzEyIiwiaWF0IjoxNTkyODI5NjMwfQ.y3ttjxh_nQ7QlxUUIfbVROEAYDBOY95HlKZZAjOGXY8
+Authorization: bearer {{authToken}}
+
+{
+		"threadName": "Lopsums",
+  		//"comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  		//"comment": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+		//"comment": "Donec tristique ipsum libero, ut viverra ligula vehicula nec. Etiam luctus porta nisl nec gravida. Suspendisse id diam elementum, elementum sapien eu, vestibulum dolor. Sed a posuere quam, ac lacinia massa. Etiam consequat lorem aliquam mi sagittis efficitur ac in ligula. Nunc mattis tincidunt nulla quis finibus. Pellentesque quis nulla nec nisl varius aliquet eget vel dolor. Proin sed semper dolor, vel tempus sem. Curabitur laoreet ultricies dui vel sagittis. Curabitur consequat pellentesque tortor, ut commodo lorem varius vitae. Mauris ornare condimentum mi vitae ornare. In lacinia eget sapien non dictum. Interdum et malesuada fames ac ante ipsum primis in faucibus."
+		//"comment": "Aliquam in porta enim, ut pulvinar neque. Fusce pulvinar fermentum placerat. Nulla porta, quam elementum eleifend dictum, leo erat fringilla arcu, nec efficitur sem purus vitae magna. Nulla facilisi. Aliquam mi lectus, iaculis non mattis sed, laoreet vitae sem. Phasellus viverra sodales arcu at sollicitudin. Phasellus vestibulum neque at dolor porttitor mattis. Curabitur porttitor massa sed condimentum auctor. Mauris semper ex massa. Vestibulum aliquet hendrerit diam, semper dictum enim lobortis eget."
+        //"comment": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+		"comment": "Curabitur quis lectus non nunc porta interdum. Cras sagittis nisi vel velit bibendum molestie. Maecenas nunc lorem, bibendum ut gravida eget, lacinia quis neque. Etiam id dolor nisl. Maecenas tincidunt ligula ut pretium accumsan. Curabitur lorem orci, aliquet vitae eleifend id, bibendum ac sem. Integer pharetra hendrerit magna nec tristique. Mauris ex magna, eleifend vel ipsum nec, molestie auctor risus. Cras porta, risus et pulvinar molestie, nibh velit tempus augue, ultrices finibus lorem turpis eu augue. Phasellus rutrum justo eu metus porta, quis tempus lectus ultrices. In ac diam eget orci ornare luctus vitae ac dolor."
+}
+
+###
+
+
+POST http://{{HOST}}:{{PORT}}/api/comments
+Content-Type: application/json
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkVzYSBNYWFuaW5rYSIsImlkIjoiNWVlZmM2MGY5ZmJlYzk0MGFlNzg1NzEyIiwiaWF0IjoxNTkyODI5NjMwfQ.y3ttjxh_nQ7QlxUUIfbVROEAYDBOY95HlKZZAjOGXY8
+Authorization: bearer {{authToken}}
+
+{
+	"threadName": "Haiku",
+	//"comment": "An old silent pond…A frog jumps into the pond, splash! Silence again. ~ Basho"
+	//"comment": "Sick and feverish... Glimpse of cherry...blossoms... Still shivering. ~ Ryunosuke Akutagawa"
+	"comment": "The summer river: although there is a... bridge, my horse ... goes through the water. ... ~ Masaoka Shiki"
+	//"comment": "Over the wintry... forest, winds howl... in rage...with no leaves to...blow..... ~ Soseki Natsume"
+	//"comment": "The Web site you seek... cannot be located, but... Countless more exist."
+	//"comment": "Chaos reigns within... Reflect, repent, and reboot... Order shall return."
+	//"comment": "Program aborting:.. Close all that you have worked on.... You ask far too much."
+	//"comment": "Having been erased,...The document you're seeking...Must now be retyped."
+}
+
+###
+POST http://{{HOST}}:{{PORT}}/api/comments
+Content-Type: application/json
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkVzYSBNYWFuaW5rYSIsImlkIjoiNWVlZmM2MGY5ZmJlYzk0MGFlNzg1NzEyIiwiaWF0IjoxNTkyODI5NjMwfQ.y3ttjxh_nQ7QlxUUIfbVROEAYDBOY95HlKZZAjOGXY8
+Authorization: bearer {{authToken}}
+
+{
+	"threadName": "Wankel -koneet",
+	//"comment": "old car, new car, go;... peel-out, burn-rubber, punch-it;... flat tire no treat!"
+	//"comment": "Grinding metal sounds... I check; yes, the warranty... Was up yesterday."
+	//"comment": "Service Engine Soon... Horrid light that burns in Hell... Damn the Ford Taurus"
+	//"comment": "Objects in mirror... Are closer than they appear,... So back off, jack-ass."
+	"comment": "Today crude oil reached... Sixty dollars a barrel ... Farewell, my Hummer."
+}
