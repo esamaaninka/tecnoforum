@@ -64,21 +64,6 @@ describe('User', function() {
       done();
     });
   })
-  it('should list ALL users on /api/users GET', function(done) {
-    chai.request(server)
-    
-      .get('/api/users')            
-      .end(function(err, res){
-        res.should.have.status(200);
-        res.should.be.json; // ei tartu jos xml ? 
-        res.body.should.be.a('array'); // 
-        res.body[0].should.have.property('email');
-        res.body[0].should.have.property('fullname');
-        res.body[0].fullname.should.equal('Mocha Deplorable');
-        res.body[0].email.should.equal('mocha.deplorable@test.com');
-        done();
-      })
-  }) 
     
   it('should add a SINGLE admin user on /api/users POST', function(done) {
     chai.request(server)
@@ -100,6 +85,23 @@ describe('User', function() {
       done();
     })
   })
+
+  it('should list ALL users on /api/users GET', function(done) {
+    chai.request(server)
+    
+      .get('/api/users')            
+      .end(function(err, res){
+        res.should.have.status(200);
+        res.should.be.json; // ei tartu jos xml ? 
+        res.body.should.be.a('array'); // 
+        res.body[0].should.have.property('email');
+        res.body[0].should.have.property('fullname');
+        res.body[0].fullname.should.equal('Mocha Deplorable');
+        res.body[0].email.should.equal('mocha.deplorable@test.com');
+        done();
+      })
+  }) 
+
     //describe('Login API', function() { 
   it('Login should success if credential is valid', function(done) {
     chai.request(server)
@@ -108,7 +110,7 @@ describe('User', function() {
       .set('Content-Type', 'application/json')
       .send({ email: 'mocha.admin@gmail.com', password: 'salasana' })                          
       .end(function(err,res){
-        console.log('login result: ', res.body)
+        //console.log('login result: ', res.body)
         res.should.have.status(200)
         res.body.should.have.property('token')
         user_token = res.body.token
@@ -116,16 +118,21 @@ describe('User', function() {
         }); 
   })
 
+
+  // REST API not implemented yet
   it('should update a SINGLE user on /api/users/<id> PUT');
+
+
+  it('should delete a SINGLE user on /api/users/<id> DELETE', function(done) {
+    chai.request(server)
+    .delete('/api/users/'+user_id)
+    .set('Authorization', `bearer ${user_token}`)
+    .end(function(error, response) {
+      response.should.have.status(204)
+      done()
+    })  
+  })
 })
-   /* it('should delete a SINGLE user on /api/users/<id> DELETE', function(done) {
-      chai.request(server)
-      .delete('/api/users/'+user_id)
-      .end(function(error, response) {
-        response.should.have.status(204)
-      })  
-    })*/
-  
 
 /*
 describe('Comments', function() {

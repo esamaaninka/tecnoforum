@@ -80,7 +80,7 @@ userRouter.post('/api/users/', async (request, response, next) => {
 
     user.save()
         .then(result => {
-            console.log('post result: ', result)
+            //console.log('post result: ', result)
             response.status(201).json(result)
         })
         .catch(error => next(error))
