@@ -11,17 +11,16 @@ import { Segment, Container } from 'semantic-ui-react';
 const App = ({ history }) => {
   return (
     <div>
-	  <NavBar/>
-	  <Container style={{"padding-top":"80px"}}>
-		<h1>_TecnoForum_</h1>{' '}
-		<Switch>
-			<Route exact path='/' render={() => <ListAllUsers />} />
-			{/* <Route exact path='/user/:name' render={(props) => <GetUser name={props.match.params.name} />} /> */}
-			<Route exact path='/register/' render={() => <Registration history={history} />} />
-			<Route exact path='/login/' render={() => <Login history={history} />} />
-			<Route render={() => <ListAllUsers />} />
-		</Switch>
-	  </Container>
+      <NavBar />
+      <Container style={{ 'padding-top': '80px' }}>
+        <Switch>
+          <Route exact path='/' render={() => <ListAllUsers />} />
+          {/* <Route exact path='/user/:name' render={(props) => <GetUser name={props.match.params.name} />} /> */}
+          <Route exact path='/register/' render={() => <Registration history={history} />} />
+          <Route exact path='/login/' render={() => <Login history={history} />} />
+          <Route render={() => <ListAllUsers />} />
+        </Switch>
+      </Container>
     </div>
   );
 };
