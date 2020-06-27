@@ -62,12 +62,12 @@ userRouter.get('/api/users/id/:id', (request, response, next) => {
 })
 // HOX jos kutsutaan await oltava tehty async sisältä
 userRouter.post('/api/users/', async (request, response, next) => {
-    console.log("post: ", request.body)
+    //console.log("post: ", request.body)
     const body = request.body
 
     const saltrounds = 10
     const passwordHash = await bcrypt.hash(body.password, saltrounds)
-    console.log('Hashed pwd: ', passwordHash)
+    //console.log('Hashed pwd: ', passwordHash)
     
     const user = new User({
         fullname: body.fullname,
@@ -109,7 +109,7 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
             return response.status(401).json({ error: 'token missing or invalid' })
         }
         const user = await User.findById(decodedToken.id)
-        console.log("admin user ", user.userType)
+       // console.log("admin user ", user.userType)
         if(user.userType !== "admin") {
             return response.status(401).json({ error: 'unauthorized admin delete operation'})
         }

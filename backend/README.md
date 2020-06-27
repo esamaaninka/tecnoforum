@@ -1,3 +1,5 @@
+# Tecnoforum backend
+
 ## Define env variables in .env file in project root, examples below:
 
     port=<PORT_NUMBER> by default 3001 used if undefined
@@ -77,3 +79,10 @@ POST http://<HOST>:<PORT>/api/comments
 	"author": "cicero"
 	}
 ```
+
+## MOCHA tests
+REST API tests utilising mocha and chai
+
+current status, tests get all users, register a user, login as admin
+To test remove the "Mocha Admin" from /users collection before runnin 
+%npm test
