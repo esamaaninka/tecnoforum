@@ -7,5 +7,6 @@ let MONGODB_URI =  !MODE ? process.env.MONGODB_URI : process.env.MONGODB_LOCAL_U
 
 module.exports = {
   MONGODB_URI,
-  PORT
+  PORT,
+  MODE
 }

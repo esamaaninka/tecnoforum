@@ -1,9 +1,11 @@
 # Tecnoforum backend
 
 ## Define env variables in .env file in project root, examples below:
-
+	//MODE = 1 // comment out to use local MongoDB 
     port=<PORT_NUMBER> by default 3001 used if undefined
-    MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?retryWrites=true&w=majority
+    MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?
+	MONGODB_LOCAL_URI='mongodb://localhost:27017/tecnoforum'
+	retryWrites=true&w=majority
     SECRET=SALAINENSANATOKENINTEKOON
 
 
