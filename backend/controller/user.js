@@ -121,8 +121,49 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
           // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
         next(exception)
       }
-      
-})
+    })
+    
+userRouter.put('/api/users/:id', async (request, response, next) => {
+    
+    const body = request.body  
+    console.log('put request body:  ', body)
+    const token = getTokenFrom(request)
+    
+    // tarkista olenko admin tai käyttäjä itse
+    try{
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        
+            if (!token || !decodedToken.id) {
+            return response.status(401).json({ error: 'token missing or invalid' })
+        }
+        const user = await User.findById(decodedToken.id)
+        // if user is admin -> ok to update
+        // if user !admin but the user itself -> ok to update
+        console.log("I am user ", user.fullname)
+        
+        var umail = 'mocha.admin@gmail.com'
+        var rmail = 'mocha.deplorable@test.com'
+        console.log("typeof ", typeof(umail), typeof(rmail))
+        console.log(`compare local mails ${umail} with ${rmail} result: ${umail.localeCompare(rmail)}`)
+        
+        console.log("typeof ", typeof(user.email), typeof(body.email))
+
+        console.log(`compare mails ${user.email} with ${body.email} result: ${user.email.localeCompare(body.email)}`)
+        
+        if(user.userType === "admin" || user.email == body.email) {
+            console.log(`attempting to update user ${body.email} nickname by ${user.fullname}`)
+            //await User.findByIdAndRemove(request.params.id)
+            response.status(204).end()
+        }
+        else return response.status(401).json({ error: 'unauthorized admin/user update operation'})
+
+        
+        } catch (exception) {
+            // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+        next(exception)
+        }
+    })
+
 
 module.exports = userRouter
 

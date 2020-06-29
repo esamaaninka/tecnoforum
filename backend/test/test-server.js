@@ -10,6 +10,7 @@ const logger = require('../utils/logger');
 
 var user_id = ""
 var user_token = ""
+var admin_token = ""
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -103,7 +104,7 @@ describe('User', function() {
   }) 
 
     //describe('Login API', function() { 
-  it('Login should success if credential is valid', function(done) {
+  it('Admin Login should success if credential is valid', function(done) {
     chai.request(server)
       .post('/api/users/login')
       .set('Accept', 'application/json')
@@ -113,25 +114,64 @@ describe('User', function() {
         //console.log('login result: ', res.body)
         res.should.have.status(200)
         res.body.should.have.property('token')
-        user_token = res.body.token
+        admin_token = res.body.token
         done()
         }); 
   })
 
-
+  it('User Login should success if credential is valid', function(done) {
+    chai.request(server)
+      .post('/api/users/login')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+      .send({ email: 'mocha.deplorable@test.com', password: 'salasana' })                          
+      .end(function(err,res){
+        //console.log('login result: ', res.body)
+        res.should.have.status(200)
+        res.body.should.have.property('token')
+        user_token = res.body.token
+        done()
+        }); 
+  })
   // REST API not implemented yet
-  it('should update a SINGLE user on /api/users/<id> PUT');
+  // update with ADMIN token
+  it('should update by Admin a user on /api/users/<id> PUT', function(done){
+    chai.request(server)
+      .put('/api/users/'+user_id)
+      .set('Authorization', `bearer ${admin_token}`)
+      .send({'nickname': 'admin assigned', 'email': "mocha_deplorable@test.com"})
+      .end(function(err, res){
+        console.log('put response: ', res.body)
+        res.should.have.status(204)
+        done()
+      })
+    })
+
+  // update with USER token
+  it('should update by User itself on /api/users/<id> PUT', function(done){
+    chai.request(server)
+      .put('/api/users/'+user_id)
+      .set('Authorization', `bearer ${user_token}`)
+      .send({'nickname': 'updated by myself','email': "mocha_deplorable@test.com"})
+      .end(function(err, res){
+        console.log('put response: ', res.body)
+        res.should.have.status(204)
+        done()
+      })
+    })
 
 
+/*
   it('should delete a SINGLE user on /api/users/<id> DELETE', function(done) {
     chai.request(server)
     .delete('/api/users/'+user_id)
-    .set('Authorization', `bearer ${user_token}`)
+    .set('Authorization', `bearer ${admin_token}`)
     .end(function(error, response) {
       response.should.have.status(204)
       done()
     })  
   })
+*/
 })
 
 /*
