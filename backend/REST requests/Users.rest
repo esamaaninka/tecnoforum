@@ -45,8 +45,7 @@ POST http://{{HOST}}:{{PORT}}/api/users/login
 Content-Type: application/json
 
 {
-  	//"username": "Alpo Admin",
-	"email": "pekkas@mtv3.fi",
+	"email": "mocha.admin@gmail.com",
   	"password": "salasana"
 }
 ###
@@ -54,5 +53,15 @@ Content-Type: application/json
 //DELETE http://{{HOST}}:{{PORT}}/api/users/name_or_id
 DELETE http://{{HOST}}:{{PORT}}/api/users/5ee9e8fff11f0c4d58c3bc1d
 //Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikphc2thIEpva3VuZW4iLCJpZCI6IjVlZWI2MjJmMTQ5ZWNiM2E4MGE4MTExNCIsImlhdCI6MTU5MjU1MDg4N30.KIeV5xe8Z9obPWP6CHEyQ9_SlcmeJJuAaWFY4Tlwnr0
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFscG8gQWRtaW4iLCJpZCI6IjVlZWM1ZTlkMGFkMDExNGFhOGFmOGZiMSIsImlhdCI6MTU5MjU1MDE4N30.YrZ0ewHmxMUWmZzukkbbXZHtxzLhKMf2Nj2l2fQmr74
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZWZjNmUxODg0NmNlNDBmNmM1YmM5Y2EiLCJpYXQiOjE1OTM2MDE3OTV9.RLYqvb2kbHIzsBae5ZqQnsM2pjWmRpwDgv2cUVs9MnE
 ###
+
+PUT http://{{HOST}}:{{PORT}}/api/users/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZWZjNmUxODg0NmNlNDBmNmM1YmM5Y2EiLCJpYXQiOjE1OTM2MDE4Njl9.4yee2ExgF9o-rUypAGavsLx70JrdDV3EM7QuVWT3-FY
+
+{
+	"id": "5efc6e18846ce40f6c5bc9c9",
+	"email": "mocha.deplorable@test.com",
+  	"nickname": "PUT huu muutos"
+}

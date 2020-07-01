@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const userRouter = require('express').Router()
 const User = require('../models/user')
+const logger = require('../utils/logger')
 
 userRouter.get('/api/users', (request, response,next) => {
     User
@@ -123,10 +124,10 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
       }
     })
     
-userRouter.put('/api/users/:id', async (request, response, next) => {
+userRouter.put('/api/users/', async (request, response, next) => {
     
     const body = request.body  
-    console.log('put request body:  ', body)
+    //console.log('put request body:  ', body)
     const token = getTokenFrom(request)
     
     // tarkista olenko admin tai käyttäjä itse
@@ -136,11 +137,29 @@ userRouter.put('/api/users/:id', async (request, response, next) => {
             if (!token || !decodedToken.id) {
             return response.status(401).json({ error: 'token missing or invalid' })
         }
-        const user = await User.findById(decodedToken.id)
+        const modifying_user = await User.findById(decodedToken.id)
+        // testauksessa käynyt että käännösten/ajojen välillä aikaisempi token
+        //ilmeisesti vanhentunut, eikä tuo token tarkistus palauta virhettä 
+        if(!modifying_user) return response.status(400).json({error: 'something wrong with token, user not found'})
+
+
         // if user is admin -> ok to update
         // if user !admin but the user itself -> ok to update
-        console.log("I am user ", user.fullname)
-        
+       /* console.log("I am user ", modifying_user.fullname, modifying_user._id)
+        await User.findOne({fullname: body.fullname})            
+            .then(user => {
+                console.log("user: ", user)
+                if(user){
+                    response.json(user.toJSON())
+                }
+                else {
+                    response.json('nothing found')
+                }
+    
+            })
+            .catch(error => next(error))
+*/
+        /*
         var umail = 'mocha.admin@gmail.com'
         var rmail = 'mocha.deplorable@test.com'
         console.log("typeof ", typeof(umail), typeof(rmail))
@@ -149,20 +168,42 @@ userRouter.put('/api/users/:id', async (request, response, next) => {
         console.log("typeof ", typeof(user.email), typeof(body.email))
 
         console.log(`compare mails ${user.email} with ${body.email} result: ${user.email.localeCompare(body.email)}`)
-        
-        if(user.userType === "admin" || user.email == body.email) {
-            console.log(`attempting to update user ${body.email} nickname by ${user.fullname}`)
-            //await User.findByIdAndRemove(request.params.id)
-            response.status(204).end()
+        */
+        if(modifying_user.userType === "admin" || modifying_user.id === body.id) {
+            console.log(`attempting to update users ${body.email} id: ${body.id} nickname by ${modifying_user.fullname} to \"${body.nickname}\"`)
+            
+            const updatedUser = await User.findOneAndUpdate(
+                //{email: body.email}, // miksei löydä email avulla ?
+                {_id: body.id}, 
+                {$set:{nickname: body.nickname}},
+                {new: true}, // to return updated doc                                
+                function(err,res) {           
+                    //console.log("findOneAndUpdate err, res ", err, res)         
+                    if(err) {
+                        console.log('error: ', err)
+                        res.send(err)                     
+                    } //else {res.send('updated the user data')}
+                } 
+            )
+
+            //console.log('findoneandupdate returned: ', updatedUser)
+            if(!updatedUser) {
+                logger.info('user data to be updated not found')
+                return response.status(400).json({error: 'user data to be updated not found'})
+            }
+            // put ei palauta mitään bodya jos laittaa koodin 204
+            //return response.status(204).json(updatedUser.toJSON())
+            return response.status(200).json(updatedUser.toJSON())
         }
         else return response.status(401).json({ error: 'unauthorized admin/user update operation'})
-
         
-        } catch (exception) {
-            // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+    } catch (exception) {
+        // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
+       console.log("tullaanko tähän ?")
         next(exception)
-        }
-    })
+    }
+    
+})
 
 
 module.exports = userRouter

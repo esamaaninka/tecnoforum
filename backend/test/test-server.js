@@ -133,16 +133,16 @@ describe('User', function() {
         done()
         }); 
   })
-  // REST API not implemented yet
+
   // update with ADMIN token
   it('should update by Admin a user on /api/users/<id> PUT', function(done){
     chai.request(server)
-      .put('/api/users/'+user_id)
+      .put('/api/users/')
       .set('Authorization', `bearer ${admin_token}`)
-      .send({'nickname': 'admin assigned', 'email': "mocha_deplorable@test.com"})
+      .send({'id': `${user_id}`,'nickname': 'admin assigned', 'email': "mocha_deplorable@test.com",'fullname':'Mocha Deplorable'})
       .end(function(err, res){
-        console.log('put response: ', res.body)
-        res.should.have.status(204)
+        res.should.have.status(200)
+        res.body.nickname.should.equal('admin assigned')
         done()
       })
     })
@@ -150,12 +150,13 @@ describe('User', function() {
   // update with USER token
   it('should update by User itself on /api/users/<id> PUT', function(done){
     chai.request(server)
-      .put('/api/users/'+user_id)
+      .put('/api/users/')
       .set('Authorization', `bearer ${user_token}`)
-      .send({'nickname': 'updated by myself','email': "mocha_deplorable@test.com"})
+      .send({'id': `${user_id}`, 'nickname': 'updated by myself','email': "mocha_deplorable@test.com", 'fullname': 'Mocha Deplorable'})
       .end(function(err, res){
-        console.log('put response: ', res.body)
-        res.should.have.status(204)
+        //console.log('test driver got put response: ', res.body)
+        res.should.have.status(200)
+        res.body.nickname.should.equal('updated by myself')
         done()
       })
     })
