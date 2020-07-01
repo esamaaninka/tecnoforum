@@ -33,7 +33,7 @@ class NavBar extends React.Component {
       <Menu fixed='top'>
         <Container>
           <Menu.Item onClick={() => this.nav('/')} header>
-            <Image src='TF_logo.gif' size='large' />
+            <Image src={process.env.PUBLIC_URL + '/TF_logo.gif'} size='large' />
           </Menu.Item>
           <Menu.Menu position='right'>
             {this.props.isLogged ? this.loggedInBar() : this.loginBar()}

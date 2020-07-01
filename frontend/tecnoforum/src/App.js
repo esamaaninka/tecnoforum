@@ -9,6 +9,7 @@ import Login from './components/Login';
 import NavBar from './components/NavBar';
 import { Container } from 'semantic-ui-react';
 import ListAllCategories from './components/ListAllCategories';
+import ViewThread from './components/ViewThread';
 
 const App = (props) => {
   return (
@@ -16,6 +17,7 @@ const App = (props) => {
       <NavBar />
       <Container style={{ 'padding-top': '100px' }}>
         <Switch>
+		  <Route exact path='/thread/' render={() => <ViewThread />} />
           <Route exact path='/users/' render={() => <ListAllUsers />} />
 		  <Route exact path='/register/' render={() => 
 			(props.isLogged ? (<Redirect to="/"/>) : (<Registration history={props.history} />))}/>
