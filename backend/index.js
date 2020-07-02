@@ -5,6 +5,7 @@ const logger = require('./utils/logger')
 
 const server = http.createServer(app)
 
-server.listen(config.PORT, () => {
+// module export needed for mocha tests
+module.exports = server.listen(config.PORT, () => {
   logger.info(`Server running on port ${config.PORT}`)
 })

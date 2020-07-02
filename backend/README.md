@@ -1,7 +1,11 @@
-## Define env variables in .env file in project root, examples below:
+# Tecnoforum backend
 
+## Define env variables in .env file in project root, examples below:
+	//MODE = 1 // comment out to use local MongoDB 
     port=<PORT_NUMBER> by default 3001 used if undefined
-    MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?retryWrites=true&w=majority
+    MONGODB_URI= mongodb+srv://<USERNAME>:<PASSWORD>@tecnoforum0-enrpp.mongodb.net/<DBNAME>?
+	MONGODB_LOCAL_URI='mongodb://localhost:27017/tecnoforum'
+	retryWrites=true&w=majority
     SECRET=SALAINENSANATOKENINTEKOON
 
 
@@ -77,3 +81,10 @@ POST http://<HOST>:<PORT>/api/comments
 	"author": "cicero"
 	}
 ```
+
+## MOCHA tests
+REST API tests utilising mocha and chai
+
+current status, tests get all users, register a user, login as admin
+To test remove the "Mocha Admin" from /users collection before runnin 
+%npm test

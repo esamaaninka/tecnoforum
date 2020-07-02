@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-//const xxxRouter = require('./controllers/xxx')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
@@ -15,7 +14,7 @@ const mongoose = require('mongoose')
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(
-		() => logger.info ("Connection to mongodb successful"),
+		() => logger.info (`Connection to mongodb ${config.MONGODB_URI} successful`),
 		(error) => logger.error(error)
 	);
 	  
