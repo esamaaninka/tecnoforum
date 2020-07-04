@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const userRouter = require('express').Router()
 const User = require('../models/user')
+const Comments = require('../models/comment')
 const logger = require('../utils/logger')
 
 userRouter.get('/api/users', (request, response,next) => {
@@ -12,21 +13,21 @@ userRouter.get('/api/users', (request, response,next) => {
         })
         .catch(error => next(error))
 })
-/* virhettä
-Schema hasn't been registered for model "Comment".
-Use mongoose.model(name, schema)
+/* virhettä ei toimi
 
 userRouter.get('/api/userscomments', async (request, response,next) => {  
     
     try{
-        const users = await User
-            .find({})
-            .populate('comments', { comment: 1, date: 1 })
-            //.populate('comments')
-        response.json(users.map(u => u.toJSON()))
-    } catch (exception) {
+        const users = 
+            await User
+                    .find({})
+                    //.populate('Comment', { comment: 1, date: 1 })
+                    .populate('Comments')
+
+                    response.json(users.map(u => u.toJSON()))
+        } catch (exception) {
         // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
-      next(exception)
+        next(exception)
     }
 
     
@@ -61,7 +62,7 @@ userRouter.get('/api/users/id/:id', (request, response, next) => {
         })
         .catch(error => next(error))
 })
-// HOX jos kutsutaan await oltava tehty async sisältä
+
 userRouter.post('/api/users/', async (request, response, next) => {
     //console.log("post: ", request.body)
     const body = request.body
