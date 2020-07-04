@@ -7,12 +7,12 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
     const body = request.body
     console.log('post login: ', body)
    
-    //korjaa tämän username, email myöhemmin nyt toimii
+    // fullname avulla ei tunnista käyttäjää, email toimii
     let user = ""
 
     try{
         if(body.username){
-            user = await User.findOne({username: body.username})
+            user = await User.findOne({fullname: body.fullname})
         }else if(body.email){
             user = await User.findOne({email: body.email})
         }    
@@ -44,8 +44,10 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
         response
             .status(200)
             .send({ fullname: user.fullname, token })
-        }catch{
-            console.log("Pieleen meni")} // korjaa tämä virhekäsittely esim. comments.js
+        }catch(error){
+            logger.error(error)
+            return response.status(401).json({ error: error.name})
+        }
     })
  
     module.exports = loginRouter
