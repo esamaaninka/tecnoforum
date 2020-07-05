@@ -19,9 +19,9 @@ GET http://{{HOST}}:{{PORT}}/api/users
 ###
 //-------------------------
 // GET A USER by name or id (change fullname/id at the end of path)
-GET http://{{HOST}}:{{PORT}}/api/users/name/Esa Maaninka
+GET http://{{HOST}}:{{PORT}}/api/users/name/Mocha Admin
 ###
-GET http://{{HOST}}:{{PORT}}/api/users/id/5eeb4e94e490098050f18ede
+GET http://{{HOST}}:{{PORT}}/api/users/id/5f00b27feb4b00289857373d
 
 ###
 //
@@ -42,7 +42,7 @@ Content-Type: application/json
 // LOGIN
 
 //@authToken = {{login.response.headers.X-AuthToken}} ei toimi, kopsaa käsin login responsesta
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZWZkZjU2ZGE5Yzc5NDc3Njg0ZWRkYjIiLCJpYXQiOjE1OTM3MDE4NzR9.wJjaN0H6WvfEcR8Qfo-qEkgRTu1M5OlLLTLpTOx-hiI
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjAwYjEyZDhjMjk5NTNlYTg5ZmYyMWYiLCJpYXQiOjE1OTM5MzE1MDJ9.lKCJD8t2PEOBenNVWTvWN-kUdoy1fm8fGarAdZoId4o
 
 // LOGIN
 // returns fullname and token
@@ -67,7 +67,10 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5efdf664773db2764cc86780",
-	"email": "mocha.deplorable@test.com",
-  	"nickname": "PUT huu muutos"
+	"id": "5f00b27feb4b00289857373d",
+	"email": "mocha.latte@gmail.com",
+  	"nickname": "espresso",
+	"fullname": "Mocha Latte",
+	"description": "cocoa with cinnamon",
+	"userType": "user" 
 }

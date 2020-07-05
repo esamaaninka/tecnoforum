@@ -155,7 +155,7 @@ userRouter.put('/api/users/', async (request, response, next) => {
         }
         const modifying_user = await User.findById(decodedToken.id)
         // testauksessa käynyt että käännösten/ajojen välillä aikaisempi token
-        //ilmeisesti vanhentunut, eikä tuo token tarkistus palauta virhettä 
+        // ilmeisesti vanhentunut, eikä tuo token tarkistus palauta virhettä 
         if(!modifying_user) {
             throw('error: something wrong with token, modifying user not found')
             //return response.status(400).json({error: 'something wrong with token, user not found'})
@@ -188,13 +188,18 @@ userRouter.put('/api/users/', async (request, response, next) => {
         console.log(`compare mails ${user.email} with ${body.email} result: ${user.email.localeCompare(body.email)}`)
         */
         if(modifying_user.userType === "admin" || modifying_user.id === body.id) {
-            console.log(`attempting to update users ${body.email} id: ${body.id} nickname by ${modifying_user.fullname} to \"${body.nickname}\"`)
+            //console.log(`attempting to update userdata  ${JSON.stringify(body)}`)
             
             const updatedUser = await User.findOneAndUpdate(
                 //{email: body.email}, // miksei löydä email avulla, FindOne Login.js löytää ?
                 {_id: body.id}, 
-                {$set:{nickname: body.nickname}},
-                {new: true}, // to return updated doc                                
+                {$set:{ nickname: body.nickname, 
+                        fullname: body.fullname, 
+                        email: body.email,  
+                        userType: body.userType,
+                        description: body.description
+                        }}, 
+                {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables
                 function(err,res) {           
                     //console.log("findOneAndUpdate err, res ", err, res)         
                     if(err) {

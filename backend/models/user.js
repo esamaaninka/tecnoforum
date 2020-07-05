@@ -26,6 +26,7 @@ const userSchema = mongoose.Schema({
       enum : ['user','moderator','admin'],
       default: 'user'
     },
+    description: String,
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
