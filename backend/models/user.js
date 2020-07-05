@@ -17,6 +17,7 @@ const userSchema = mongoose.Schema({
     passwordHash: String,
     email: {
         type: String,
+        unique:true,
         required: true
     },
     nickname: String,
@@ -25,10 +26,11 @@ const userSchema = mongoose.Schema({
       enum : ['user','moderator','admin'],
       default: 'user'
     },
+    description: String,
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
+        ref: 'Comments'
       }
     ], 
   })

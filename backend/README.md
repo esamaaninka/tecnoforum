@@ -84,7 +84,8 @@ POST http://<HOST>:<PORT>/api/comments
 
 ## MOCHA tests
 REST API tests utilising mocha and chai
+/test/test-server.js
 
-current status, tests get all users, register a user, login as admin
-To test remove the "Mocha Admin" from /users collection before runnin 
-%npm test
+%npm run test 
+
+current status: test cases for User API (get, put, post, delete, login)

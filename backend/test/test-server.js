@@ -11,6 +11,7 @@ const logger = require('../utils/logger');
 var user_id = ""
 var user_token = ""
 var admin_token = ""
+var broken_token = "ey1hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZWZkYmM2YmUwZjY3ZDhhMDQyYTZiMzkiLCJpYXQiOjE1OTM2ODc1NzV9._znN2oYOSlhmuYcELqK7N2_p3c6_kwIMOdZxReSCs-I"
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -18,7 +19,7 @@ chai.use(chaiHttp);
 // delete db before running tests
 
 logger.info('MOCHA with CHAI')
-// check whether we are in test/local moide then drop collection
+// check whether we are in test/local mode then drop collection
 if(config.MODE) {
   logger.info('Dropping user collection')
   User.collection.drop(); 
@@ -161,8 +162,27 @@ describe('User', function() {
       })
     })
 
+    it('should fail (not admin) to delete a SINGLE user on /api/users/<id> DELETE', function(done) {
+      chai.request(server)
+      .delete('/api/users/'+user_id)
+      .set('Authorization', `bearer ${user_token}`)
+      .end(function(error, response) {
+        response.should.have.status(401)
+        done()
+      })  
+    })
 
-/*
+    it('should fail (broken token) to delete a SINGLE user on /api/users/<id> DELETE', function(done) {
+      chai.request(server)
+      .delete('/api/users/'+user_id)
+      .set('Authorization', `bearer ${broken_token}`)
+      .end(function(error, response) {
+        response.should.have.status(401)
+        done()
+      })  
+    })
+  
+
   it('should delete a SINGLE user on /api/users/<id> DELETE', function(done) {
     chai.request(server)
     .delete('/api/users/'+user_id)
@@ -172,7 +192,7 @@ describe('User', function() {
       done()
     })  
   })
-*/
+
 })
 
 /*

@@ -29,6 +29,17 @@ commentRouter.get('/api/comments', (request, response,next) => {
         .catch(error => next(error))
   })
 
+  /* populate ei toimi 
+  commentRouter.get('/api/commentsusers', (request,response, next) => {
+    Comments
+      .find({})
+      .populate('user')
+
+      response.json(comment.map(comment => comment.toJSON()))
+
+  })
+    
+  */
   
   commentRouter.get('/api/comments/:id', (request, response, next) => {
       Comments

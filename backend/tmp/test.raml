@@ -1,0 +1,47 @@
+#%RAML
+title: Tecnoforum API
+description: discussion forum like ...
+baseUri: http://localhost:3001/api/
+resourceTypes: 
+  mediaType: application/json
+version: 1.0
+type:
+    User: 
+        type: object
+        properties:
+            email:
+                type:string
+                required: true
+                unique: true
+            nickname:string
+            fullname:string
+            description:string
+            role:enum [default user, moderator, admin]
+            comments:array [comment ids]
+    Category:
+        type: object
+            name:
+                type: string
+                required: true
+            description:string            
+            threads:array [thread ids]
+    Thread:
+        type: object   
+            title:
+                type: string
+                required: true
+            description:string
+            Category: category id
+            comments:array [comment ids]
+    Comments:
+        type: object
+            Text:string
+            author:string
+            date:Date
+            modified:Date
+            Thread:thread id
+            Category:category id
+            
+            
+
+

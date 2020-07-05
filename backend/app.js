@@ -12,7 +12,11 @@ const categoryRouter = require('./controller/category')
 
 const mongoose = require('mongoose')
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.MONGODB_URI, { 
+	useCreateIndex: true,
+	useNewUrlParser: true, 
+	useUnifiedTopology: true, 
+	useFindAndModify: false })
     .then(
 		() => logger.info (`Connection to mongodb ${config.MONGODB_URI} successful`),
 		(error) => logger.error(error)

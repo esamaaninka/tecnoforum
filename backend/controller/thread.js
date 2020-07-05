@@ -33,6 +33,7 @@ threadRouter.get('/api/threads', (request, response,next) => {
   threadRouter.post('/api/threads', async (request, response,next) => {
     
     const body = request.body  
+    console.log('threadPost: ', body)
     const token = getTokenFrom(request)
  
     try{
@@ -50,6 +51,7 @@ threadRouter.get('/api/threads', (request, response,next) => {
       const thread = new Threads({
         category_id: category._id,
         threadName: body.threadName,
+        description: body.description,
         author: user.fullname, // vai id
         user_id: user._id,
         date: new Date()
@@ -68,4 +70,50 @@ threadRouter.get('/api/threads', (request, response,next) => {
     } 
 })    
   
+threadRouter.put('/api/threads', async (request, response, next) => {
+  const body = request.body
+  console.log('putThread request body:  ', body)
+
+  const token = getTokenFrom(request)
+
+  try{
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      throw('error: token missing or invalid')
+      //return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const modifying_user = await User.findById(decodedToken.id)
+    if(!modifying_user) {
+      throw('error: something wrong with token, modifying user not found')
+      //return response.status(400).json({error: 'something wrong with token, user not found'})
+    }
+
+    if(modifying_user.userType === "admin" ) {
+      console.log(`attempting to update ${body} with values: ${body.description}`)
+      
+      const updatedThread = await Threads.findOneAndUpdate(          
+          {_id: body.id}, 
+          {$set:{threadName: body.threadName, description: body.description }},
+          {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables                                
+          function(err,res) {                         
+              if(err) {
+                  throw('error: error updating thread',err)
+              }
+            })
+      
+      if(!updatedThread) {
+          logger.info('thread data to be updated not found')
+          return response.status(400).json({error: 'thread data to be updated not found'})
+      }
+      
+      return response.status(200).json(updatedThread.toJSON())
+    }
+      else return response.status(401).json({ error: 'unauthorized admin update operation'})
+
+    }catch (exception) {
+      next(exception)
+    }
+  })
+
 module.exports = threadRouter

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const userRouter = require('express').Router()
 const User = require('../models/user')
+const Comments = require('../models/comment')
 const logger = require('../utils/logger')
 
 userRouter.get('/api/users', (request, response,next) => {
@@ -12,21 +13,21 @@ userRouter.get('/api/users', (request, response,next) => {
         })
         .catch(error => next(error))
 })
-/* virhettä
-Schema hasn't been registered for model "Comment".
-Use mongoose.model(name, schema)
+/* virhettä ei toimi
 
 userRouter.get('/api/userscomments', async (request, response,next) => {  
     
     try{
-        const users = await User
-            .find({})
-            .populate('comments', { comment: 1, date: 1 })
-            //.populate('comments')
-        response.json(users.map(u => u.toJSON()))
-    } catch (exception) {
+        const users = 
+            await User
+                    .find({})
+                    //.populate('Comment', { comment: 1, date: 1 })
+                    .populate('Comments')
+
+                    response.json(users.map(u => u.toJSON()))
+        } catch (exception) {
         // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
-      next(exception)
+        next(exception)
     }
 
     
@@ -61,7 +62,7 @@ userRouter.get('/api/users/id/:id', (request, response, next) => {
         })
         .catch(error => next(error))
 })
-// HOX jos kutsutaan await oltava tehty async sisältä
+
 userRouter.post('/api/users/', async (request, response, next) => {
     //console.log("post: ", request.body)
     const body = request.body
@@ -102,25 +103,39 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
     const body = request.body  
     const token = getTokenFrom(request)
     
-    // tarkista olenko admin tai käyttäjä itse
+    // vain admin voi poistaa käyttäjätilin
     try{
         const decodedToken = jwt.verify(token, process.env.SECRET)
         
-          if (!token || !decodedToken.id) {
-            return response.status(401).json({ error: 'token missing or invalid' })
+        if (!token || !decodedToken.id) {
+            //return response.status(401).json({ error: 'token missing or invalid' })
+            throw('error: token missing or invalid')
         }
         const user = await User.findById(decodedToken.id)
-       // console.log("admin user ", user.userType)
-        if(user.userType !== "admin") {
-            return response.status(401).json({ error: 'unauthorized admin delete operation'})
+        if(!user) {            
+            throw('error: something wrong with token, user not found')
+            //return response.status(400).json({error: 'something wrong with token, user not found'})
+        }        
+        if(user.userType !== "admin") { 
+            //return response.status(401).json({ error: 'unauthorized admin delete operation'})
+            throw('unauthorized admin delete operation')
         }
 
+        // FAIL if no user in db when trying to remove should res to NULL, or orFail to throw error
+        //await User.findByIdAndRemove(request.params.id)//.orFail('no user found to delete')
+        //response.status(204).end()
+        var error = ''
+        await User.findByIdAndRemove(request.params.id, function(err,res){
+            if(err) throw ('error: user to be removed not found')
+            if(!res && !err) response.status(401).json({error: 'user to be removed not found'})
+            else response.status(204).json('success')//(`message: user ${request.params.id} removed`) // msg not               
+        })
         
-        await User.findByIdAndRemove(request.params.id)
-        response.status(204).end()
-      } catch (exception) {
-          // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
-        next(exception)
+        
+        
+      } catch (error) {                 
+            logger.error(error)
+            return response.status(401).json({ error: error.name})
       }
     })
     
@@ -135,13 +150,16 @@ userRouter.put('/api/users/', async (request, response, next) => {
         const decodedToken = jwt.verify(token, process.env.SECRET)
         
             if (!token || !decodedToken.id) {
-            return response.status(401).json({ error: 'token missing or invalid' })
+                throw('error: token missing or invalid')
+                //return response.status(401).json({ error: 'token missing or invalid' })
         }
         const modifying_user = await User.findById(decodedToken.id)
         // testauksessa käynyt että käännösten/ajojen välillä aikaisempi token
-        //ilmeisesti vanhentunut, eikä tuo token tarkistus palauta virhettä 
-        if(!modifying_user) return response.status(400).json({error: 'something wrong with token, user not found'})
-
+        // ilmeisesti vanhentunut, eikä tuo token tarkistus palauta virhettä 
+        if(!modifying_user) {
+            throw('error: something wrong with token, modifying user not found')
+            //return response.status(400).json({error: 'something wrong with token, user not found'})
+        }
 
         // if user is admin -> ok to update
         // if user !admin but the user itself -> ok to update
@@ -170,18 +188,24 @@ userRouter.put('/api/users/', async (request, response, next) => {
         console.log(`compare mails ${user.email} with ${body.email} result: ${user.email.localeCompare(body.email)}`)
         */
         if(modifying_user.userType === "admin" || modifying_user.id === body.id) {
-            console.log(`attempting to update users ${body.email} id: ${body.id} nickname by ${modifying_user.fullname} to \"${body.nickname}\"`)
+            //console.log(`attempting to update userdata  ${JSON.stringify(body)}`)
             
             const updatedUser = await User.findOneAndUpdate(
-                //{email: body.email}, // miksei löydä email avulla ?
+                //{email: body.email}, // miksei löydä email avulla, FindOne Login.js löytää ?
                 {_id: body.id}, 
-                {$set:{nickname: body.nickname}},
-                {new: true}, // to return updated doc                                
+                {$set:{ nickname: body.nickname, 
+                        fullname: body.fullname, 
+                        email: body.email,  
+                        userType: body.userType,
+                        description: body.description
+                        }}, 
+                {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables
                 function(err,res) {           
                     //console.log("findOneAndUpdate err, res ", err, res)         
                     if(err) {
-                        console.log('error: ', err)
-                        res.send(err)                     
+                        throw('error: error updating userdata',err)
+                        //console.log('error: ', err)
+                        //res.send(err)                     
                     } //else {res.send('updated the user data')}
                 } 
             )
@@ -198,8 +222,6 @@ userRouter.put('/api/users/', async (request, response, next) => {
         else return response.status(401).json({ error: 'unauthorized admin/user update operation'})
         
     } catch (exception) {
-        // tulee DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodif
-       console.log("tullaanko tähän ?")
         next(exception)
     }
     
