@@ -19,6 +19,17 @@ threadRouter.get('/api/threads', (request, response,next) => {
         .catch(error => next(error))
   })
 
+  threadRouter.get('/api/threads/:id', (request, response, next) => {
+    Threads
+      .findById(request.params.id)
+      .then(thread =>{
+          //console.log(`comment ${comment} with id ${request.params.id}`)
+          if(thread) response.json(thread.toJSON())
+          else response.json(`no thread found with id ${request.params.id}`)
+      })
+      .catch(error => next(error))
+})
+
   const getTokenFrom = request => {
     const authorization = request.get('authorization')
     if(authorization && authorization.toLowerCase().startsWith('basic ')) {

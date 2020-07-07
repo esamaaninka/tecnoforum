@@ -32,11 +32,15 @@ Content-Type: application/json
 @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjAwYjEyZDhjMjk5NTNlYTg5ZmYyMWYiLCJpYXQiOjE1OTM4ODEzMDF9.9nfuwZoIH9MT6WVP123g9Z95sVHPUzp3epZiVrhFBmg
 
 
-
+///////////////
 ///// THREADS
 /////////////
-
+### 
 GET http://{{HOST}}:{{PORT}}/api/threads
+
+###
+
+GET http://{{HOST}}:{{PORT}}/api/threads/5f00b390eb4b002898573743
 
 ###
 
@@ -65,11 +69,16 @@ Authorization: bearer {{authToken}}
 }
 
 
+
+///////////////
 //// CATEGORIES
 ///////////////
 
+###
 GET http://{{HOST}}:{{PORT}}/api/categories
 
+###
+GET http://{{HOST}}:{{PORT}}/api/categories/5f00b34feb4b002898573740
 ###
 POST http://{{HOST}}:{{PORT}}/api/categories
 Content-Type: application/json
