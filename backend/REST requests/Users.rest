@@ -31,10 +31,10 @@ POST http://{{HOST}}:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Mocha Deplorable",
+  	"fullname": "Mocha Latte",
   	"password": "salasana",
-    "email": "mocha.deplorable@test.com",
-    "nickname": "MochaLatte",
+    "email": "mocha.latte@test.com",
+    "nickname": "Lattena",
     "userType": "user" 
 }
 

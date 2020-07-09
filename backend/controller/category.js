@@ -12,11 +12,22 @@ categoryRouter.get('/api/categories', (request, response,next) => {
     
     Category
         .find({})
-        .then(comment => {
-            response.json(comment.map(p => p.toJSON()))
+        .then(category => {
+            response.json(category.map(p => p.toJSON()))
         })
         .catch(error => next(error))
   })
+
+  categoryRouter.get('/api/categories/:id', (request, response, next) => {
+    Category
+      .findById(request.params.id)
+      .then(category =>{
+          //console.log(`comment ${comment} with id ${request.params.id}`)
+          if(category) response.json(category.toJSON())
+          else response.json(`no category found with id ${request.params.id}`)
+      })
+      .catch(error => next(error))
+})
 
   const getTokenFrom = request => {
     const authorization = request.get('authorization')

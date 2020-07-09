@@ -20,10 +20,10 @@ chai.use(chaiHttp);
 
 logger.info('MOCHA with CHAI')
 // check whether we are in test/local mode then drop collection
-if(config.MODE) {
-  logger.info('Dropping user collection')
-  User.collection.drop(); 
-}
+//if(config.MODE) {
+//  logger.info('Dropping user collection')
+  //User.collection.drop(); 
+//}
 
 /* before - after -hooks will be run for  each  test
   beforeEach(function(done){
@@ -42,7 +42,16 @@ if(config.MODE) {
     done();
   });
 */
-
+describe('Drop collection', function() {
+  it('should drop User collection', function(done) {
+    if(config.MODE) {
+      logger.info('Dropping user collection')
+      User.collection.drop()
+    }
+    done()
+  })
+})
+  
 
 describe('User', function() {
   it('should add a SINGLE deplorable user on /api/users POST', function(done) {
@@ -195,15 +204,36 @@ describe('User', function() {
 
 })
 
-/*
-describe('Comments', function() {
-    it('should list ALL blobs on /api/comments GET');
-    it('should list a SINGLE blob on /api/comments/<id> GET');
-    it('should add a SINGLE blob on /api/comments POST');
-    it('should update a SINGLE blob on /api/comments/<id> PUT');
-    it('should delete a SINGLE blob on /api/comments/<id> DELETE');
-  });
 
+describe('Comments', function() {
+    it('should list ALL Comments on /api/comments GET', function(done){
+      chai.request(server)
+      .get('/api/comments')
+      .end(function(err, res){
+        res.should.have.status(200);
+        res.should.be.json; // ei tartu jos xml ? 
+        res.body.should.be.a('array'); // 
+        res.body[0].should.have.property('comment');
+        res.body[0].should.have.property('user_id')
+        done()
+      })
+    });
+    it('should list a SINGLE Comment on /api/comments/<id> GET');
+    it('should add a SINGLE Comment on /api/comments POST');
+    it('should update a SINGLE Commenton /api/comments/<id> PUT');
+    
+    it('should delete a SINGLE user on /api/comments/<id> DELETE', function(done) {
+      chai.request(server)
+      .delete('/api/comments/'+comment_id)
+      .set('Authorization', `bearer ${admin_token}`)
+      .end(function(error, response) {
+        response.should.have.status(204)
+        // check that deleted comment id removed from threads and user
+        done()
+      })  
+    })
+  });
+/*
 describe('Category', function() {
     it('should list ALL blobs on /api/categories GET');
     it('should list a SINGLE blob on /api/categories/<id> GET');

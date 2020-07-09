@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
+var mongoosePaginate = require('mongoose-paginate')
+
 
 
 const threadSchema = mongoose.Schema({
@@ -30,5 +32,6 @@ const threadSchema = mongoose.Schema({
   })
 
   threadSchema.plugin(uniqueValidator)
+  threadSchema.plugin(mongoosePaginate)
 
   module.exports = mongoose.model('Threads', threadSchema, 'threads')
