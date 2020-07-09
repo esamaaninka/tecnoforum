@@ -1,11 +1,7 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
+var mongoosePaginate = require('mongoose-paginate')
 
-// HOX validators might work only in creation, when using schema
-// e.g when updating model validations see discussion about solutions
-// https://stackoverflow.com/questions/15627967/why-mongoose-doesnt-validate-on-update
-// try whether this setting "mongoose.set('runValidators', true); "
-// just before app.js connectMongo
 const commentSchema = mongoose.Schema({
     comment: {
       type: String,
@@ -37,5 +33,6 @@ const commentSchema = mongoose.Schema({
   })
 
   commentSchema.plugin(uniqueValidator)
+  commentSchema.plugin(mongoosePaginate)
 
   module.exports = mongoose.model('Comments', commentSchema, 'comment')

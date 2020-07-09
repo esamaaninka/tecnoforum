@@ -29,7 +29,7 @@ Content-Type: application/json
   	"password": "salasana"
 }
 
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjAwYjEyZDhjMjk5NTNlYTg5ZmYyMWYiLCJpYXQiOjE1OTM4ODEzMDF9.9nfuwZoIH9MT6WVP123g9Z95sVHPUzp3epZiVrhFBmg
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjA0MTFiNDJmODcwYzRlYmM0NmJhMDUiLCJpYXQiOjE1OTQxMDQ5Njd9.Dc6RqzylA3Un48CIISn9Up2WacxPZRBUQIYSgNF2Ybk
 
 
 ///////////////
@@ -40,7 +40,12 @@ GET http://{{HOST}}:{{PORT}}/api/threads
 
 ###
 
-GET http://{{HOST}}:{{PORT}}/api/threads/5f00b390eb4b002898573743
+GET http://{{HOST}}:{{PORT}}/api/threads/5f00b433eb4b002898573747
+
+###
+
+GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=2&limit=2&id=5f00b433eb4b002898573747
+
 
 ###
 
@@ -63,8 +68,8 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f00e374590414237caac9e9",
-	"threadName": "Joikhaus",
+	"id": "5f041ccd01100463e48dd84a",
+	"threadName": "Joikhataan",
 	"description": "kuusenkerkät ja kärpässienet muusana"
 }
 
@@ -85,8 +90,8 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-		"categoryName": "Joikut",
-		"description": "nunnuka nunnuka lailaalailaa"
+		"categoryName": "Yrtit",
+		"description": "keskustelualue yrteistä ja niiden käytöstä"
 }
 
 ###
@@ -95,7 +100,7 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f00d956a3e9e13e44004064",
+	"id": "5f041eb8f0df2161d89e12c7",
 	//"categoryName": "Juomat",
-	"description": "kaikki mallastetut ja käytetyt juomat, ei tisleet eikä limsat"
+	"description": "keskustelualue yrttien keruu, säilöntä, käyttö"
 }

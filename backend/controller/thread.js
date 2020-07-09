@@ -1,12 +1,12 @@
+
 const threadRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
-//const Comments = require('../models/comment')
+const Comment = require('../models/comment')
 const User = require('../models/user')
 const Category = require('../models/category')
 const Threads = require('../models/thread')
 //const { response } = require('../app')
 const logger = require('../utils/logger')
-//const { ConnectionStates } = require('mongoose') // mistä tämä tuli ?
 
 
 threadRouter.get('/api/threads', (request, response,next) => {
@@ -17,6 +17,38 @@ threadRouter.get('/api/threads', (request, response,next) => {
             response.json(comment.map(p => p.toJSON()))
         })
         .catch(error => next(error))
+  })
+
+  // BUG! populate not working yet
+  threadRouter.get('/api/threads/pages', async (request, response, next) => {
+    console.log('/api/threads/pages pagination from ', request.query.page, request.query.limit, request.query.id )
+     
+    const options = {
+      select: 'threadName  author date comments ', // {} jos kaikki kentät
+      sort: {date: -1},
+      //populate: 'Comments',
+      //populate: {path: 'Comment', model:'Comment', select: 'comment'},
+      page: parseInt(request.query.page), 
+      limit: parseInt(request.query.limit)
+    }
+
+    /*const tredi = await Threads.findOne({_id: request.query.id})
+            .populate('Comment') // comments crashaa, Comment, Comments, comment ei `?
+            .exec() 
+            console.log(tredi);*/
+    Threads
+      .paginate( {_id: request.query.id}, options,
+        //{select: "comment", sort: {date: -1}, populate: "author",lean: true, offset: 5, limit:5}),
+        function(error, pageCount, paginatedResults)  {
+          if (error) {
+              console.error(error);
+            } else {
+              console.log('Pages:', pageCount);
+              //console.log(paginatedResults); // miksi tyhjä, undefined ?
+              response.status(200).json(pageCount)
+            }
+        })
+      .catch(error => next(error))
   })
 
   threadRouter.get('/api/threads/:id', (request, response, next) => {

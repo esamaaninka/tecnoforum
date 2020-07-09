@@ -106,3 +106,7 @@ dist
 #RAML test files
 backend/test/test.yaml
 backend/test/test.raml
+
+#own test files
+backend/tmp_tests/depopulate.js
+backend/mongoose_populate.js

@@ -20,10 +20,13 @@ GET http://{{HOST}}:{{PORT}}/api/comments
 
 // GET A COMMENT BY ID
 // copy the comment id to the path from some of the listed comments
-GET http://{{HOST}}:{{PORT}}/api/comments/5eeb3b0ab3b2e67e98c0c650
+GET http://{{HOST}}:{{PORT}}/api/comments/5f00b414eb4b002898573746
 
 ###
 
+GET http://{{HOST}}:{{PORT}}/api/comments/pages?page=5&limit=5&thread_id=5f00b433eb4b002898573747
+
+###
 ////////////////////////////////////////////////////////////////////////
 // Helper LOGIN request to login and use token for the session
 // copy the token value to the variable @authToken below 
@@ -41,7 +44,7 @@ Content-Type: application/json
 ### tämä header juttu ei toimi
 //@authToken = {{login.response.headers.X-AuthToken}}
 
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIERlcGxvcmFibGUiLCJpZCI6IjVmMDBiMjkzZWI0YjAwMjg5ODU3MzczZSIsImlhdCI6MTU5Mzg4MTczMn0.sN0Y8I9Jy7FwYJkQ-vYeO3DyylvLLU7oGxQdRkhO1Sc
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIERlcGxvcmFibGUiLCJpZCI6IjVmMDQxMThhYTcwOTg3NjU4MDUzMzI2MiIsImlhdCI6MTU5NDExMzA4OH0.gGWwC7W4YMHR-g_C0GkBeOnq3rG2SOhoHroENL88l1A
 ###
 // DELETE A COMMENT BY ID
 DELETE http://{{HOST}}:{{PORT}}/api/comments/5ef4699e0e13696b5c01bb59
@@ -76,10 +79,20 @@ Authorization: bearer {{authToken}}
 	//"comment": "Sick and feverish... Glimpse of cherry...blossoms... Still shivering. ~ Ryunosuke Akutagawa"
 	//"comment": "The summer river: although there is a... bridge, my horse ... goes through the water. ... ~ Masaoka Shiki"
 	//"comment": "Over the wintry... forest, winds howl... in rage...with no leaves to...blow..... ~ Soseki Natsume"
-	"comment": "The Web site you seek... cannot be located, but... Countless more exist."
+	//"comment": "The Web site you seek... cannot be located, but... Countless more exist."
 	//"comment": "Chaos reigns within... Reflect, repent, and reboot... Order shall return."
 	//"comment": "Program aborting:.. Close all that you have worked on.... You ask far too much."
 	//"comment": "Having been erased,...The document you're seeking...Must now be retyped."
+	//"comment": "Windows NT crashed. - I am the Blue Screen of Death. - No one hears your screams."
+	//"comment": "Yesterday it worked. - Today it is not working. - Windows is like that."
+	//"comment": "Your file was so big. It might be very useful. But now it is gone."
+	//"comment": "Stay the patient course. Of little worth is your ire. The network is down."
+	//"comment": "A crash reduces - Your expensive computer - To a simple stone."
+	//"comment": "Three things are certain: Death, taxes and lost data. Guess which has occurred."
+	//"comment": "You step in the stream, But the water has moved on. This page is not here."
+	//"comment": "Out of memory. We wish to hold the whole sky, But we never will."
+	//"comment": "Having been erased, The document you're seeking Must now be retyped."
+	"comment": "Serious error. All shortcuts have disappeared. Screen. Mind. Both are blank."
 }
 
 ###

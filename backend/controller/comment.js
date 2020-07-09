@@ -6,7 +6,6 @@ const Category = require('../models/category')
 const Thread = require('../models/thread')
 const { response } = require('../app')
 const logger = require('../utils/logger')
-//const { ConnectionStates } = require('mongoose') // mistä tämä tuli ?
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -40,16 +39,48 @@ commentRouter.get('/api/comments', (request, response,next) => {
   })
     
   */
+
   
-  commentRouter.get('/api/comments/:id', (request, response, next) => {
-      Comments
-        .findById(request.params.id)
-        .then(comment =>{
-            //console.log(`comment ${comment} with id ${request.params.id}`)
-            if(comment) response.json(comment.toJSON())
-            else response.json(`no comment found with id ${request.params.id}`)
-        })
-        .catch(error => next(error))
+
+commentRouter.get('/api/comments/pages', (request, response, next) => {
+  console.log('/api/comments/page pagination from ', request.query.page, request.query.limit, request.query.thread_id)
+   
+  const options = {
+    select: {},//'comment  author date', // {} jos kaikki kentät
+    //select: {_id: request.params.thread_id}, // populate kyselyssä ? 
+    sort: {date: -1},
+    lean: true,
+    // BUG tarkista vielä nämä miten lasketaaanm nyt jos sivu 0, tulee 
+    // limit/skip arvosta negatiivinen ja kaatuu. Samaten jos sivuja antaa
+    // liikaa (esim. jos total 25, limit5, page 5, pages 5) kaivaa jostain syystä eri threadin commentteja ?? 
+    page: parseInt(request.query.page,10), //|| 0, // pitäisikö olla -1
+    limit: parseInt(request.query.limit,10) //|| 10 // BUG! miksi jos ei anneta tuottaa -10 ? 
+  }
+  Comments
+    .paginate( {Thread: request.params.thread_id}, options,
+      //{select: "comment", sort: {date: -1}, populate: "author",lean: true, offset: 5, limit:5}),
+      function(error, pageCount) {
+        if (error) {
+            console.error(error);
+          } else {
+            console.log('Pages:', pageCount);
+            //console.log(paginatedResults);
+            response.status(200).json(pageCount)
+          }
+      })
+    .catch(error => next(error))
+})
+// tämä oltava tuon edellisen jälkeen, muuten tämä kaappaa requesting
+commentRouter.get('/api/comments/:id', (request, response, next) => {
+  console.log('/api/comments/:id ', request.params.id)
+  Comments
+    .findById(request.params.id)
+    .then(comment =>{
+        //console.log(`comment ${comment} with id ${request.params.id}`)
+        if(comment) response.json(comment.toJSON())
+        else response.json(`no comment found with id ${request.params.id}`)
+    })
+    .catch(error => next(error))
 })
 
   commentRouter.post('/api/comments', async (request, response,next) => {
@@ -64,6 +95,7 @@ commentRouter.get('/api/comments', (request, response,next) => {
           return response.status(401).json({ error: 'token missing or invalid' })
       }
       const user = await User.findById(decodedToken.id)
+      if(!user) return response.status(401).json({error: 'user not found for the token'})
   
       const thread = await Thread.findOne({threadName: body.threadName})
       if(!thread) 
