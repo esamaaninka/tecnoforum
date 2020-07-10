@@ -12,6 +12,8 @@ class ViewThread extends React.Component {
 					<Table.Cell>
 						<Header as='h2'>Title of this thread</Header>
 						<Breadcrumb size='tiny'>
+							<Breadcrumb.Section link>Home</Breadcrumb.Section>
+							<Breadcrumb.Divider />
 							<Breadcrumb.Section link>Category</Breadcrumb.Section>
 							<Breadcrumb.Divider />
 							<Breadcrumb.Section active>Thread</Breadcrumb.Section>
