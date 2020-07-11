@@ -85,17 +85,20 @@ mongoose.connection.on('open', function () {
       assert.ifError(err);
         
       
-      BlogPost.find({ tags: 'fun' }).lean().populate('author').exec(function (err, docs) { // Sally: Mary,Bob, Joe   Joe: Mary,Bob, Sally
-        assert.ifError(err);
-        console.log('temp log: ', docs);
+      BlogPost.find({ tags: 'fun' })
+        .lean()
+        .populate('author')
+        .exec(function (err, docs) { // Sally: Mary,Bob, Joe   Joe: Mary,Bob, Sally
+          assert.ifError(err);
+          //console.log('temp log: ', docs);
 
-        var opts = {
+          var opts = {
             path: 'author.friends'
           , select: 'name'
-          , options: { limit: 2 }
-        }
+          , options: { limit: 5 }
+          }
         
-        BlogPost.populate(docs, opts, function (err, docs) {
+          BlogPost.populate(docs, opts, function (err, docs) {
             assert.ifError(err);
             console.log('-----');
             console.log(docs);

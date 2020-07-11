@@ -44,7 +44,8 @@ GET http://{{HOST}}:{{PORT}}/api/threads/5f00b433eb4b002898573747
 
 ###
 
-GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=2&limit=2&id=5f00b433eb4b002898573747
+// not working, not implemented
+//GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=1&limit=5&id=5f00b433eb4b002898573747
 
 
 ###

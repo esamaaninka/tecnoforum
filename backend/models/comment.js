@@ -16,7 +16,7 @@ const commentSchema = mongoose.Schema({
       }
     ,
     //category
-    thread_id:  // kokeillaan toimisko näin ei taulukko vaan vain 1 ref
+    thread_id:  
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Thread'
@@ -31,8 +31,10 @@ const commentSchema = mongoose.Schema({
       delete returnedObject.__v
     }
   })
-
+  //commentSchema.set('toObject', { depopulate: false })
   commentSchema.plugin(uniqueValidator)
   commentSchema.plugin(mongoosePaginate)
+  
+
 
   module.exports = mongoose.model('Comments', commentSchema, 'comment')

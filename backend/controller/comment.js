@@ -26,45 +26,27 @@ commentRouter.get('/api/comments', (request, response,next) => {
             response.json(comment.map(p => p.toJSON()))
         })
         .catch(error => next(error))
-  })
-
-  /* populate ei toimi 
-  commentRouter.get('/api/commentsusers', (request,response, next) => {
-    Comments
-      .find({})
-      .populate('user')
-
-      response.json(comment.map(comment => comment.toJSON()))
-
-  })
-    
-  */
-
-  
+  })  
 
 commentRouter.get('/api/comments/pages', (request, response, next) => {
-  console.log('/api/comments/page pagination from ', request.query.page, request.query.limit, request.query.thread_id)
+  console.log(`/api/comments/page pagination from page ${request.query.page} limit ${request.query.limit} for thread: ${request.query.thread_id}`)
    
   const options = {
     select: {},//'comment  author date', // {} jos kaikki kentät
-    //select: {_id: request.params.thread_id}, // populate kyselyssä ? 
     sort: {date: -1},
-    lean: true,
-    // BUG tarkista vielä nämä miten lasketaaanm nyt jos sivu 0, tulee 
-    // limit/skip arvosta negatiivinen ja kaatuu. Samaten jos sivuja antaa
-    // liikaa (esim. jos total 25, limit5, page 5, pages 5) kaivaa jostain syystä eri threadin commentteja ?? 
-    page: parseInt(request.query.page,10), //|| 0, // pitäisikö olla -1
-    limit: parseInt(request.query.limit,10) //|| 10 // BUG! miksi jos ei anneta tuottaa -10 ? 
+    lean: true,  // return: true for JS objects, false for Mongoose Documents
+    page: parseInt(request.query.page,10), 
+    limit: parseInt(request.query.limit,10) // limit 0 for metadata only
   }
   Comments
-    .paginate( {Thread: request.params.thread_id}, options,
-      //{select: "comment", sort: {date: -1}, populate: "author",lean: true, offset: 5, limit:5}),
-      function(error, pageCount) {
+    //.paginate( {_id: request.query.thread_id}, options,
+    .paginate( {thread_id: request.query.thread_id}, options,
+      function(error, pageCount,paginatedResults) {
         if (error) {
             console.error(error);
           } else {
             console.log('Pages:', pageCount);
-            //console.log(paginatedResults);
+            console.log(paginatedResults); // miksi undefined ?
             response.status(200).json(pageCount)
           }
       })
@@ -96,13 +78,16 @@ commentRouter.get('/api/comments/:id', (request, response, next) => {
       }
       const user = await User.findById(decodedToken.id)
       if(!user) return response.status(401).json({error: 'user not found for the token'})
-  
-      const thread = await Thread.findOne({threadName: body.threadName})
-      if(!thread) 
-        return response.status(401).json({error: `thread ${body.threadName} does not exist`})
       
+      console.log('trying to find thread ', body.thread_id)
+      const thread = await Thread.findOne({/*threadName: body.threadName*/ _id: body.thread_id})
+      if(!thread) 
+        return response.status(401).json({error: `thread ${body.thread_id} does not exist`})
+        
+      
+    
       const comment = new Comments({
-        thread_id: thread._id,
+        thread_id: body.thread_id,
         comment: body.comment,
         author: user.fullname,
         user_id: user._id,

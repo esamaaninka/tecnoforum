@@ -19,10 +19,11 @@ const threadSchema = mongoose.Schema({
     category_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}, 
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
+        ref: 'Comments'
     }]
   })
 
+  threadSchema.set('toObject', { depopulate: false })
   threadSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
@@ -31,6 +32,7 @@ const threadSchema = mongoose.Schema({
     }
   })
 
+  
   threadSchema.plugin(uniqueValidator)
   threadSchema.plugin(mongoosePaginate)
 
