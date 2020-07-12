@@ -27,6 +27,8 @@ const userSchema = mongoose.Schema({
       default: 'user'
     },
     description: String,
+    date: Date, 
+    lastModified:Date,
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,

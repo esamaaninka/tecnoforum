@@ -69,9 +69,9 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f041ccd01100463e48dd84a",
-	"threadName": "Joikhataan",
-	"description": "kuusenkerkät ja kärpässienet muusana"
+	"id": "5f00b390eb4b002898573743",
+	"threadName": "4t- ja 2t -koneet",
+	"description": "kaikki putputtimet"
 }
 
 
@@ -101,7 +101,7 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f041eb8f0df2161d89e12c7",
-	//"categoryName": "Juomat",
-	"description": "keskustelualue yrttien keruu, säilöntä, käyttö"
+	"id": "5f00b34feb4b002898573740",
+	"categoryName": "Autot, mopot putputtimet",
+	"description": "keskustelualue kaikista menovehkeistä"
 }

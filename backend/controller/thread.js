@@ -149,7 +149,7 @@ threadRouter.put('/api/threads', async (request, response, next) => {
       
       const updatedThread = await Threads.findOneAndUpdate(          
           {_id: body.id}, 
-          {$set:{threadName: body.threadName, description: body.description }},
+          {$set:{threadName: body.threadName, description: body.description, lastModified: new Date() }},
           {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables                                
           function(err,res) {                         
               if(err) {

@@ -12,6 +12,7 @@ const categorySchema = mongoose.Schema({
     },
     description: String,
     date: Date, 
+    lastModified:Date,
     author: String, 
     user_id: String,
     threads: [{

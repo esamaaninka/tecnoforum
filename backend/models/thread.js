@@ -14,6 +14,7 @@ const threadSchema = mongoose.Schema({
     },
     description: String,
     date: Date, // thread luontipäivä
+    lastModified:Date,
     author: String, 
     user_id: String,
     category_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}, 

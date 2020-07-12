@@ -111,6 +111,54 @@ commentRouter.get('/api/comments/:id', (request, response, next) => {
     } 
 })    
 
+commentRouter.put('/api/comments', async (request, response, next) => {
+  const body = request.body
+  console.log('put request body:  ', body)
+
+  const token = getTokenFrom(request)
+
+  try{
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      throw('error: token missing or invalid')
+      //return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const modifying_user = await User.findById(decodedToken.id)
+    if(!modifying_user) {
+      throw('error: something wrong with token, modifying user not found')
+      //return response.status(400).json({error: 'something wrong with token, user not found'})
+    }
+
+    if(modifying_user.userType === "admin" ) {
+      console.log(`attempting to update ${body}`)
+      
+    // if want to update auhtor, user_id to be updated as well
+    //
+      const updatedComment = await Comments.findOneAndUpdate(          
+          {_id: body.id}, 
+          {$set:{comment: body.comment, lastModified: new Date()}},
+          {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables                                
+          function(err,res) {                         
+              if(err) {
+                  throw('error: error updating user',err)
+              }
+            })
+      
+      if(!updatedComment) {
+          logger.info('comment to be updated not found')
+          return response.status(400).json({error: 'user data to be updated not found'})
+      }
+      
+      return response.status(200).json(updatedComment.toJSON())
+    }
+      else return response.status(401).json({ error: 'unauthorized admin/user update operation'})
+
+    }catch (exception) {
+      next(exception)
+    }
+  })  
+
 commentRouter.delete('/api/comments/:id', async (request, response, next) => {
     
   const body = request.body  
