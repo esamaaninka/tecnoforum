@@ -32,7 +32,7 @@ Content-Type: application/json
 
 {
   	"fullname": "Mocha validemail",
-  	"password": "salasana",
+  	"password": "salasanaaivanliianpitkäjottaseevoitaisiinhyväksyä",
     "email": "mocha.testi@gmail.com",
     "nickname": "no huh",
     "userType": "user" 

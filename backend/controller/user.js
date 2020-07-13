@@ -67,7 +67,7 @@ userRouter.post('/api/users/', async (request, response, next) => {
     //console.log("post: ", request.body)
     const body = request.body
 
-    if(body.password.length <8 ) return response.status(401).json({ error: 'password too short'})
+    if(20 < body.password.length <8  ) return response.status(401).json({ error: 'password too short or long'})
 
     const saltrounds = 10
 

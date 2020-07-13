@@ -145,7 +145,7 @@ describe('User', function() {
   })
 
   // update with ADMIN token
-  it('should update by Admin a user on /api/users/<id> PUT', function(done){
+  it('should update User by Admin a user on /api/users/<id> PUT', function(done){
     chai.request(server)
       .put('/api/users/')
       .set('Authorization', `bearer ${admin_token}`)
@@ -156,6 +156,18 @@ describe('User', function() {
         done()
       })
     })
+
+    it('should update a subset of User fields by Admin a user on /api/users/<id> PUT', function(done){
+      chai.request(server)
+        .put('/api/users/')
+        .set('Authorization', `bearer ${admin_token}`)
+        .send({'id': `${user_id}`,'nickname': 'admin assigned updated'})
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.nickname.should.equal('admin assigned updated')
+          done()
+        })
+      })
 
   // update with USER token
   it('should update by User itself on /api/users/<id> PUT', function(done){
@@ -171,6 +183,28 @@ describe('User', function() {
       })
     })
 
+    
+    it('should fail to update invalid email or user on /api/users/', function(done) {
+      chai.request(server)
+      .put('/api/users/'+user_id)
+      .set('Authorization', `bearer ${user_token}`)
+      .send({'id': `${user_id}`, 'nickname': 'updated invalid email','email': 'mocha_deplorable.test.com'})
+      .end(function(error, response) {
+        response.should.have.status(401)
+        //res.body.sh
+        done()
+      })  
+    })
+
+    it('should fail (not admin) to delete a SINGLE user on /api/users/<id> DELETE', function(done) {
+      chai.request(server)
+      .delete('/api/users/'+user_id)
+      .set('Authorization', `bearer ${user_token}`)
+      .end(function(error, response) {
+        response.should.have.status(401)
+        done()
+      })  
+    })
     it('should fail (not admin) to delete a SINGLE user on /api/users/<id> DELETE', function(done) {
       chai.request(server)
       .delete('/api/users/'+user_id)
