@@ -45,8 +45,8 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
             .status(200)
             .send({ fullname: user.fullname, token })
         }catch(error){
-            logger.error(error)
-            return response.status(401).json({ error: error.name})
+            //logger.error(error)
+            return response.status(401).json({ error: error})
         }
     })
  

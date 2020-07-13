@@ -33,7 +33,7 @@ commentRouter.get('/api/comments/pages', (request, response, next) => {
    
   const options = {
     select: {},//'comment  author date', // {} jos kaikki kentät
-    sort: {date: -1},
+    sort: {date: 1}, // sort -1 fifo, +1 lifo
     lean: true,  // return: true for JS objects, false for Mongoose Documents
     page: parseInt(request.query.page,10), 
     limit: parseInt(request.query.limit,10) // limit 0 for metadata only

@@ -145,7 +145,7 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
 userRouter.put('/api/users/', async (request, response, next) => {
     
     const body = request.body  
-    //console.log('put request body:  ', body)
+    //console.log('put request body:  ', body.email, request.header.Authorization)
     const token = getTokenFrom(request)
     
     // tarkista olenko admin tai käyttäjä itse
