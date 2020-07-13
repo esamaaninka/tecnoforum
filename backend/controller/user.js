@@ -175,11 +175,13 @@ userRouter.put('/api/users/', async (request, response, next) => {
                         userType: body.userType,
                         description: body.description
                         }}, 
-                {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables
+                {new: true, omitUndefined: true, runValidators: true, context: 'query' }, // to return updated doc and skip undefined variables
                 function(err,res) {           
                     //console.log("findOneAndUpdate err, res ", err, res)         
                     if(err) {
-                        throw('error: error updating userdata',err)
+                        
+                        // pieni BUGI! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+                        return response.status(400).json({error: err.message})
                         
                     }
                 } 
@@ -192,6 +194,7 @@ userRouter.put('/api/users/', async (request, response, next) => {
             }
             // put ei palauta mitään bodya jos laittaa koodin 204?
             // return response.status(204).json(updatedUser.toJSON())
+            //if(!err)
             return response.status(200).json(updatedUser.toJSON())
         }
         else return response.status(401).json({ error: 'unauthorized admin/user update operation'})

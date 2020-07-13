@@ -31,10 +31,10 @@ POST http://{{HOST}}:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Mocha Short",
+  	"fullname": "Mocha validemail",
   	"password": "salasana",
-    "email": "mocha.pwd@test.com",
-    "nickname": "na pliis",
+    "email": "mocha.testi@gmail.com",
+    "nickname": "no huh",
     "userType": "user" 
 }
 
@@ -42,7 +42,7 @@ Content-Type: application/json
 // LOGIN
 
 //@authToken = {{login.response.headers.X-AuthToken}} ei toimi, kopsaa käsin login responsesta
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjA0MTFiNDJmODcwYzRlYmM0NmJhMDUiLCJpYXQiOjE1OTQ1NTk2MDl9.9FyuCSAkkF_G_ldo5pm_W-MZTKz32Um51PISJL6yHfk
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjA0MTFiNDJmODcwYzRlYmM0NmJhMDUiLCJpYXQiOjE1OTQ2MjMyNTB9.D6nAS4vLd9sR-d6D_u82xqdhoWiy9_zTV1f1nSThYuM
 
 // LOGIN
 // returns fullname and token
@@ -68,9 +68,9 @@ Authorization: bearer {{authToken}}
 
 {
 	"id": "5f0b0cab19e562676c01ce79",
-	//"email": "mocha.latte@gmail.com",
+	"email": "mocha.lasse@gmail.com"
   	//"nickname": "espresso",
 	//"fullname": "Mocha Latte",
-	"description": "new cafe -admin",
-	"userType": "admin" 
+	//"description": "new cafe -admin",
+	//"userType": "admin" 
 }
