@@ -47,7 +47,7 @@ export const onLogout = (token) => {
     let request = {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     dispatch(loading());
     fetch('/logout', request)

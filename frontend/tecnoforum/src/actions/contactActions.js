@@ -18,7 +18,7 @@ export const getContacts = (token, search) => {
     let request = {
       method: 'GET',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     let url = '/api/users';
     if (search) {
@@ -60,7 +60,7 @@ export const addContact = (token, contact) => {
     let request = {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
       body: JSON.stringify(contact),
     };
     dispatch(loading());
@@ -92,7 +92,7 @@ export const removeContact = (token, id) => {
     let request = {
       method: 'DELETE',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     dispatch(loading());
     let url = '/api/contact/' + id;
@@ -124,7 +124,7 @@ export const editContact = (token, contact) => {
     let request = {
       method: 'PUT',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
       body: JSON.stringify(contact),
     };
     let url = '/api/contact/' + contact._id;

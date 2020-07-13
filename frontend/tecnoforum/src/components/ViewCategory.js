@@ -1,40 +1,67 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Header, Divider, Breadcrumb, Button, Icon } from 'semantic-ui-react';
+import { Table, Pagination, Header, Button, Icon, Breadcrumb } from 'semantic-ui-react';
 
 import ThreadRow from './ThreadRow';
 import Spinner from './Spinner';
-import { getThreads } from '../actions/categoryActions';
+import { getCategory } from '../actions/categoryActions';
 
 class ViewCategory extends React.Component {
 
 	componentDidMount () {
-		this.props.dispatch(getThreads(this.props.token, this.props.id));
+		this.props.dispatch(getCategory(this.props.token, this.props.id));
+	}
+
+	onClickThread = (event) => {
+		event.preventDefault();
+		this.props.history.push(`/t/${event.target.id}`);
+	};
+
+	onClickUser = (event) => {
+		event.preventDefault();
+		
+	};
+
+	onClickBreadcrum = (event) => {
+		event.preventDefault();
+		this.props.history.push(event.target.getAttribute("href"));
 	}
 
 	render() {
 		const isLoading = this.props.loading && <Spinner />;
 		let threads = this.props.list.map((thread) => {
-			return <ThreadRow key={thread.id} item={thread} />;
+			return <ThreadRow key={thread.id} item={thread} onClickThread={this.onClickThread} onClickUser={this.onClickUser} />;
 		});
 		let name = this.props.category ? this.props.category.categoryName : "Category";
    		return (
 			<div>
 				{isLoading}
+				<Breadcrumb size='tiny'>
+					<Breadcrumb.Section href={`/`} onClick={this.onClickBreadcrum}>Home</Breadcrumb.Section>
+					<Breadcrumb.Divider />
+					<Breadcrumb.Section active>{name}</Breadcrumb.Section>
+				</Breadcrumb>
 				<Table basic='very'>
 					<Table.Body>
 						<Table.Row>
 							<Table.Cell>
-								<Header as='h2'>{name}</Header>
-								<Breadcrumb size='tiny'>
-									<Breadcrumb.Section link onClick={() => this.props.history.push("/")}>Home</Breadcrumb.Section>
-									<Breadcrumb.Divider />
-									<Breadcrumb.Section active>{name}</Breadcrumb.Section>
-								</Breadcrumb>
+								<Header as='h1'>{name}</Header>
+							</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								<Pagination size='mini' defaultActivePage={5} totalPages={10} />
 							</Table.Cell>
 							<Table.Cell collapsing>
-								<Button disabled={!this.props.isLogged} icon labelPosition='right'>New Thread <Icon name="plus" /></Button>
+								<Button 
+									disabled={!this.props.isLogged} 
+									icon 
+									labelPosition='right' 
+									onClick={() => this.props.history.push(`/c/${this.props.id}/new-thread/`)}>
+										New Thread 
+										<Icon name="plus" />
+								</Button>
 							</Table.Cell>
 						</Table.Row>
 					</Table.Body>
@@ -49,7 +76,6 @@ class ViewCategory extends React.Component {
 					</Table.Header>
 					<Table.Body>{threads}</Table.Body>
 				</Table>
-				<Pagination floated="right" size='mini' defaultActivePage={5} totalPages={10} />
 			</div>
     	);
 	}

@@ -1,10 +1,10 @@
 import {
 	FETCH_CATEGORIES_SUCCESS,
 	FETCH_CATEGORIES_FAILED,
-	FETCH_CATEGORY_THREADS_SUCCESS,
-	FETCH_CATEGORY_THREADS_FAILED,
-	FETCH_THREAD_SUCCESS,
-	FETCH_THREAD_FAILED,
+	FETCH_CATEGORY_SUCCESS,
+	FETCH_CATEGORY_FAILED,
+	FETCH_THREADS_SUCCESS,
+	FETCH_THREADS_FAILED,
 	ADD_CATEGORY_SUCCESS,
 	ADD_CATEGORY_FAILED,
 	REMOVE_CATEGORY_SUCCESS,
@@ -53,7 +53,7 @@ import {
 		};
 		saveToStorage(tempState);
 		return tempState;
-	  case FETCH_CATEGORY_THREADS_SUCCESS:
+	  case FETCH_CATEGORY_SUCCESS:
 		tempState = {
 		  ...state,
 		  list:[],
@@ -62,14 +62,14 @@ import {
 		};
 		saveToStorage(tempState);
 		return tempState;
-	  case FETCH_CATEGORY_THREADS_FAILED:
+	  case FETCH_CATEGORY_FAILED:
 		tempState = {
 		  ...state,
 		  error: action.error,
 		};
 		saveToStorage(tempState);
 		return tempState;
-	  case FETCH_THREAD_SUCCESS:
+	  case FETCH_THREADS_SUCCESS:
 		let list = [...state.list];
 		list.push(action.thread);
 		tempState = {
@@ -79,7 +79,7 @@ import {
 		};
 		saveToStorage(tempState);
 		return tempState;
-	  case FETCH_THREAD_FAILED:
+	  case FETCH_THREADS_FAILED:
 		tempState = {
 		  ...state,
 		  error: action.error,

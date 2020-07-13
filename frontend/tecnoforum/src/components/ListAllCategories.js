@@ -14,9 +14,9 @@ class ListAllCategories extends React.Component {
   }
 
   onClick = (event) => {
-	event.preventDefault();
 	// event.nativeEvent.stopImmediatePropagation();
-	this.props.history.push(`/c/${event.target.id}`);
+	event.preventDefault();
+	this.props.history.push(event.target.getAttribute("href"));
   };
   
   render() {

@@ -2,10 +2,10 @@ import { loading, endLoading, logoutSuccess } from './loginActions';
 
 export const FETCH_CATEGORIES_SUCCESS = 'FETCH_CATEGORIES_SUCCESS';
 export const FETCH_CATEGORIES_FAILED = 'FETCH_CATEGORIES_FAILED';
-export const FETCH_CATEGORY_THREADS_SUCCESS = 'FETCH_CATEGORY_THREADS_SUCCESS';
-export const FETCH_CATEGORY_THREADS_FAILED = 'FETCH_CATEGORY_THREADS_FAILED';
-export const FETCH_THREAD_SUCCESS = 'FETCH_THREAD_SUCCESS';
-export const FETCH_THREAD_FAILED = 'FETCH_THREAD_FAILED';
+export const FETCH_CATEGORY_SUCCESS = 'FETCH_CATEGORY_SUCCESS';
+export const FETCH_CATEGORY_FAILED = 'FETCH_CATEGORY_FAILED';
+export const FETCH_THREADS_SUCCESS = 'FETCH_THREADS_SUCCESS';
+export const FETCH_THREADS_FAILED = 'FETCH_THREADS_FAILED';
 export const ADD_CATEGORY_SUCCESS = 'ADD_CATEGORY_SUCCESS';
 export const ADD_CATEGORY_FAILED = 'ADD_CATEGORY_FAILED';
 export const REMOVE_CATEGORY_SUCCESS = 'REMOVE_CATEGORY_SUCCESS';
@@ -20,7 +20,7 @@ export const getCategories = (token) => {
     let request = {
       method: 'GET',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     let url = '/api/categories';
     dispatch(loading());
@@ -52,12 +52,12 @@ export const getCategories = (token) => {
   };
 };
 
-export const getThreads = (token, id) => {
+export const getCategory = (token, id, loadThreads = true) => {
 	return (dispatch) => {
 	  let request = {
 		method: 'GET',
 		mode: 'cors',
-		headers: { 'Content-type': 'application/json', token: token },
+		headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
 	  };
 	  let url = `/api/categories/${id}`;
 	  dispatch(loading());
@@ -70,9 +70,12 @@ export const getThreads = (token, id) => {
 			  .then((data) => {
 				dispatch(fetchCategoryThreadsSuccess(data));
 				// TEMPORARY
-				for(let i = 0; i < data.threads.length; ++i)
+				if ( loadThreads )
 				{
-					dispatch(getThread(token, data.threads[i]));
+					for(let i = 0; i < data.threads.length; ++i)
+					{
+						dispatch(getThread(token, data.threads[i]));
+					}
 				}
 			  })
 			  .catch((error) => {
@@ -100,7 +103,7 @@ export const getThread = (token, id) => {
 		let request = {
 		  method: 'GET',
 		  mode: 'cors',
-		  headers: { 'Content-type': 'application/json', token: token },
+		  headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
 		};
 		let url = `/api/threads/${id}`;
 		dispatch(loading());
@@ -150,14 +153,14 @@ export const fetchCategoriesFailed = (error) => {
 
 export const fetchCategoryThreadsSuccess = (category) => {
 	return {
-	  type: FETCH_CATEGORY_THREADS_SUCCESS,
+	  type: FETCH_CATEGORY_SUCCESS,
 	  category: category,
 	};
 };
   
 export const fetchCategoryThreadsFailed = (error) => {
 	return {
-	  type: FETCH_CATEGORY_THREADS_FAILED,
+	  type: FETCH_CATEGORY_FAILED,
 	  error: error,
 	};
 };
@@ -165,13 +168,13 @@ export const fetchCategoryThreadsFailed = (error) => {
 export const fetchThreadSuccess = (thread) => {
 	return {
 	  thread: thread,
-	  type: FETCH_THREAD_SUCCESS
+	  type: FETCH_THREADS_SUCCESS
 	};
 };
   
 export const fetchThreadFailed = (error) => {
 	return {
-	  type: FETCH_THREAD_FAILED,
+	  type: FETCH_THREADS_FAILED,
 	  error: error,
 	};
 };
