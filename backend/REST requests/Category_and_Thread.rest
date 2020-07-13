@@ -44,8 +44,13 @@ GET http://{{HOST}}:{{PORT}}/api/threads/5f00b433eb4b002898573747
 
 ###
 
-// not working, not implemented
-//GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=1&limit=5&id=5f00b433eb4b002898573747
+// Categories
+// 5f00b33ceb4b00289857373f Lorut
+// 5f00b34feb4b002898573740 Autot...
+// 5f00d956a3e9e13e44004064 Juomat
+// 5f041eb8f0df2161d89e12c7 Yrtit
+
+GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=1&limit=5&category_id=5f00b33ceb4b00289857373f
 
 
 ###
