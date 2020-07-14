@@ -26,7 +26,8 @@ export const onLogin = (user, history) => {
           response
             .json()
             .then((data) => {
-              dispatch(loginSuccess(data.token));
+			  console.log(data);
+              dispatch(loginSuccess(data));
 			  history.push('/');
             })
             .catch((error) => {
@@ -75,10 +76,10 @@ export const endLoading = () => {
   };
 };
 
-export const loginSuccess = (token) => {
+export const loginSuccess = (data) => {
   return {
     type: LOGIN_SUCCESS,
-    token: token,
+    data: data,
   };
 };
 

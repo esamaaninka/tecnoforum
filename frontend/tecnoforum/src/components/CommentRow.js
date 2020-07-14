@@ -5,6 +5,7 @@ import { Segment, Card, Image, Icon, Table } from 'semantic-ui-react';
 class CommentRow extends React.Component {
   render() {
 	const { comment, id, author, user_id, date, thread_id } = this.props.item;
+	
 	let tUrl = `/t/${thread_id}/`;
     return (
       <Segment>
@@ -24,17 +25,17 @@ class CommentRow extends React.Component {
 							</Card.Description>
 							</Card.Content>
 							<Card.Content extra>
-							<a>
+							{/* <a>
 								<Icon name='user' />
 								22 Friends
-							</a>
+							</a> */}
 							</Card.Content>
 						</Card>
 					  </Table.Cell>
 					  <Table.Cell verticalAlign='top'>
 						  <div style={{opacity:.45,paddingBottom:"10px"}}>
 							<div style={{right: "15px",position:"absolute"}}>
-								<a href={`${tUrl}new-comment/${id}`}>Reply</a> / <a href={`${tUrl}edit-comment/${id}`}>Edit</a> / <a href="">Remove</a>
+							<a href="">Remove</a> / <a href={`${tUrl}edit-comment/${id}`}>Edit</a> / <a href={`${tUrl}new-comment/${id}`}>Reply</a>
 							</div>
 						 	Created {date} {/* - Modified {modified_date}*/}
 						  </div>
