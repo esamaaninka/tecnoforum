@@ -24,8 +24,8 @@ const getInitialStateFromStorage = () => {
 	  return threadstate;
 	} else {
 	  return {
-		thread: {},
-		comments: {},
+		thread: null,
+		comments: null,
 		error: '',
 	  };
 	}
