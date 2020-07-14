@@ -12,11 +12,17 @@ class ListAllCategories extends React.Component {
   componentDidMount (){
     this.props.dispatch(getCategories(this.props.token));
   }
+
+  onClick = (event) => {
+	// event.nativeEvent.stopImmediatePropagation();
+	event.preventDefault();
+	this.props.history.push(event.target.getAttribute("href"));
+  };
   
   render() {
 	const isLoading = this.props.loading && <Spinner />;
 	let categories = this.props.list.map((category) => {
-		return <CategoryRow key={category.id} item={category} />;
+		return <CategoryRow key={category.id} item={category} onClick={this.onClick} />;
 	});
     return (
       <div>

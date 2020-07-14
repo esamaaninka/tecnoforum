@@ -31,10 +31,10 @@ POST http://{{HOST}}:{{PORT}}/api/users/
 Content-Type: application/json
 
 {
-  	"fullname": "Mocha Latte",
-  	"password": "salasana",
-    "email": "mocha.latte@test.com",
-    "nickname": "Lattena",
+  	"fullname": "Mocha validemail",
+  	"password": "salasanaaivanliianpitkäjottaseevoitaisiinhyväksyä",
+    "email": "mocha.testi@gmail.com",
+    "nickname": "no huh",
     "userType": "user" 
 }
 
@@ -42,7 +42,7 @@ Content-Type: application/json
 // LOGIN
 
 //@authToken = {{login.response.headers.X-AuthToken}} ei toimi, kopsaa käsin login responsesta
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjAwYjEyZDhjMjk5NTNlYTg5ZmYyMWYiLCJpYXQiOjE1OTM5MzE1MDJ9.lKCJD8t2PEOBenNVWTvWN-kUdoy1fm8fGarAdZoId4o
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjA0MTFiNDJmODcwYzRlYmM0NmJhMDUiLCJpYXQiOjE1OTQ2MjMyNTB9.D6nAS4vLd9sR-d6D_u82xqdhoWiy9_zTV1f1nSThYuM
 
 // LOGIN
 // returns fullname and token
@@ -53,8 +53,15 @@ Content-Type: application/json
 	"email": "mocha.admin@gmail.com",
 	//"fullname": "Mocha Admin",
   	"password": "salasana"
+	//"email": {"$gt":""}, // this injection does not work
+	//"password": {"$gt":""}
 }
+
 ###
+
+
+//@authToken = {{login.response.headers.body.$.token}}
+
 //-------------------------
 //DELETE http://{{HOST}}:{{PORT}}/api/users/name_or_id
 DELETE http://{{HOST}}:{{PORT}}/api/users/5efe3956bdb1292738d7b3c4
@@ -67,10 +74,10 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f00b27feb4b00289857373d",
-	"email": "mocha.latte@gmail.com",
-  	"nickname": "espresso",
-	"fullname": "Mocha Latte",
-	"description": "cocoa with cinnamon",
-	"userType": "user" 
+	"id": "5f0b0cab19e562676c01ce79",
+	"email": "mocha.java@gmail.com"
+  	//"nickname": "espresso",
+	//"fullname": "Mocha Latte",
+	//"description": "new cafe -admin",
+	//"userType": "admin" 
 }

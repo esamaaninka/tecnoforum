@@ -31,6 +31,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.17",
     "mongoose-paginate": "^5.0.3",
-    "mongoose-unique-validator": "^2.0.3"
+    "mongoose-type-email": "^1.0.12",
+    "mongoose-unique-validator": "^2.0.3",
+    "validator": "^13.1.1"
   }
 }

@@ -67,7 +67,10 @@ userRouter.post('/api/users/', async (request, response, next) => {
     //console.log("post: ", request.body)
     const body = request.body
 
+    if(20 < body.password.length <8  ) return response.status(401).json({ error: 'password too short or long'})
+
     const saltrounds = 10
+
     const passwordHash = await bcrypt.hash(body.password, saltrounds)
     //console.log('Hashed pwd: ', passwordHash)
     
@@ -142,7 +145,7 @@ userRouter.delete('/api/users/:id', async (request, response, next) => {
 userRouter.put('/api/users/', async (request, response, next) => {
     
     const body = request.body  
-    //console.log('put request body:  ', body)
+    //console.log('put request body:  ', body.email, request.header.Authorization)
     const token = getTokenFrom(request)
     
     // tarkista olenko admin tai käyttäjä itse
@@ -161,37 +164,10 @@ userRouter.put('/api/users/', async (request, response, next) => {
             //return response.status(400).json({error: 'something wrong with token, user not found'})
         }
 
-        // if user is admin -> ok to update
-        // if user !admin but the user itself -> ok to update
-       /* console.log("I am user ", modifying_user.fullname, modifying_user._id)
-        await User.findOne({fullname: body.fullname})            
-            .then(user => {
-                console.log("user: ", user)
-                if(user){
-                    response.json(user.toJSON())
-                }
-                else {
-                    response.json('nothing found')
-                }
-    
-            })
-            .catch(error => next(error))
-*/
-        /*
-        var umail = 'mocha.admin@gmail.com'
-        var rmail = 'mocha.deplorable@test.com'
-        console.log("typeof ", typeof(umail), typeof(rmail))
-        console.log(`compare local mails ${umail} with ${rmail} result: ${umail.localeCompare(rmail)}`)
-        
-        console.log("typeof ", typeof(user.email), typeof(body.email))
-
-        console.log(`compare mails ${user.email} with ${body.email} result: ${user.email.localeCompare(body.email)}`)
-        */
         if(modifying_user.userType === "admin" || modifying_user.id === body.id) {
             //console.log(`attempting to update userdata  ${JSON.stringify(body)}`)
             
-            const updatedUser = await User.findOneAndUpdate(
-                //{email: body.email}, // miksei löydä email avulla, FindOne Login.js löytää ?
+            const updatedUser = await User.findOneAndUpdate(                
                 {_id: body.id}, 
                 {$set:{ nickname: body.nickname, 
                         fullname: body.fullname, 
@@ -199,14 +175,15 @@ userRouter.put('/api/users/', async (request, response, next) => {
                         userType: body.userType,
                         description: body.description
                         }}, 
-                {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables
+                {new: true, omitUndefined: true, runValidators: true, context: 'query' }, // to return updated doc and skip undefined variables
                 function(err,res) {           
                     //console.log("findOneAndUpdate err, res ", err, res)         
                     if(err) {
-                        throw('error: error updating userdata',err)
-                        //console.log('error: ', err)
-                        //res.send(err)                     
-                    } //else {res.send('updated the user data')}
+                        
+                        // pieni BUGI! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+                        return response.status(400).json({error: err.message})
+                        
+                    }
                 } 
             )
 
@@ -215,8 +192,9 @@ userRouter.put('/api/users/', async (request, response, next) => {
                 logger.info('user data to be updated not found')
                 return response.status(400).json({error: 'user data to be updated not found'})
             }
-            // put ei palauta mitään bodya jos laittaa koodin 204
-            //return response.status(204).json(updatedUser.toJSON())
+            // put ei palauta mitään bodya jos laittaa koodin 204?
+            // return response.status(204).json(updatedUser.toJSON())
+            //if(!err)
             return response.status(200).json(updatedUser.toJSON())
         }
         else return response.status(401).json({ error: 'unauthorized admin/user update operation'})

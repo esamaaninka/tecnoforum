@@ -44,7 +44,13 @@ GET http://{{HOST}}:{{PORT}}/api/threads/5f00b433eb4b002898573747
 
 ###
 
-GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=2&limit=2&id=5f00b433eb4b002898573747
+// Categories
+// 5f00b33ceb4b00289857373f Lorut
+// 5f00b34feb4b002898573740 Autot...
+// 5f00d956a3e9e13e44004064 Juomat
+// 5f041eb8f0df2161d89e12c7 Yrtit
+
+GET http://{{HOST}}:{{PORT}}/api/threads/pages?page=1&limit=5&category_id=5f00b33ceb4b00289857373f
 
 
 ###
@@ -68,9 +74,9 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f041ccd01100463e48dd84a",
-	"threadName": "Joikhataan",
-	"description": "kuusenkerkät ja kärpässienet muusana"
+	"id": "5f00b390eb4b002898573743",
+	"threadName": "4t- ja 2t -koneet",
+	"description": "kaikki putputtimet"
 }
 
 
@@ -100,7 +106,7 @@ Content-Type: application/json
 Authorization: bearer {{authToken}}
 
 {
-	"id": "5f041eb8f0df2161d89e12c7",
-	//"categoryName": "Juomat",
-	"description": "keskustelualue yrttien keruu, säilöntä, käyttö"
+	"id": "5f00b34feb4b002898573740",
+	"categoryName": "Autot, mopot putputtimet",
+	"description": "keskustelualue kaikista menovehkeistä"
 }

@@ -26,7 +26,8 @@ export const onLogin = (user, history) => {
           response
             .json()
             .then((data) => {
-              dispatch(loginSuccess(data.token));
+			  console.log(data);
+              dispatch(loginSuccess(data));
 			  history.push('/');
             })
             .catch((error) => {
@@ -47,7 +48,7 @@ export const onLogout = (token) => {
     let request = {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     dispatch(loading());
     fetch('/logout', request)
@@ -75,10 +76,10 @@ export const endLoading = () => {
   };
 };
 
-export const loginSuccess = (token) => {
+export const loginSuccess = (data) => {
   return {
     type: LOGIN_SUCCESS,
-    token: token,
+    data: data,
   };
 };
 

@@ -95,7 +95,7 @@ categoryRouter.put('/api/categories', async (request, response, next) => {
       
       const updatedCategory = await Category.findOneAndUpdate(          
           {_id: body.id}, 
-          {$set:{categoryName: body.categoryName, description: body.description }},
+          {$set:{categoryName: body.categoryName, description: body.description, lastModified: new Date()}},
           {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables                                
           function(err,res) {                         
               if(err) {

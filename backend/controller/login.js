@@ -40,13 +40,19 @@ loginRouter.post('/api/users/login', async(request, response, next) => {
                 res.send(token);
             });        */
         const token = jwt.sign(userForToken, process.env.SECRET)
-        //console('login palauttama tokeni; ', token)
+		//console('login palauttama tokeni; ', token)
+		const userForFrontend = {
+			fullname: user.fullname,
+			nickname: user.nickname,
+			userType: user.userType,
+            id: user._id,
+        }
         response
             .status(200)
-            .send({ fullname: user.fullname, token })
+            .send({ user: userForFrontend, token })
         }catch(error){
-            logger.error(error)
-            return response.status(401).json({ error: error.name})
+            //logger.error(error)
+            return response.status(401).json({ error: error})
         }
     })
  

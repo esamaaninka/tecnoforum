@@ -26,45 +26,27 @@ commentRouter.get('/api/comments', (request, response,next) => {
             response.json(comment.map(p => p.toJSON()))
         })
         .catch(error => next(error))
-  })
-
-  /* populate ei toimi 
-  commentRouter.get('/api/commentsusers', (request,response, next) => {
-    Comments
-      .find({})
-      .populate('user')
-
-      response.json(comment.map(comment => comment.toJSON()))
-
-  })
-    
-  */
-
-  
+  })  
 
 commentRouter.get('/api/comments/pages', (request, response, next) => {
-  console.log('/api/comments/page pagination from ', request.query.page, request.query.limit, request.query.thread_id)
+  console.log(`/api/comments/page pagination from page ${request.query.page} limit ${request.query.limit} for thread: ${request.query.thread_id}`)
    
   const options = {
     select: {},//'comment  author date', // {} jos kaikki kentät
-    //select: {_id: request.params.thread_id}, // populate kyselyssä ? 
-    sort: {date: -1},
-    lean: true,
-    // BUG tarkista vielä nämä miten lasketaaanm nyt jos sivu 0, tulee 
-    // limit/skip arvosta negatiivinen ja kaatuu. Samaten jos sivuja antaa
-    // liikaa (esim. jos total 25, limit5, page 5, pages 5) kaivaa jostain syystä eri threadin commentteja ?? 
-    page: parseInt(request.query.page,10), //|| 0, // pitäisikö olla -1
-    limit: parseInt(request.query.limit,10) //|| 10 // BUG! miksi jos ei anneta tuottaa -10 ? 
+    sort: {date: 1}, // sort -1 lifo, +1 fifo 
+    lean: true,  // return: true for JS objects, false for Mongoose Documents
+    page: parseInt(request.query.page,10), 
+    limit: parseInt(request.query.limit,10) // limit 0 for metadata only
   }
   Comments
-    .paginate( {Thread: request.params.thread_id}, options,
-      //{select: "comment", sort: {date: -1}, populate: "author",lean: true, offset: 5, limit:5}),
-      function(error, pageCount) {
+    //.paginate( {_id: request.query.thread_id}, options,
+    .paginate( {thread_id: request.query.thread_id}, options,
+      function(error, pageCount,paginatedResults) {
         if (error) {
             console.error(error);
           } else {
             console.log('Pages:', pageCount);
-            //console.log(paginatedResults);
+            console.log(paginatedResults); // miksi undefined ?
             response.status(200).json(pageCount)
           }
       })
@@ -96,13 +78,16 @@ commentRouter.get('/api/comments/:id', (request, response, next) => {
       }
       const user = await User.findById(decodedToken.id)
       if(!user) return response.status(401).json({error: 'user not found for the token'})
-  
-      const thread = await Thread.findOne({threadName: body.threadName})
-      if(!thread) 
-        return response.status(401).json({error: `thread ${body.threadName} does not exist`})
       
+      console.log('trying to find thread ', body.thread_id)
+      const thread = await Thread.findOne({/*threadName: body.threadName*/ _id: body.thread_id})
+      if(!thread) 
+        return response.status(401).json({error: `thread ${body.thread_id} does not exist`})
+        
+      
+    
       const comment = new Comments({
-        thread_id: thread._id,
+        thread_id: body.thread_id,
         comment: body.comment,
         author: user.fullname,
         user_id: user._id,
@@ -125,6 +110,54 @@ commentRouter.get('/api/comments/:id', (request, response, next) => {
       return response.status(401).json({ error: error.name})
     } 
 })    
+
+commentRouter.put('/api/comments', async (request, response, next) => {
+  const body = request.body
+  console.log('put request body:  ', body)
+
+  const token = getTokenFrom(request)
+
+  try{
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      throw('error: token missing or invalid')
+      //return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const modifying_user = await User.findById(decodedToken.id)
+    if(!modifying_user) {
+      throw('error: something wrong with token, modifying user not found')
+      //return response.status(400).json({error: 'something wrong with token, user not found'})
+    }
+
+    if(modifying_user.userType === "admin" ) {
+      console.log(`attempting to update ${body}`)
+      
+    // if want to update auhtor, user_id to be updated as well
+    //
+      const updatedComment = await Comments.findOneAndUpdate(          
+          {_id: body.id}, 
+          {$set:{comment: body.comment, lastModified: new Date()}},
+          {new: true, omitUndefined: true}, // to return updated doc and skip undefined variables                                
+          function(err,res) {                         
+              if(err) {
+                  throw('error: error updating user',err)
+              }
+            })
+      
+      if(!updatedComment) {
+          logger.info('comment to be updated not found')
+          return response.status(400).json({error: 'user data to be updated not found'})
+      }
+      
+      return response.status(200).json(updatedComment.toJSON())
+    }
+      else return response.status(401).json({ error: 'unauthorized admin/user update operation'})
+
+    }catch (exception) {
+      next(exception)
+    }
+  })  
 
 commentRouter.delete('/api/comments/:id', async (request, response, next) => {
     
