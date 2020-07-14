@@ -5,8 +5,10 @@ import { Segment, Card, Image, Icon, Table } from 'semantic-ui-react';
 class CommentRow extends React.Component {
   render() {
 	const { comment, id, author, user_id, date, thread_id } = this.props.item;
-	
 	let tUrl = `/t/${thread_id}/`;
+	let editAndRemove = "";
+	if ( this.props.isLogged && ( this.props.user.userType === "admin" || this.props.user.id === user_id ) )
+		editAndRemove = <><a href="">Remove</a> / <a href={`${tUrl}edit-comment/${id}`}>Edit</a> /</>;
     return (
       <Segment>
 		  <Table basic='very' celled>
@@ -35,7 +37,7 @@ class CommentRow extends React.Component {
 					  <Table.Cell verticalAlign='top'>
 						  <div style={{opacity:.45,paddingBottom:"10px"}}>
 							<div style={{right: "15px",position:"absolute"}}>
-							<a href="">Remove</a> / <a href={`${tUrl}edit-comment/${id}`}>Edit</a> / <a href={`${tUrl}new-comment/${id}`}>Reply</a>
+							{editAndRemove} <a href={`${tUrl}new-comment/${id}`}>Reply</a>
 							</div>
 						 	Created {date} {/* - Modified {modified_date}*/}
 						  </div>
