@@ -21,7 +21,7 @@ class NavBar extends React.Component {
   loggedInBar = () => {
 	return (
 		<>
-		<Menu.Item>Welcome ...</Menu.Item>
+		<Menu.Item>Welcome {this.props.user.fullname}</Menu.Item>
 		<Menu.Item onClick={() => this.nav('/')}>Account</Menu.Item>
 		<Menu.Item onClick={() => this.props.dispatch(onLogout(this.props.token))}>Logout</Menu.Item>
 		</>
@@ -48,7 +48,8 @@ const mapStateToProps = (state) => {
   return {
 	loading: state.login.loading,
 	isLogged: state.login.isLogged,
-	token: state.login.token
+	token: state.login.token,
+	user: state.login.user
   };
 };
 

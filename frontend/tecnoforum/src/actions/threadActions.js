@@ -29,18 +29,14 @@ export const getThread = (token, id, fetchCategory = false) => {
 		};
 		let url = `/api/threads/${id}`;
 		dispatch(loading());
-		fetch(url, request)
-		  .then((response) => {
+		fetch(url, request).then((response) => {
 			dispatch(endLoading());
 			if (response.ok) {
-			  response
-				.json()
-				.then((data) => {
+			  response.json().then((data) => {
 				  dispatch(fetchThreadSuccess(data));
 				  if (fetchCategory)
 				  	dispatch(getCategory(token, data.category_id, false));
-				})
-				.catch((error) => {
+				}).catch((error) => {
 				  dispatch(fetchThreadFailed(`Failed to parse data. Try again error ${error}`));
 				});
 			} else {
@@ -48,11 +44,14 @@ export const getThread = (token, id, fetchCategory = false) => {
 				dispatch(fetchThreadFailed('Server responded with a session failure. Logging out!'));
 				dispatch(logoutSuccess());
 			  } else {
-				dispatch(fetchThreadFailed(`Server responded with a status: ${response.status}`));
+				response.json().then((data) => {
+					dispatch(fetchThreadFailed(`Server responded with status: ${data.error}`));
+				}).catch((error) => {
+				  dispatch(fetchThreadFailed(`Server responded with status: ${response.status}`));
+				});
 			  }
 			}
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			dispatch(endLoading());
 			dispatch(fetchThreadFailed(`Server responded with an error: ${error}`));
 		});
@@ -85,7 +84,11 @@ export const getComments = (token, id, page) => {
 				dispatch(fetchCommentsFailed('Server responded with a session failure. Logging out!'));
 				dispatch(logoutSuccess());
 			  } else {
-				dispatch(fetchCommentsFailed(`Server responded with a status: ${response.status}`));
+				response.json().then((data) => {
+					dispatch(fetchCommentsFailed(`Server responded with status: ${data.error}`));
+				}).catch((error) => {
+				  dispatch(fetchCommentsFailed(`Server responded with status: ${response.status}`));
+				});
 			  }
 			}
 		})
@@ -121,7 +124,11 @@ export const newThread = (token, thread, history) => {
 			  dispatch(addThreadFailed('Server responded with a session failure. Logging out!'));
 			  dispatch(logoutSuccess());
 			} else {
-			  dispatch(addThreadFailed(`Server responded with a status: ${response.status}`));
+			  response.json().then((data) => {
+				dispatch(addThreadFailed(`Server responded with status: ${data.error}`));
+              }).catch((error) => {
+			  dispatch(addThreadFailed(`Server responded with status: ${response.status}`));
+              });
 			}
 		  }
 		})

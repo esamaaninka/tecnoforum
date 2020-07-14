@@ -20,25 +20,24 @@ export const onLogin = (user, history) => {
       body: JSON.stringify(user),
     };
     dispatch(loading());
-    fetch('/api/users/login', request)
-      .then((response) => {
+    fetch('/api/users/login', request).then((response) => {
         if (response.ok) {
-          response
-            .json()
-            .then((data) => {
+          response.json().then((data) => {
 			  console.log(data);
               dispatch(loginSuccess(data));
 			  history.push('/');
-            })
-            .catch((error) => {
-              dispatch(loginFailed('Failed to parse response. Reason:', error));
+            }).catch((error) => {
+              dispatch(loginFailed(`Server responded with status: ${error}`));
             });
         } else {
-          dispatch(loginFailed('Server responded with status:', response.status));
+			response.json().then((data) => {
+			  dispatch(loginFailed(`Server responded with status: ${data.error}`));
+            }).catch((error) => {
+			  dispatch(loginFailed(`Server responded with status: ${response.status}`));
+            });
         }
-      })
-      .catch((error) => {
-        dispatch(loginFailed('Server responded with an error:', error));
+      }).catch((error) => {
+        dispatch(loginFailed(`Server responded with status: ${error}`));
       });
   };
 };
@@ -51,13 +50,11 @@ export const onLogout = (token) => {
       headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     dispatch(loading());
-    fetch('/logout', request)
-      .then((response) => {
+    fetch('/logout', request).then((response) => {
         dispatch(logoutSuccess());
         dispatch(clearContactReducerState());
-      })
-      .catch((error) => {
-        dispatch(logoutFailed('Server responded with an error', error));
+      }).catch((error) => {
+        dispatch(logoutFailed(`Server responded with an error: ${error}`));
         dispatch(clearContactReducerState());
       });
   };

@@ -48,7 +48,7 @@ class ViewThread extends React.Component {
 	let categoryName = categoryLoaded ? this.props.category.categoryName : "Category";
 	let threadName = this.props.thread ? this.props.thread.threadName : "Thread";
 	let comments = this.props.comments && this.props.comments.docs.map((comment) => {
-		return <CommentRow key={comment.id} item={comment} />;
+		return <CommentRow key={comment.id} item={comment} isLogged={this.props.isLogged} user={this.props.user} />;
 	});
 	let page = this.props.page ? this.props.page : 1;
 	let pagination = this.props.comments && <Pagination size='mini' 
@@ -85,7 +85,6 @@ class ViewThread extends React.Component {
 					<Table.Row>
 						<Table.Cell>
 							{pagination}
-							{/* <Pagination size='mini' defaultActivePage={5} totalPages={10} /> */}
 						</Table.Cell>
 						<Table.Cell collapsing>
 							<Button 
@@ -100,11 +99,9 @@ class ViewThread extends React.Component {
 					</Table.Row>
 				</Table.Body>
 			</Table>
-			{/* <CommentRow  */}
-			{this.state.page === 1 && threadComment && <CommentRow item={threadComment} />}
+			{this.state.page === 1 && threadComment && 
+				<CommentRow item={threadComment} isLogged={this.props.isLogged} user={this.props.user} />}
 			{comments}
-			{/* <CommentRow/>
-			<CommentRow/> */}
 		</div>
     );
   }
@@ -115,6 +112,7 @@ const mapStateToProps = (state) => {
 	  isLogged: state.login.isLogged,
 	  token: state.login.token,
 	  loading: state.login.loading,
+	  user: state.login.user,
 	  category: state.category.category,
 	  thread: state.thread.thread,
 	  comments: state.thread.comments

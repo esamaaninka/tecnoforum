@@ -25,17 +25,13 @@ export const getContacts = (token, search) => {
       url = `${url}?name=${search}`;
     }
     dispatch(loading());
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         dispatch(endLoading());
         if (response.ok) {
-          response
-            .json()
-            .then((data) => {
+          response.json().then((data) => {
               console.log(`from actions data: ${data}`);
               dispatch(fetchContactsSuccess(data));
-            })
-            .catch((error) => {
+            }).catch((error) => {
               dispatch(fetchContactsFailed(`Failed to parse data. Try again error ${error}`));
             });
         } else {
@@ -44,11 +40,14 @@ export const getContacts = (token, search) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(fetchContactsFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(fetchContactsFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(fetchContactsFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(fetchContactsFailed(`Server responded with an error: ${error}`));
       });
@@ -64,8 +63,7 @@ export const addContact = (token, contact) => {
       body: JSON.stringify(contact),
     };
     dispatch(loading());
-    fetch('/api/contact', request)
-      .then((response) => {
+    fetch('/api/contact', request).then((response) => {
         if (response.ok) {
           dispatch(addContactSuccess());
           dispatch(getContacts(token));
@@ -76,11 +74,14 @@ export const addContact = (token, contact) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(addContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(addContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(addContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(addContactFailed(`Server responded with an error: ${error}`));
       });
@@ -96,8 +97,7 @@ export const removeContact = (token, id) => {
     };
     dispatch(loading());
     let url = '/api/contact/' + id;
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         if (response.ok) {
           dispatch(removeContactSuccess());
           dispatch(getContacts(token));
@@ -108,11 +108,14 @@ export const removeContact = (token, id) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(removeContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(removeContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(removeContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(removeContactFailed(`Server responded with an error: ${error}`));
       });
@@ -129,8 +132,7 @@ export const editContact = (token, contact) => {
     };
     let url = '/api/contact/' + contact._id;
     dispatch(loading());
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         if (response.ok) {
           dispatch(editContactSuccess());
           dispatch(getContacts(token));
@@ -142,11 +144,14 @@ export const editContact = (token, contact) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(editContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(editContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(editContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(editContactFailed(`Server responded with an error: ${error}`));
       });

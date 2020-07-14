@@ -24,16 +24,12 @@ export const getCategories = (token) => {
     };
     let url = '/api/categories';
     dispatch(loading());
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         dispatch(endLoading());
         if (response.ok) {
-          response
-            .json()
-            .then((data) => {
+          response.json().then((data) => {
               dispatch(fetchCategoriesSuccess(data));
-            })
-            .catch((error) => {
+            }).catch((error) => {
               dispatch(fetchCategoriesFailed(`Failed to parse data. Try again error ${error}`));
             });
         } else {
@@ -41,11 +37,14 @@ export const getCategories = (token) => {
             dispatch(fetchCategoriesFailed('Server responded with a session failure. Logging out!'));
             dispatch(logoutSuccess());
           } else {
-            dispatch(fetchCategoriesFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(fetchCategoriesFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(fetchCategoriesFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(fetchCategoriesFailed(`Server responded with an error: ${error}`));
       });
@@ -61,13 +60,10 @@ export const getCategory = (token, id, loadThreads = true) => {
 	  };
 	  let url = `/api/categories/${id}`;
 	  dispatch(loading());
-	  fetch(url, request)
-		.then((response) => {
+	  fetch(url, request).then((response) => {
 		  dispatch(endLoading());
 		  if (response.ok) {
-			response
-			  .json()
-			  .then((data) => {
+			response.json().then((data) => {
 				dispatch(fetchCategoryThreadsSuccess(data));
 				// TEMPORARY
 				if ( loadThreads )
@@ -77,8 +73,7 @@ export const getCategory = (token, id, loadThreads = true) => {
 						dispatch(getThread(token, data.threads[i]));
 					}
 				}
-			  })
-			  .catch((error) => {
+			  }).catch((error) => {
 				dispatch(fetchCategoryThreadsFailed(`Failed to parse data. Try again error ${error}`));
 			  });
 		  } else {
@@ -86,11 +81,14 @@ export const getCategory = (token, id, loadThreads = true) => {
 			  dispatch(fetchCategoryThreadsFailed('Server responded with a session failure. Logging out!'));
 			  dispatch(logoutSuccess());
 			} else {
-			  dispatch(fetchCategoryThreadsFailed(`Server responded with a status: ${response.status}`));
+			  response.json().then((data) => {
+				dispatch(fetchCategoryThreadsFailed(`Server responded with status: ${data.error}`));
+			  }).catch((error) => {
+				dispatch(fetchCategoryThreadsFailed(`Server responded with status: ${response.status}`));
+			  });
 			}
 		  }
-		})
-		.catch((error) => {
+		}).catch((error) => {
 		  dispatch(endLoading());
 		  dispatch(fetchCategoryThreadsFailed(`Server responded with an error: ${error}`));
 		});
@@ -107,16 +105,12 @@ export const getThread = (token, id) => {
 		};
 		let url = `/api/threads/${id}`;
 		dispatch(loading());
-		fetch(url, request)
-		  .then((response) => {
+		fetch(url, request).then((response) => {
 			dispatch(endLoading());
 			if (response.ok) {
-			  response
-				.json()
-				.then((data) => {
+			  response.json().then((data) => {
 				  dispatch(fetchThreadSuccess(data));
-				})
-				.catch((error) => {
+				}).catch((error) => {
 				  dispatch(fetchThreadFailed(`Failed to parse data. Try again error ${error}`));
 				});
 			} else {
@@ -124,11 +118,14 @@ export const getThread = (token, id) => {
 				dispatch(fetchThreadFailed('Server responded with a session failure. Logging out!'));
 				dispatch(logoutSuccess());
 			  } else {
-				dispatch(fetchThreadFailed(`Server responded with a status: ${response.status}`));
+				response.json().then((data) => {
+				  dispatch(fetchThreadFailed(`Server responded with status: ${data.error}`));
+				}).catch((error) => {
+				  dispatch(fetchThreadFailed(`Server responded with status: ${response.status}`));
+				});
 			  }
 			}
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			dispatch(endLoading());
 			dispatch(fetchThreadFailed(`Server responded with an error: ${error}`));
 		});

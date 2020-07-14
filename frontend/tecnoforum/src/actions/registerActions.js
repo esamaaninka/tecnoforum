@@ -15,8 +15,7 @@ export const onRegister = (user) => {
       body: JSON.stringify(user),
     };
     dispatch(loading());
-    fetch('/api/users', request)
-      .then((response) => {
+    fetch('/api/users', request).then((response) => {
 		dispatch(endLoading());
         if (response.ok) {
 		  dispatch(registerSuccess());
@@ -24,13 +23,16 @@ export const onRegister = (user) => {
           if (response.status === 409) {
             dispatch(registerFailed('Register failed. Is username already in use?'));
           } else {
-            dispatch(registerFailed('Server responded with status:', response.status));
+			response.json().then((data) => {
+				dispatch(registerFailed(`Server responded with status: ${data.error}`));
+            }).catch((error) => {
+			  dispatch(registerFailed(`Server responded with status: ${response.status}`));
+            });
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
 		dispatch(endLoading());
-        dispatch(registerFailed('Server responded with ana error', error));
+        dispatch(registerFailed(`Server responded with status: ${error}`));
       });
   };
 };
