@@ -20,49 +20,35 @@ threadRouter.get('/api/threads', (request, response,next) => {
   })
 
   // BUG! populate not working yet
-/*  threadRouter.get('/api/threads/pages', async (request, response, next) => {
-    console.log('/api/threads/pages pagination from ', request.query.page, request.query.limit, request.query.id )
-     
+  threadRouter.get('/api/threads/pages', async (request, response, next) => {
+    console.log(`/api/threads/pages pagination from page ${request.query.page} limit ${request.query.limit} for thread: ${request.query.category_id}`)
+   
     const options = {
-      select: 'comments', //'threadName  author date comments ', // {} jos kaikki kentät
-      sort: {date: -1},
-      populate: 'comments',
+      select: {}, // 'threadName  author date comments ', // {} jos kaikki kentät
+      sort: {date: -1}, // sort -1 lifo, +1 fifo
+      //populate: 'comments',
       //populate: {path: 'comments'},//, model:'Comments', select: 'comments'},
-      page: parseInt(request.query.page), 
-      limit: parseInt(request.query.limit)
+      lean: true,
+      page: parseInt(request.query.page,10), 
+      limit: parseInt(request.query.limit,10) // limit 0 for metadata only
     }
 
-    const tredi = Threads
-            .findOne({_id: request.query.id})
-            .populate('comments') // schemassa oltava täsmälleeen sama kuin oliossa
-            //.paginate('2','3')
-            //.where('thread._id').equals(request.query.id)
-            .skip(0) // ei toimi, jos laittaa != 0 palauttaa NULL
-            .limit(2) // ei toimi            
-            .exec((err, comms) => {
-              if(err) throw err
-              else {
-                console.log('populated ',comms);
-                response.status(200).json(comms)
-              }
-            }) 
-  // tekeekö tämä paginaten threadeistä, ei kommenteille !! ? */
-  /*
     Threads
-      .paginate( {_id: request.query.id}, options,
-        //{select: "comment", sort: {date: -1}, populate: "author",lean: true, offset: 5, limit:5}),
-        function(error, pageCount, paginatedResults)  {
-          if (error) {
-              console.error(error);
-            } else {
-              console.log('Pages:', pageCount);
-              console.log(paginatedResults); // miksi tyhjä, undefined ?
-              response.status(200).json(pageCount)
+      .paginate({category_id: request.query.category_id}, options,
+          function(error, pageCount, paginatedResults){
+            if(error) {
+              console.log(error)
+              return response.status(400).json(error)
             }
-        })*/
-    /*  .catch(error => next(error))
+            else {
+              console.log('Pages: ', pageCount) // miksi date ei tulostu console mutta response ok ?
+              console.log('paginatedResults: ',paginatedResults)
+              return response.status(200).json(pageCount)
+           }
+       })        
+      .catch(error => next(error))
   })
-*/
+
   threadRouter.get('/api/threads/:id', (request, response, next) => {
     Threads
       .findById(request.params.id)

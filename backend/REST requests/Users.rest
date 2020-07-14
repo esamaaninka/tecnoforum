@@ -53,8 +53,15 @@ Content-Type: application/json
 	"email": "mocha.admin@gmail.com",
 	//"fullname": "Mocha Admin",
   	"password": "salasana"
+	//"email": {"$gt":""}, // this injection does not work
+	//"password": {"$gt":""}
 }
+
 ###
+
+
+//@authToken = {{login.response.headers.body.$.token}}
+
 //-------------------------
 //DELETE http://{{HOST}}:{{PORT}}/api/users/name_or_id
 DELETE http://{{HOST}}:{{PORT}}/api/users/5efe3956bdb1292738d7b3c4
@@ -68,7 +75,7 @@ Authorization: bearer {{authToken}}
 
 {
 	"id": "5f0b0cab19e562676c01ce79",
-	"email": "mocha.lasse@gmail.com"
+	"email": "mocha.java@gmail.com"
   	//"nickname": "espresso",
 	//"fullname": "Mocha Latte",
 	//"description": "new cafe -admin",
