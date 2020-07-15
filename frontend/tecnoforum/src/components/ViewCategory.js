@@ -5,12 +5,26 @@ import { Table, Pagination, Header, Button, Icon, Breadcrumb } from 'semantic-ui
 
 import ThreadRow from './ThreadRow';
 import Spinner from './Spinner';
-import { getCategory } from '../actions/categoryActions';
+import { getCategory, getThreads, clearCategories } from '../actions/categoryActions';
 
 class ViewCategory extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			page: 1
+		};
+	}
 
 	componentDidMount () {
+		let state = {};
+		state.page = this.props.page ? this.props.page : 1;
 		this.props.dispatch(getCategory(this.props.token, this.props.id));
+		this.props.dispatch(getThreads(this.props.token, this.props.id, state.page));
+		this.setState(state);
+	}
+
+	componentWillUnmount () {
+		this.props.dispatch(clearCategories());
 	}
 
 	onClickThread = (event) => {
@@ -28,12 +42,24 @@ class ViewCategory extends React.Component {
 		this.props.history.push(event.target.getAttribute("href"));
 	}
 
+	handlePaginationChange = (e, { activePage }) => {
+		this.props.history.replace(`/c/${this.props.id}/page-${activePage}`);
+		this.props.dispatch(getThreads(this.props.token, this.props.id, activePage));
+		let state = {};
+		state.page = activePage;
+		this.setState(state);
+	}
+
 	render() {
 		const isLoading = this.props.loading && <Spinner />;
-		let threads = this.props.list.map((thread) => {
+		let threads = this.props.threads && this.props.threads.docs.map((thread) => {
 			return <ThreadRow key={thread.id} item={thread} onClickThread={this.onClickThread} onClickUser={this.onClickUser} />;
 		});
 		let name = this.props.category ? this.props.category.categoryName : "Category";
+		let pagination = this.props.threads && <Pagination size='mini'
+			defaultActivePage={this.state.page}
+			totalPages={this.props.threads.pages}
+			onPageChange={this.handlePaginationChange} />
    		return (
 			<div>
 				{isLoading}
@@ -51,7 +77,7 @@ class ViewCategory extends React.Component {
 						</Table.Row>
 						<Table.Row>
 							<Table.Cell>
-								<Pagination size='mini' defaultActivePage={5} totalPages={10} />
+								{pagination}
 							</Table.Cell>
 							<Table.Cell collapsing>
 								<Button 
@@ -87,7 +113,7 @@ const mapStateToProps = (state) => {
 	  loading: state.login.loading,
 	  token: state.login.token,
 	  category: state.category.category,
-	  list: state.category.list
+	  threads: state.category.threads
 	};
 };
   

@@ -21,7 +21,7 @@ class ListAllCategories extends React.Component {
   
   render() {
 	const isLoading = this.props.loading && <Spinner />;
-	let categories = this.props.list.map((category) => {
+	let categories = this.props.categories.map((category) => {
 		return <CategoryRow key={category.id} item={category} onClick={this.onClick} />;
 	});
     return (
@@ -47,7 +47,7 @@ const mapStateToProps = (state) => {
   return {
     loading: state.login.loading,
     token: state.login.token,
-	list: state.category.list
+	categories: state.category.categories
   };
 };
 

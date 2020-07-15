@@ -12,6 +12,7 @@ export const REMOVE_CATEGORY_SUCCESS = 'REMOVE_CATEGORY_SUCCESS';
 export const REMOVE_CATEGORY_FAILED = 'REMOVE_CATEGORY_FAILED';
 export const EDIT_CATEGORY_SUCCESS = 'EDIT_CATEGORY_SUCCESS';
 export const EDIT_CATEGORY_FAILED = 'EDIT_CATEGORY_FAILED';
+export const CLEAR_THREADS = 'CLEAR_THREADS';
 
 //ASync actions
 
@@ -65,14 +66,6 @@ export const getCategory = (token, id, loadThreads = true) => {
 		  if (response.ok) {
 			response.json().then((data) => {
 				dispatch(fetchCategoryThreadsSuccess(data));
-				// TEMPORARY
-				if ( loadThreads )
-				{
-					for(let i = 0; i < data.threads.length; ++i)
-					{
-						dispatch(getThread(token, data.threads[i]));
-					}
-				}
 			  }).catch((error) => {
 				dispatch(fetchCategoryThreadsFailed(`Failed to parse data. Try again error ${error}`));
 			  });
@@ -95,49 +88,59 @@ export const getCategory = (token, id, loadThreads = true) => {
 	};
 };
 
-// TEMPORARY
-export const getThread = (token, id) => {
+export const getThreads = (token, id, page) => {
 	return (dispatch) => {
 		let request = {
 		  method: 'GET',
 		  mode: 'cors',
 		  headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
 		};
-		let url = `/api/threads/${id}`;
+		let url = `/api/threads/pages?page=${page}&limit=5&category_id=${id}`;
 		dispatch(loading());
-		fetch(url, request).then((response) => {
+		fetch(url, request)
+		  .then((response) => {
 			dispatch(endLoading());
 			if (response.ok) {
-			  response.json().then((data) => {
-				  dispatch(fetchThreadSuccess(data));
-				}).catch((error) => {
-				  dispatch(fetchThreadFailed(`Failed to parse data. Try again error ${error}`));
+			  response
+				.json()
+				.then((data) => {
+				  dispatch(fetchThreadsSuccess(data));
+				})
+				.catch((error) => {
+				  dispatch(fetchThreadsFailed(`Failed to parse data. Try again error ${error}`));
 				});
 			} else {
 			  if (response.status === 403) {
-				dispatch(fetchThreadFailed('Server responded with a session failure. Logging out!'));
+				dispatch(fetchThreadsFailed('Server responded with a session failure. Logging out!'));
 				dispatch(logoutSuccess());
 			  } else {
 				response.json().then((data) => {
-				  dispatch(fetchThreadFailed(`Server responded with status: ${data.error}`));
+					dispatch(fetchThreadsFailed(`Server responded with status: ${data.error}`));
 				}).catch((error) => {
-				  dispatch(fetchThreadFailed(`Server responded with status: ${response.status}`));
+				  dispatch(fetchThreadsFailed(`Server responded with status: ${response.status}`));
 				});
 			  }
 			}
-		}).catch((error) => {
+		})
+		.catch((error) => {
 			dispatch(endLoading());
-			dispatch(fetchThreadFailed(`Server responded with an error: ${error}`));
+			dispatch(fetchThreadsFailed(`Server responded with an error: ${error}`));
 		});
 	};
 }
 
 //Action creators
 
-export const fetchCategoriesSuccess = (list) => {
+export const clearCategories = () => {
+	return {
+		type: CLEAR_THREADS
+	};
+}
+
+export const fetchCategoriesSuccess = (categories) => {
   return {
     type: FETCH_CATEGORIES_SUCCESS,
-    list: list,
+    categories: categories,
   };
 };
 
@@ -162,14 +165,14 @@ export const fetchCategoryThreadsFailed = (error) => {
 	};
 };
 
-export const fetchThreadSuccess = (thread) => {
+export const fetchThreadsSuccess = (threads) => {
 	return {
-	  thread: thread,
+	  threads: threads,
 	  type: FETCH_THREADS_SUCCESS
 	};
 };
   
-export const fetchThreadFailed = (error) => {
+export const fetchThreadsFailed = (error) => {
 	return {
 	  type: FETCH_THREADS_FAILED,
 	  error: error,

@@ -11,18 +11,18 @@ import {
 	REMOVE_CATEGORY_FAILED,
 	EDIT_CATEGORY_SUCCESS,
 	EDIT_CATEGORY_FAILED,
+	CLEAR_THREADS,
   } from '../actions/categoryActions';
   
   const getInitialStateFromStorage = () => {
 	if (sessionStorage.getItem('categorystate')) {
 	  let categorystate = JSON.parse(sessionStorage.getItem('categorystate'));
-	  categorystate.list = [];
-	  categorystate.category = {};
 	  return categorystate;
 	} else {
 	  return {
-		list: [],
-		category: {},
+		threads: null,
+		category: null,
+		categories: [],
 		error: '',
 	  };
 	}
@@ -41,7 +41,7 @@ import {
 	  case FETCH_CATEGORIES_SUCCESS:
 		tempState = {
 		  ...state,
-		  list: action.list,
+		  categories: action.categories,
 		  error: '',
 		};
 		saveToStorage(tempState);
@@ -56,7 +56,6 @@ import {
 	  case FETCH_CATEGORY_SUCCESS:
 		tempState = {
 		  ...state,
-		  list:[],
 		  category: action.category,
 		  error: '',
 		};
@@ -70,13 +69,11 @@ import {
 		saveToStorage(tempState);
 		return tempState;
 	  case FETCH_THREADS_SUCCESS:
-		let list = [...state.list];
-		list.push(action.thread);
 		tempState = {
-		  ...state,
-		  list: list,
-		  error: '',
-		};
+			...state,
+			threads: action.threads,
+			error: '',
+		}
 		saveToStorage(tempState);
 		return tempState;
 	  case FETCH_THREADS_FAILED:
@@ -126,6 +123,14 @@ import {
 		  ...state,
 		  error: action.error,
 		};
+		saveToStorage(tempState);
+		return tempState;
+	  case CLEAR_THREADS:
+		tempState = {
+			...state,
+			threads: null,
+			error: ''
+		}
 		saveToStorage(tempState);
 		return tempState;
 	  default:

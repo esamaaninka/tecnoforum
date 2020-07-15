@@ -20,13 +20,10 @@ const App = ({ isLogged, history, match }) => {
       <Container style={{ 'paddingTop': '100px' }}>
         <Switch>
           <Route exact path='/users/' render={() => <ListAllUsers />} />
-          <Route
-            exact
-            path='/register/'
-            render={() => (isLogged ? <Redirect to='/' /> : <Registration history={history} />)}
-          />
+          <Route exact path='/register/'render={() => (isLogged ? <Redirect to='/' /> : <Registration history={history} />)}/>
           <Route exact path='/login/' render={() => (isLogged ? <Redirect to='/' /> : <Login history={history} />)} />
 		  <Route exact path='/c/:id' render={({match}) => <ViewCategory id={match.params.id} history={history} />} />
+		  <Route exact path='/c/:id/page-:page' render={({match}) => <ViewCategory id={match.params.id} page={match.params.page} history={history} />} />
 		  <Route exact path='/c/:id/new-thread' render={({match}) => <NewThread id={match.params.id} history={history} />} />
 		  <Route exact path='/t/:id' render={({match}) => <ViewThread id={match.params.id} history={history} />} />
 		  <Route exact path='/t/:id/page-:page' render={({match}) => <ViewThread id={match.params.id} page={match.params.page} history={history} />} />

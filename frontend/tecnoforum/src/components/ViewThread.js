@@ -41,70 +41,69 @@ class ViewThread extends React.Component {
 		this.setState(state);
 	}
 
-  render() {
-	const isLoading = this.props.loading && <Spinner />;
-	let categoryLoaded = this.props.category && this.props.thread && this.props.thread.category_id === this.props.category.id;
-	let categoryID = categoryLoaded ? this.props.thread.category_id : 0;
-	let categoryName = categoryLoaded ? this.props.category.categoryName : "Category";
-	let threadName = this.props.thread ? this.props.thread.threadName : "Thread";
-	let comments = this.props.comments && this.props.comments.docs.map((comment) => {
-		return <CommentRow key={comment.id} item={comment} isLogged={this.props.isLogged} user={this.props.user} />;
-	});
-	let page = this.props.page ? this.props.page : 1;
-	let pagination = this.props.comments && <Pagination size='mini' 
-		defaultActivePage={page} 
-		totalPages={this.props.comments.pages} 
-		onPageChange={this.handlePaginationChange} />
-	let threadComment = {};
-	if ( this.props.thread ) 
-	{
-		threadComment = {
-		comment: this.props.thread.description,
-		author: this.props.thread.author,
-		id: this.props.thread.id,
-		user_id: this.props.thread.user_id,
-		date: this.props.thread.date};
+	render() {
+		const isLoading = this.props.loading && <Spinner />;
+		let categoryLoaded = this.props.category && this.props.thread && this.props.thread.category_id === this.props.category.id;
+		let categoryID = categoryLoaded ? this.props.thread.category_id : 0;
+		let categoryName = categoryLoaded ? this.props.category.categoryName : "Category";
+		let threadName = this.props.thread ? this.props.thread.threadName : "Thread";
+		let comments = this.props.comments && this.props.comments.docs.map((comment) => {
+			return <CommentRow key={comment.id} item={comment} isLogged={this.props.isLogged} user={this.props.user} />;
+		});
+		let pagination = this.props.comments && <Pagination size='mini' 
+			defaultActivePage={this.state.page} 
+			totalPages={this.props.comments.pages} 
+			onPageChange={this.handlePaginationChange} />
+		let threadComment = {};
+		if ( this.props.thread ) 
+		{
+			threadComment = {
+			comment: this.props.thread.description,
+			author: this.props.thread.author,
+			id: this.props.thread.id,
+			user_id: this.props.thread.user_id,
+			date: this.props.thread.date};
+		}
+		return (
+			<div>
+				{isLoading}
+				<Breadcrumb size='tiny'>
+					<Breadcrumb.Section href={`/`} onClick={this.onClickBreadcrum}>Home</Breadcrumb.Section>
+					<Breadcrumb.Divider />
+					<Breadcrumb.Section href={`/c/${categoryID}`} onClick={this.onClickBreadcrum}>{categoryName}</Breadcrumb.Section>
+					<Breadcrumb.Divider />
+					<Breadcrumb.Section active>{threadName}</Breadcrumb.Section>
+				</Breadcrumb>
+				<Table basic='very'>
+					<Table.Body>
+						<Table.Row>
+							<Table.Cell>
+								<Header as='h1'>{threadName}</Header>
+							</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								{pagination}
+							</Table.Cell>
+							<Table.Cell collapsing>
+								<Button 
+									disabled={!this.props.isLogged} 
+									icon 
+									labelPosition='right' 
+									onClick={() => this.props.history.push(`/t/${this.props.id}/new-comment/`)}>
+										New Comment 
+										<Icon name="plus" />
+								</Button>
+							</Table.Cell>
+						</Table.Row>
+					</Table.Body>
+				</Table>
+				{this.state.page === 1 && threadComment && 
+					<CommentRow item={threadComment} isLogged={this.props.isLogged} user={this.props.user} />}
+				{comments}
+			</div>
+		);
 	}
-    return (
-		<div>
-			{isLoading}
-			<Breadcrumb size='tiny'>
-				<Breadcrumb.Section href={`/`} onClick={this.onClickBreadcrum}>Home</Breadcrumb.Section>
-				<Breadcrumb.Divider />
-				<Breadcrumb.Section href={`/c/${categoryID}`} onClick={this.onClickBreadcrum}>{categoryName}</Breadcrumb.Section>
-				<Breadcrumb.Divider />
-				<Breadcrumb.Section active>{threadName}</Breadcrumb.Section>
-			</Breadcrumb>
-			<Table basic='very'>
-				<Table.Body>
-					<Table.Row>
-						<Table.Cell>
-							<Header as='h1'>{threadName}</Header>
-						</Table.Cell>
-					</Table.Row>
-					<Table.Row>
-						<Table.Cell>
-							{pagination}
-						</Table.Cell>
-						<Table.Cell collapsing>
-							<Button 
-								disabled={!this.props.isLogged} 
-								icon 
-								labelPosition='right' 
-								onClick={() => this.props.history.push(`/t/${this.props.id}/new-comment/`)}>
-									New Comment 
-									<Icon name="plus" />
-							</Button>
-						</Table.Cell>
-					</Table.Row>
-				</Table.Body>
-			</Table>
-			{this.state.page === 1 && threadComment && 
-				<CommentRow item={threadComment} isLogged={this.props.isLogged} user={this.props.user} />}
-			{comments}
-		</div>
-    );
-  }
 }
 
 const mapStateToProps = (state) => {
