@@ -7,7 +7,6 @@ import { getThread, editThread } from '../actions/threadActions';
 import ThreadForm from './ThreadForm';
 
 class EditThread extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {

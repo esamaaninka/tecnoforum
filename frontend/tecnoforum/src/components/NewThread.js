@@ -8,7 +8,6 @@ import { newThread } from '../actions/threadActions';
 import ThreadForm from './ThreadForm';
 
 class NewThread extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {

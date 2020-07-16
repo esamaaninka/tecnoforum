@@ -3,6 +3,8 @@ import { getCategory } from './categoryActions';
 
 export const FETCH_THREAD_SUCCESS = 'FETCH_THREAD_SUCCESS';
 export const FETCH_THREAD_FAILED = 'FETCH_THREAD_FAILED';
+export const FETCH_COMMENT_SUCCESS = 'FETCH_COMMENT_SUCCESS';
+export const FETCH_COMMENT_FAILED = 'FETCH_COMMENT_FAILED';
 export const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
 export const FETCH_COMMENTS_FAILED = 'FETCH_COMMENTS_FAILED';
 export const ADD_THREAD_SUCCESS = 'ADD_THREAD_SUCCESS';
@@ -54,6 +56,42 @@ export const getThread = (token, id, fetchCategory = false) => {
 		}).catch((error) => {
 			dispatch(endLoading());
 			dispatch(fetchThreadFailed(`Server responded with an error: ${error}`));
+		});
+	};
+}
+
+export const getComment = (token, id) => {
+	return (dispatch) => {
+		let request = {
+		  method: 'GET',
+		  mode: 'cors',
+		  headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
+		};
+		let url = `/api/comments/${id}`;
+		dispatch(loading());
+		fetch(url, request).then((response) => {
+			dispatch(endLoading());
+			if (response.ok) {
+			  response.json().then((data) => {
+				  dispatch(fetchCommentSuccess(data));
+				}).catch((error) => {
+				  dispatch(fetchCommentFailed(`Failed to parse data. Try again error ${error}`));
+				});
+			} else {
+			  if (response.status === 403) {
+				dispatch(fetchCommentFailed('Server responded with a session failure. Logging out!'));
+				dispatch(logoutSuccess());
+			  } else {
+				response.json().then((data) => {
+					dispatch(fetchCommentFailed(`Server responded with status: ${data.error}`));
+				}).catch((error) => {
+				  dispatch(fetchCommentFailed(`Server responded with status: ${response.status}`));
+				});
+			  }
+			}
+		}).catch((error) => {
+			dispatch(endLoading());
+			dispatch(fetchCommentFailed(`Server responded with an error: ${error}`));
 		});
 	};
 }
@@ -204,6 +242,40 @@ export const newComment = (token, comment, history) => {
 	};
 };
 
+export const editComment = (token, comment, history) => {
+	return (dispatch) => {
+	  let request = {
+		method: 'PUT',
+		mode: 'cors',
+		headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
+		body: JSON.stringify(comment)
+	  };
+	  let url = '/api/comments';
+	  dispatch(loading());
+	  fetch(url, request).then((response) => {
+		  dispatch(endLoading());
+		  if (response.ok) {
+			dispatch(editCommentSuccess());
+			history.push(`/t/${comment.thread_id}`);
+		  } else {
+			if (response.status === 403) {
+			  dispatch(editCommentFailed('Server responded with a session failure. Logging out!'));
+			  dispatch(logoutSuccess());
+			} else {
+			  response.json().then((data) => {
+				dispatch(editCommentFailed(`Server responded with status: ${data.error}`));
+              }).catch((error) => {
+			  dispatch(editCommentFailed(`Server responded with status: ${response.status}`));
+              });
+			}
+		  }
+		}).catch((error) => {
+		  dispatch(endLoading());
+		  dispatch(editCommentFailed(`Server responded with an error: ${error}`));
+		});
+	};
+};
+
 export const clearThreadAndComments = () => {
 	return {
 		type: CLEAR_THREAD_AND_COMMENTS
@@ -222,6 +294,20 @@ export const fetchThreadFailed = (error) => {
 	  type: FETCH_THREAD_FAILED,
 	  error: error,
 	};
+};
+
+export const fetchCommentSuccess = (comment) => {
+	return {
+		type: FETCH_COMMENT_SUCCESS,
+		comment: comment,
+	};
+};
+	
+export const fetchCommentFailed = (error) => {
+	  return {
+		type: FETCH_COMMENT_FAILED,
+		error: error,
+	  };
 };
   
 export const fetchCommentsSuccess = (comments) => {

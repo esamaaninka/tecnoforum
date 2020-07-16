@@ -1,6 +1,8 @@
 import {
 	FETCH_THREAD_SUCCESS,
 	FETCH_THREAD_FAILED,
+	FETCH_COMMENT_SUCCESS,
+	FETCH_COMMENT_FAILED,
 	FETCH_COMMENTS_SUCCESS,
 	FETCH_COMMENTS_FAILED,
 	ADD_THREAD_SUCCESS,
@@ -26,6 +28,7 @@ const getInitialStateFromStorage = () => {
 	  return {
 		thread: null,
 		comments: null,
+		comment: null,
 		error: '',
 	  };
 	}
@@ -53,6 +56,21 @@ const threadReducer = (state = initialState, action) => {
 		tempState = {
 			...state,
 			error: action.error,
+		};
+		saveToStorage(tempState);
+		return tempState;
+	  case FETCH_COMMENT_SUCCESS:
+		tempState = {
+		  ...state,
+		  comment: action.comment,
+		  error: '',
+		};
+		saveToStorage(tempState);
+		return tempState;
+	  case FETCH_COMMENT_FAILED:
+		tempState = {
+		  ...state,
+		  error: action.error,
 		};
 		saveToStorage(tempState);
 		return tempState;
@@ -159,6 +177,7 @@ const threadReducer = (state = initialState, action) => {
 		tempState = {
 			...state,
 			comments: null,
+			comment: null,
 			thread: null,
 			error: ''
 		}

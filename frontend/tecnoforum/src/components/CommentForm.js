@@ -23,11 +23,6 @@ export default class CommentForm extends React.Component {
 					<Breadcrumb.Divider />
 					<Breadcrumb.Section href={threadLink} onClick={this.onClickBreadcrum}>{this.props.thread.threadName}</Breadcrumb.Section>
 					<Breadcrumb.Divider />
-					{this.props.editComment &&
-						<React.Fragment>
-							<Breadcrumb.Section href={`${threadLink}/`} onClick={this.onClickBreadcrum} content="" />
-							<Breadcrumb.Divider />
-						</React.Fragment>}
 					<Breadcrumb.Section active>{this.props.header}</Breadcrumb.Section>
 				</Breadcrumb>
 				<Segment>
