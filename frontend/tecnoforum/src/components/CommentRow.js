@@ -5,10 +5,17 @@ import { Segment, Card, Image, Icon, Table } from 'semantic-ui-react';
 class CommentRow extends React.Component {
   render() {
 	const { comment, id, author, user_id, date, thread_id } = this.props.item;
-	let tUrl = `/t/${thread_id}/`;
+	const isThread = this.props.isThread;
+	const tUrl = `/t/${thread_id}/`;
+	const onClickCommentModify = this.props.onClickCommentModify;
 	let editAndRemove = "";
 	if ( this.props.isLogged && ( this.props.user.userType === "admin" || this.props.user.id === user_id ) )
-		editAndRemove = <><a href="">Remove</a> / <a href={`${tUrl}edit-comment/${id}`}>Edit</a> /</>;
+	{
+		if ( !isThread )
+			editAndRemove = <><a href="">Remove</a> / <a href={`${tUrl}edit-comment/${id}`} onClick={onClickCommentModify}>Edit</a> /</>;
+		else
+			editAndRemove = <><a href="">Remove</a> / <a href={`${tUrl}edit-thread`} onClick={onClickCommentModify}>Edit</a> /</>;
+	}
     return (
       <Segment>
 		  <Table basic='very' celled>
@@ -37,7 +44,7 @@ class CommentRow extends React.Component {
 					  <Table.Cell verticalAlign='top'>
 						  <div style={{opacity:.45,paddingBottom:"10px"}}>
 							<div style={{right: "15px",position:"absolute"}}>
-							{editAndRemove} <a href={`${tUrl}new-comment/${id}`}>Reply</a>
+							{editAndRemove} <a href={`${tUrl}new-comment/${isThread ? "thread" : id}`} onClick={onClickCommentModify}>Reply</a>
 							</div>
 						 	Created {date} {/* - Modified {modified_date}*/}
 						  </div>

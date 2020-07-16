@@ -67,16 +67,12 @@ export const getComments = (token, id, page) => {
 		};
 		let url = `/api/comments/pages?page=${page}&limit=5&thread_id=${id}`;
 		dispatch(loading());
-		fetch(url, request)
-		  .then((response) => {
+		fetch(url, request).then((response) => {
 			dispatch(endLoading());
 			if (response.ok) {
-			  response
-				.json()
-				.then((data) => {
+			  response.json().then((data) => {
 				  dispatch(fetchCommentsSuccess(data));
-				})
-				.catch((error) => {
+				}).catch((error) => {
 				  dispatch(fetchCommentsFailed(`Failed to parse data. Try again error ${error}`));
 				});
 			} else {
@@ -91,8 +87,7 @@ export const getComments = (token, id, page) => {
 				});
 			  }
 			}
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			dispatch(endLoading());
 			dispatch(fetchCommentsFailed(`Server responded with an error: ${error}`));
 		});
@@ -109,8 +104,7 @@ export const newThread = (token, thread, history) => {
 	  };
 	  let url = '/api/threads';
 	  dispatch(loading());
-	  fetch(url, request)
-		.then((response) => {
+	  fetch(url, request).then((response) => {
 		  dispatch(endLoading());
 		  if (response.ok) {
 			response.json().then((data) => {
@@ -131,10 +125,43 @@ export const newThread = (token, thread, history) => {
               });
 			}
 		  }
-		})
-		.catch((error) => {
+		}).catch((error) => {
 		  dispatch(endLoading());
 		  dispatch(addThreadFailed(`Server responded with an error: ${error}`));
+		});
+	};
+};
+
+export const editThread = (token, thread, history) => {
+	return (dispatch) => {
+	  let request = {
+		method: 'PUT',
+		mode: 'cors',
+		headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
+		body: JSON.stringify(thread)
+	  };
+	  let url = '/api/threads';
+	  dispatch(loading());
+	  fetch(url, request).then((response) => {
+		  dispatch(endLoading());
+		  if (response.ok) {
+			dispatch(editThreadSuccess());
+			history.push(`/t/${thread.id}`);
+		  } else {
+			if (response.status === 403) {
+			  dispatch(editThreadFailed('Server responded with a session failure. Logging out!'));
+			  dispatch(logoutSuccess());
+			} else {
+			  response.json().then((data) => {
+				dispatch(editThreadFailed(`Server responded with status: ${data.error}`));
+              }).catch((error) => {
+			  dispatch(editThreadFailed(`Server responded with status: ${response.status}`));
+              });
+			}
+		  }
+		}).catch((error) => {
+		  dispatch(endLoading());
+		  dispatch(editThreadFailed(`Server responded with an error: ${error}`));
 		});
 	};
 };

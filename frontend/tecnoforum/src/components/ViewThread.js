@@ -33,6 +33,11 @@ class ViewThread extends React.Component {
 		this.props.history.push(event.target.getAttribute("href"));
 	}
 
+	onClickCommentModify = (event) => {
+		event.preventDefault();
+		this.props.history.push(event.target.getAttribute("href"));
+	}
+
 	handlePaginationChange = (e, { activePage }) => {
 		this.props.history.replace(`/t/${this.props.id}/page-${activePage}`);
 		this.props.dispatch(getComments(this.props.token, this.props.id, activePage));
@@ -48,7 +53,13 @@ class ViewThread extends React.Component {
 		let categoryName = categoryLoaded ? this.props.category.categoryName : "Category";
 		let threadName = this.props.thread ? this.props.thread.threadName : "Thread";
 		let comments = this.props.comments && this.props.comments.docs.map((comment) => {
-			return <CommentRow key={comment.id} item={comment} isLogged={this.props.isLogged} user={this.props.user} />;
+			return <CommentRow 
+				key={comment.id} 
+				item={comment} 
+				isLogged={this.props.isLogged} 
+				user={this.props.user} 
+				isThread={false} 
+				onClickCommentModify={this.onClickCommentModify} />;
 		});
 		let pagination = this.props.comments && <Pagination size='mini' 
 			defaultActivePage={this.state.page} 
@@ -60,7 +71,7 @@ class ViewThread extends React.Component {
 			threadComment = {
 			comment: this.props.thread.description,
 			author: this.props.thread.author,
-			id: this.props.thread.id,
+			thread_id: this.props.thread.id,
 			user_id: this.props.thread.user_id,
 			date: this.props.thread.date};
 		}
@@ -99,7 +110,12 @@ class ViewThread extends React.Component {
 					</Table.Body>
 				</Table>
 				{this.state.page === 1 && threadComment && 
-					<CommentRow item={threadComment} isLogged={this.props.isLogged} user={this.props.user} />}
+					<CommentRow 
+						item={threadComment} 
+						isLogged={this.props.isLogged} 
+						user={this.props.user} 
+						isThread={true}  
+						onClickCommentModify={this.onClickCommentModify} />}
 				{comments}
 			</div>
 		);

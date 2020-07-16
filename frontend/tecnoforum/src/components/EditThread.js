@@ -4,10 +4,10 @@ import { withRouter } from 'react-router-dom';
 
 import Spinner from './Spinner';
 import { getCategory } from '../actions/categoryActions';
-import { newThread } from '../actions/threadActions';
+import { getThread, editThread } from '../actions/threadActions';
 import ThreadForm from './ThreadForm';
 
-class NewThread extends React.Component {
+class EditThread extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -15,13 +15,23 @@ class NewThread extends React.Component {
 			title: '',
 			comment: '',
 			titleFail: false,
-			commentFail: false
+			commentFail: false,
+			threadLoaded: false
 		};
 	}
 
 	componentDidMount () {
-		if (this.props.category.id !== this.props.id)
-			this.props.dispatch(getCategory(this.props.token, this.props.id, false));
+		this.props.dispatch(getThread(this.props.token, this.props.id, true));
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.thread !== prevProps.thread && this.props.thread !== null && this.state.threadLoaded === false) {
+			let state = {};
+			state.threadLoaded = true;
+			state.title = this.props.thread.threadName;
+			state.comment = this.props.thread.description;
+			this.setState(state);
+		}
 	}
 
 	onChange = (event) => {
@@ -56,10 +66,10 @@ class NewThread extends React.Component {
 		let thread = {
 			threadName: this.state.title,
 			description: this.state.comment,
-			categoryName: this.props.category.categoryName
+			id: this.props.thread.id
 		}
 
-		this.props.dispatch(newThread(this.props.token, thread, this.props.history));
+		this.props.dispatch(editThread(this.props.token, thread, this.props.history));
 	};
 
 	onClickBreadcrum = (event) => {
@@ -73,14 +83,17 @@ class NewThread extends React.Component {
 		return (
 			<>
 				{isLoading}
-				<ThreadForm 
-					id={this.props.id} 
-					categoryName={categoryName} 
-					header="New Thread" 
+				{this.state.threadLoaded && <ThreadForm 
+					id={this.props.category.id} 
+					thread_id={this.props.thread.id}
+					categoryName={categoryName}
+					header="Edit Thread" 
 					onChange={this.onChange} 
 					onSubmit={this.onSubmit} 
 					state={{...this.state}} 
+					editThread={true}
 					history={this.props.history} />
+				}
 			</>
 		);
 	}
@@ -90,6 +103,7 @@ const mapStateToProps = (state) => {
 	return {
 		token: state.login.token,
 		category: state.category.category,
+		thread: state.thread.thread,
 		loading: state.register.loading,
 		error: state.thread.error
 	};
@@ -99,4 +113,4 @@ const mapDispatchToProps = (dispatch) => ({
 	dispatch
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewThread));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditThread));
