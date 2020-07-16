@@ -62,11 +62,6 @@ class NewThread extends React.Component {
 		this.props.dispatch(newThread(this.props.token, thread, this.props.history));
 	};
 
-	onClickBreadcrum = (event) => {
-		event.preventDefault();
-		this.props.history.push(event.target.getAttribute("href"));
-	}
-
 	render() {
 		const isLoading = this.props.loading && <Spinner />;
 		let categoryName = this.props.category ? this.props.category.categoryName : "Category";

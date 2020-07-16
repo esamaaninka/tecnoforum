@@ -13,6 +13,7 @@ import ViewThread from './components/ViewThread';
 import ViewCategory from './components/ViewCategory';
 import NewThread from './components/NewThread';
 import EditThread from './components/EditThread';
+import NewComment from './components/NewComment';
 
 const App = ({ isLogged, history, match }) => {
   return (
@@ -29,6 +30,7 @@ const App = ({ isLogged, history, match }) => {
 		  <Route exact path='/t/:id' render={({match}) => <ViewThread id={match.params.id} history={history} />} />
 		  <Route exact path='/t/:id/page-:page' render={({match}) => <ViewThread id={match.params.id} page={match.params.page} history={history} />} />
 		  <Route exact path='/t/:id/edit-thread' render={({match}) => <EditThread id={match.params.id} history={history} />} />
+		  <Route exact path='/t/:id/new-comment' render={({match}) => <NewComment id={match.params.id} history={history} />} />
           <Route render={() => <ListAllCategories history={history} />} />
         </Switch>
       </Container>

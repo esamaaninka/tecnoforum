@@ -166,6 +166,44 @@ export const editThread = (token, thread, history) => {
 	};
 };
 
+export const newComment = (token, comment, history) => {
+	return (dispatch) => {
+	  let request = {
+		method: 'POST',
+		mode: 'cors',
+		headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
+		body: JSON.stringify(comment)
+	  };
+	  let url = '/api/comments';
+	  dispatch(loading());
+	  fetch(url, request).then((response) => {
+		  dispatch(endLoading());
+		  if (response.ok) {
+			response.json().then((data) => {
+				dispatch(addCommentSuccess());
+				history.push(`/t/${data.thread_id}`);
+            }).catch((error) => {
+              dispatch(addCommentFailed(`Failed to parse data. Try again error ${error}`));
+            });
+		  } else {
+			if (response.status === 403) {
+			  dispatch(addCommentFailed('Server responded with a session failure. Logging out!'));
+			  dispatch(logoutSuccess());
+			} else {
+			  response.json().then((data) => {
+				dispatch(addCommentFailed(`Server responded with status: ${data.error}`));
+              }).catch((error) => {
+			  dispatch(addCommentFailed(`Server responded with status: ${response.status}`));
+              });
+			}
+		  }
+		}).catch((error) => {
+		  dispatch(endLoading());
+		  dispatch(addCommentFailed(`Server responded with an error: ${error}`));
+		});
+	};
+};
+
 export const clearThreadAndComments = () => {
 	return {
 		type: CLEAR_THREAD_AND_COMMENTS
