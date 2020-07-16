@@ -397,7 +397,7 @@ export const editCommentSuccess = () => {
   
 export const editCommentFailed = (error) => {
 	return {
-	  type: EDIT_COMMENT_SUCCESS,
+	  type: EDIT_COMMENT_FAILED,
 	  error: error,
 	};
 };
