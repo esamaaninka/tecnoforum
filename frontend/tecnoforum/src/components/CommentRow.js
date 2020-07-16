@@ -48,7 +48,9 @@ class CommentRow extends React.Component {
 							</div>
 						 	Created {date} {/* - Modified {modified_date}*/}
 						  </div>
+						  <div style={{whiteSpace:"pre-wrap"}}>
 						  {comment}
+						  </div>
 					  </Table.Cell>
 				  </Table.Row>
 			  </Table.Body>
