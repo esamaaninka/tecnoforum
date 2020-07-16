@@ -1,0 +1,83 @@
+// Define these variables in VSC settings.js and select "local" 
+// as "REST Client Environment"
+// "rest-client.environmentVariables": {
+//
+//        "local": {
+//           "HOST": "localhost",
+//           "PORT": "3001"
+//       }
+//   }
+//-------------------------
+// OR COMMENT THESE OUT
+//@PORT=3001
+//@HOST=localhost
+//
+//-------------------------
+// GET ALL USERS
+GET http://{{HOST}}:{{PORT}}/api/users
+
+###
+//-------------------------
+// GET A USER by name or id (change fullname/id at the end of path)
+GET http://{{HOST}}:{{PORT}}/api/users/name/Mocha Admin
+###
+GET http://{{HOST}}:{{PORT}}/api/users/id/5f00b27feb4b00289857373d
+
+###
+//
+// POST a user, userType enum : ['user','moderator','admin']
+// default "user"
+POST http://{{HOST}}:{{PORT}}/api/users/
+Content-Type: application/json
+
+{
+  	"fullname": "Mocha validemail",
+  	"password": "salasanaaivanliianpitkäjottaseevoitaisiinhyväksyä",
+    "email": "mocha.testi@gmail.com",
+    "nickname": "no huh",
+    "userType": "user" 
+}
+
+###
+// LOGIN
+
+//@authToken = {{login.response.headers.X-AuthToken}} ei toimi, kopsaa käsin login responsesta
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1vY2hhIEFkbWluIiwiaWQiOiI1ZjA0MTFiNDJmODcwYzRlYmM0NmJhMDUiLCJpYXQiOjE1OTQ2MjMyNTB9.D6nAS4vLd9sR-d6D_u82xqdhoWiy9_zTV1f1nSThYuM
+
+// LOGIN
+// returns fullname and token
+POST http://{{HOST}}:{{PORT}}/api/users/login
+Content-Type: application/json
+
+{
+	"email": "mocha.admin@gmail.com",
+	//"fullname": "Mocha Admin",
+  	"password": "salasana"
+	//"email": {"$gt":""}, // this injection does not work
+	//"password": {"$gt":""}
+}
+
+###
+
+
+//@authToken = {{login.response.headers.body.$.token}}
+
+//-------------------------
+//DELETE http://{{HOST}}:{{PORT}}/api/users/name_or_id
+DELETE http://{{HOST}}:{{PORT}}/api/users/5efe3956bdb1292738d7b3c4
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikphc2thIEpva3VuZW4iLCJpZCI6IjVlZWI2MjJmMTQ5ZWNiM2E4MGE4MTExNCIsImlhdCI6MTU5MjU1MDg4N30.KIeV5xe8Z9obPWP6CHEyQ9_SlcmeJJuAaWFY4Tlwnr0
+Authorization: bearer {{1authToken}}
+###
+
+PUT http://{{HOST}}:{{PORT}}/api/users/
+Content-Type: application/json
+Authorization: bearer {{authToken}}
+
+{
+	"id": "5f0b0cab19e562676c01ce79",
+	"email": "mocha.java@gmail.com"
+  	//"nickname": "espresso",
+	//"fullname": "Mocha Latte",
+	//"description": "new cafe -admin",
+	//"userType": "admin" 
+}

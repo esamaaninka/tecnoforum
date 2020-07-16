@@ -3,38 +3,57 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const loginRouter = require('express').Router()
 
-// tulisiko login olla omassa modulisssa login.js ?
-// voiko path olla noin, vai pelkkä /login ? 
 loginRouter.post('/api/users/login', async(request, response, next) => {
     const body = request.body
     console.log('post login: ', body)
+   
+    // fullname avulla ei tunnista käyttäjää, email toimii
+    let user = ""
 
-    const user = await User.findOne({fullname: body.fullname})
-    console.log("user after await: ", user)
-
-   const passwordCorrect = user === null
+    try{
+        if(body.username){
+            user = await User.findOne({fullname: body.fullname})
+        }else if(body.email){
+            user = await User.findOne({email: body.email})
+        }    
+    
+        const passwordCorrect = user === null
         ? false
             : await bcrypt.compare(body.password, user.passwordHash)
+    
+        //console.log('after pwd check', passwordCorrect)
 
-    //const passwordCorrect = await bcrypt.compare(body.password, user.passwordHash)
-    console.log('after pwd check', passwordCorrect)
+        if (!(user && passwordCorrect)) {
+            return response.status(401).json({
+                error: 'invalid username or password'
+            })
+        }
 
-    if (!(user && passwordCorrect)) {
-        return response.status(401).json({
-            error: 'invalid username or password'
-        })
-    }
+        const userForToken = {
+            username: user.fullname,
+            id: user._id,
+        }
 
-    const userForToken = {
-        username: user.fullname,
-        id: user._id,
-    }
-
-    const token = jwt.sign(userForToken, process.env.SECRET)
-
-    response
-        .status(200)
-        .send({ fullname: user.fullname, token })
+        /*
+            jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
+                if(err) { console.log(err) }    
+                res.send(token);
+            });        */
+        const token = jwt.sign(userForToken, process.env.SECRET)
+		//console('login palauttama tokeni; ', token)
+		const userForFrontend = {
+			fullname: user.fullname,
+			nickname: user.nickname,
+			userType: user.userType,
+            id: user._id,
+        }
+        response
+            .status(200)
+            .send({ user: userForFrontend, token })
+        }catch(error){
+            //logger.error(error)
+            return response.status(401).json({ error: error})
+        }
     })
  
     module.exports = loginRouter

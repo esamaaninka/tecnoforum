@@ -1,39 +1,3 @@
-// import Axios from 'axios';
-
-// static getContacts(state) {
-//   Axios({
-//     method: 'GET',
-//     mode: 'cors',
-//     url: '/api/users',
-//     responseType: 'json',
-//   })
-//     .then((response) => {
-//       state.setState({
-//         list: response.data,
-//       });
-//     })
-//     .catch((error) => {
-//       console.log('Server responded with an error:', error);
-//     });
-// }
-
-// static getUserByName(state, name) {
-//   Axios({
-//     method: 'GET',
-//     mode: 'cors',
-//     url: `/api/users/name/${name}`,
-//     responseType: 'json',
-//   })
-//     .then((response) => {
-//       state.setState({
-//         user: response.data,
-//       });
-//     })
-//     .catch((error) => {
-//       console.log('Server responded with an error:', error);
-//     });
-// }
-
 import { loading, endLoading, logoutSuccess } from './loginActions';
 
 export const FETCH_CONTACTS_SUCCESS = 'FETCH_CONTACTS_SUCCESS';
@@ -54,24 +18,20 @@ export const getContacts = (token, search) => {
     let request = {
       method: 'GET',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     let url = '/api/users';
     if (search) {
       url = `${url}?name=${search}`;
     }
     dispatch(loading());
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         dispatch(endLoading());
         if (response.ok) {
-          response
-            .json()
-            .then((data) => {
+          response.json().then((data) => {
               console.log(`from actions data: ${data}`);
               dispatch(fetchContactsSuccess(data));
-            })
-            .catch((error) => {
+            }).catch((error) => {
               dispatch(fetchContactsFailed(`Failed to parse data. Try again error ${error}`));
             });
         } else {
@@ -80,11 +40,14 @@ export const getContacts = (token, search) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(fetchContactsFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(fetchContactsFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(fetchContactsFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(fetchContactsFailed(`Server responded with an error: ${error}`));
       });
@@ -96,12 +59,11 @@ export const addContact = (token, contact) => {
     let request = {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
       body: JSON.stringify(contact),
     };
     dispatch(loading());
-    fetch('/api/contact', request)
-      .then((response) => {
+    fetch('/api/contact', request).then((response) => {
         if (response.ok) {
           dispatch(addContactSuccess());
           dispatch(getContacts(token));
@@ -112,11 +74,14 @@ export const addContact = (token, contact) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(addContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(addContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(addContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(addContactFailed(`Server responded with an error: ${error}`));
       });
@@ -128,12 +93,11 @@ export const removeContact = (token, id) => {
     let request = {
       method: 'DELETE',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
     };
     dispatch(loading());
     let url = '/api/contact/' + id;
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         if (response.ok) {
           dispatch(removeContactSuccess());
           dispatch(getContacts(token));
@@ -144,11 +108,14 @@ export const removeContact = (token, id) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(removeContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(removeContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(removeContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(removeContactFailed(`Server responded with an error: ${error}`));
       });
@@ -160,13 +127,12 @@ export const editContact = (token, contact) => {
     let request = {
       method: 'PUT',
       mode: 'cors',
-      headers: { 'Content-type': 'application/json', token: token },
+      headers: { 'Content-type': 'application/json', Authorization: `bearer ${token}` },
       body: JSON.stringify(contact),
     };
     let url = '/api/contact/' + contact._id;
     dispatch(loading());
-    fetch(url, request)
-      .then((response) => {
+    fetch(url, request).then((response) => {
         if (response.ok) {
           dispatch(editContactSuccess());
           dispatch(getContacts(token));
@@ -178,11 +144,14 @@ export const editContact = (token, contact) => {
             dispatch(logoutSuccess());
             dispatch(clearContactReducerState());
           } else {
-            dispatch(editContactFailed(`Server responded with a status: ${response.status}`));
+            response.json().then((data) => {
+			  dispatch(editContactFailed(`Server responded with status: ${data.error}`));
+			}).catch((error) => {
+			  dispatch(editContactFailed(`Server responded with status: ${response.status}`));
+			});
           }
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         dispatch(endLoading());
         dispatch(editContactFailed(`Server responded with an error: ${error}`));
       });
