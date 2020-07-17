@@ -9,6 +9,7 @@ const commentRouter = require('./controller/comment')
 const loginRouter = require('./controller/login')
 const threadRouter = require('./controller/thread')
 const categoryRouter = require('./controller/category')
+const path = require('path');
 
 const mongoose = require('mongoose')
 
@@ -26,6 +27,7 @@ mongoose.connect(config.MONGODB_URI, {
 		logger.info(err);
 	});
 
+app.use(express.static(path.resolve(__dirname, './frontend/build')));
 app.use(cors())
 //app.use(express.static('build')) //NOT BUILT YET
 app.use(express.json())
@@ -35,8 +37,10 @@ app.use('', loginRouter)
 app.use('', commentRouter)
 app.use('', threadRouter)
 app.use('', categoryRouter)
-
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './frontend/build', 'index.html'));
+});
 
 module.exports = app
