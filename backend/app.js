@@ -37,7 +37,7 @@ app.use('', loginRouter)
 app.use('', commentRouter)
 app.use('', threadRouter)
 app.use('', categoryRouter)
-app.use(middleware.unknownEndpoint)
+// app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './frontend/build', 'index.html'));

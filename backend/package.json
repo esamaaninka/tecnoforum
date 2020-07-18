@@ -13,7 +13,7 @@
     "dev": "nodemon index.js",
     "lint": "eslint .",
     "test": "mocha",
-	"quick": "cd ./frontend/ && npm run build && cd ../ && npm run dev"
+    "quick": "cd ./frontend/ && npm run win-build && cd ../ && npm run dev"
   },
   "cacheDirectories": [
     "node_modules",
